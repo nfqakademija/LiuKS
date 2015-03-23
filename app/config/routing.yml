@@ -1,0 +1,12 @@
+liuks_game:
+    resource: "@LiuksGameBundle/Resources/config/routing.yml"
+    prefix:   /
+
+liuks_table:
+    resource: "@LiuksTableBundle/Resources/config/routing.yml"
+    prefix:   /
+
+liuks_user:
+    resource: "@LiuksUserBundle/Resources/config/routing.yml"
+    prefix:   /
+

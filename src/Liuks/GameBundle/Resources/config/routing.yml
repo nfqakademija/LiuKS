@@ -1,0 +1,3 @@
+liuks_game_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: LiuksGameBundle:Default:index }

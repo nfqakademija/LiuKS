@@ -1,0 +1,4 @@
+services:
+#    liuks_table.example:
+#        class: Liuks\TableBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
