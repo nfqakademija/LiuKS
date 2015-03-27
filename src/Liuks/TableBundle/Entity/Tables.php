@@ -57,9 +57,9 @@ class Tables
     private $id;
 
     /**
-     * @var \Liuks\TableBundle\Entity\Groups
+     * @var \Liuks\UserBundle\Entity\Groups
      *
-     * @ORM\ManyToOne(targetEntity="Liuks\TableBundle\Entity\Groups")
+     * @ORM\ManyToOne(targetEntity="Liuks\UserBundle\Entity\Groups")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="group_id", referencedColumnName="id")
      * })
@@ -196,10 +196,10 @@ class Tables
     /**
      * Set group
      *
-     * @param \Liuks\TableBundle\Entity\Groups $group
+     * @param \Liuks\UserBundle\Entity\Groups $group
      * @return Tables
      */
-    public function setGroup(\Liuks\TableBundle\Entity\Groups $group = null)
+    public function setGroup(\Liuks\UserBundle\Entity\Groups $group = null)
     {
         $this->group = $group;
 
@@ -209,7 +209,7 @@ class Tables
     /**
      * Get group
      *
-     * @return \Liuks\TableBundle\Entity\Groups
+     * @return \Liuks\UserBundle\Entity\Groups
      */
     public function getGroup()
     {
