@@ -15,9 +15,9 @@ class Tableupdate
     /**
      * @var integer
      *
-     * @ORM\Column(name="last_update", type="integer", nullable=false)
+     * @ORM\Column(name="last_id", type="integer", nullable=false)
      */
-    private $lastUpdate;
+    private $lastId;
 
     /**
      * @var integer
@@ -41,26 +41,26 @@ class Tableupdate
 
 
     /**
-     * Set lastUpdate
+     * Set lastId
      *
-     * @param integer $lastUpdate
+     * @param integer $lastId
      * @return Tableupdate
      */
-    public function setLastUpdate($lastUpdate)
+    public function setLastId($lastId)
     {
-        $this->lastUpdate = $lastUpdate;
+        $this->lastId = $lastId;
 
         return $this;
     }
 
     /**
-     * Get lastUpdate
+     * Get lastId
      *
      * @return integer 
      */
-    public function getLastUpdate()
+    public function getLastId()
     {
-        return $this->lastUpdate;
+        return $this->lastId;
     }
 
     /**
