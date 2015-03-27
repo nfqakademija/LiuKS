@@ -239,7 +239,7 @@ DROP TABLE IF EXISTS `tableUpdate`;
 CREATE TABLE `tableUpdate` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `table_id` int(10) unsigned NOT NULL,
-  `last_update` int(10) unsigned NOT NULL,
+  `last_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `index2` (`table_id`),
   CONSTRAINT `fk_tableUpdate_1` FOREIGN KEY (`table_id`) REFERENCES `tables` (`id`)
