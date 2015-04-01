@@ -1,15 +1,13 @@
 #LiuKS
--------------------------
 
 ###Team members:
-Laurynas Baltrėnas
-Saulius Baltutis
+* Laurynas Baltrėnas
+* Saulius Baltutis
 
 ###Mentor:
-Darius Grigalevičius
+* Darius Grigalevičius
 
 #Working routes
--------------------------
 
 Route | Functionality
 ------------ | -------------
