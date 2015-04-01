@@ -13,16 +13,16 @@ use Doctrine\ORM\Mapping as ORM;
 class Games
 {
     /**
-     * @var boolean
+     * @var integer
      *
-     * @ORM\Column(name="goals1", type="boolean", nullable=false)
+     * @ORM\Column(name="goals1", type="integer", nullable=false)
      */
     private $goals1;
 
     /**
-     * @var boolean
+     * @var integer
      *
-     * @ORM\Column(name="goals2", type="boolean", nullable=false)
+     * @ORM\Column(name="goals2", type="integer", nullable=false)
      */
     private $goals2;
 
@@ -121,50 +121,98 @@ class Games
 
 
 
+//    /**
+//     * Set goals1
+//     *
+//     * @param boolean $goals1
+//     * @return Games
+//     */
+//    public function setGoals1($goals1)
+//    {
+//        $this->goals1 = $goals1;
+//
+//        return $this;
+//    }
+//
+//    /**
+//     * Get goals1
+//     *
+//     * @return boolean
+//     */
+//    public function getGoals1()
+//    {
+//        return $this->goals1;
+//    }
+//
+//    /**
+//     * Set goals2
+//     *
+//     * @param boolean $goals2
+//     * @return Games
+//     */
+//    public function setGoals2($goals2)
+//    {
+//        $this->goals2 = $goals2;
+//
+//        return $this;
+//    }
+//
+//    /**
+//     * Get goals2
+//     *
+//     * @return boolean
+//     */
+//    public function getGoals2()
+//    {
+//        return $this->goals2;
+//    }
+
+
+
     /**
-     * Set goals1
+     * Set goals based on team
      *
-     * @param boolean $goals1
+     * @param integer $goals
+     * @param integer $team
      * @return Games
      */
-    public function setGoals1($goals1)
+    public function setGoals($goals, $team)
     {
-        $this->goals1 = $goals1;
+        switch ($team)
+        {
+            case 0:
+                $this->goals1 = $goals;
+            break;
+            case 1:
+                $this->goals2 = $goals;
+            break;
+            default:
+                //throw error
+        }
 
         return $this;
     }
 
     /**
-     * Get goals1
+     * Get goals based on team
      *
-     * @return boolean 
+     * @param integer $team
+     * @return integer
      */
-    public function getGoals1()
+    public function getGoals($team)
     {
-        return $this->goals1;
-    }
-
-    /**
-     * Set goals2
-     *
-     * @param boolean $goals2
-     * @return Games
-     */
-    public function setGoals2($goals2)
-    {
-        $this->goals2 = $goals2;
-
-        return $this;
-    }
-
-    /**
-     * Get goals2
-     *
-     * @return boolean 
-     */
-    public function getGoals2()
-    {
-        return $this->goals2;
+        switch ($team)
+        {
+            case 0:
+                return $this->goals1;
+                break;
+            case 1:
+                return $this->goals2;
+                break;
+            default:
+                //throw error
+        }
+        return null;
     }
 
     /**
@@ -382,5 +430,60 @@ class Games
     public function getTable()
     {
         return $this->table;
+    }
+
+    /**
+     * Set user based on given position
+     *
+     * @param \Liuks\UserBundle\Entity\Users $user
+     * @param integer $position
+     * @return Games
+     */
+    public function setUser(\Liuks\UserBundle\Entity\Users $user, $position)
+    {
+
+        switch ($position)
+        {
+            case 1:
+                $this->user1 = $user;
+                break;
+            case 2:
+                $this->user2 = $user;
+                break;
+            case 3:
+                $this->user3 = $user;
+                break;
+            case 4:
+                $this->user4 = $user;
+                break;
+            default:
+                //error
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get user based on position
+     *
+     * @param integer $position
+     * @return \Liuks\UserBundle\Entity\Users
+     */
+    public function getUser($position)
+    {
+        switch ($position)
+        {
+            case 1:
+                return $this->user1;
+            case 2:
+                return $this->user2;
+            case 3:
+                return $this->user3;
+            case 4:
+                return $this->user4;
+            default:
+                //throw error
+        }
+        return null;
     }
 }
