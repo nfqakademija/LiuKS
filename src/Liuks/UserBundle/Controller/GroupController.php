@@ -1,6 +1,6 @@
 <?php
 
-namespace Liuks\TableBundle\Controller;
+namespace Liuks\UserBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 

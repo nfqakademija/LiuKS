@@ -1,3 +1,3 @@
-liuks_user_homepage:
-    path:     /hello/{name}
-    defaults: { _controller: LiuksUserBundle:Default:index }
+liuks_user_users:
+    resource: "@LiuksUserBundle/Resources/config/routing/users.yml"
+    prefix:   /users
