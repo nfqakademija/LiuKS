@@ -217,7 +217,7 @@ CREATE TABLE `tableShake` (
   PRIMARY KEY (`id`),
   KEY `table_id` (`table_id`),
   CONSTRAINT `fk_table_id` FOREIGN KEY (`table_id`) REFERENCES `tables` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -226,6 +226,7 @@ CREATE TABLE `tableShake` (
 
 LOCK TABLES `tableShake` WRITE;
 /*!40000 ALTER TABLE `tableShake` DISABLE KEYS */;
+INSERT INTO `tableShake` VALUES (1,1,0);
 /*!40000 ALTER TABLE `tableShake` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -243,7 +244,7 @@ CREATE TABLE `tableUpdate` (
   PRIMARY KEY (`id`),
   KEY `index2` (`table_id`),
   CONSTRAINT `fk_tableUpdate_1` FOREIGN KEY (`table_id`) REFERENCES `tables` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -252,6 +253,7 @@ CREATE TABLE `tableUpdate` (
 
 LOCK TABLES `tableUpdate` WRITE;
 /*!40000 ALTER TABLE `tableUpdate` DISABLE KEYS */;
+INSERT INTO `tableUpdate` VALUES (1,1,164117);
 /*!40000 ALTER TABLE `tableUpdate` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -268,8 +270,11 @@ CREATE TABLE `tables` (
   `city` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `available_from` time NOT NULL,
   `available_to` time NOT NULL,
-  `private` tinyint(1) NOT NULL,
+  `api` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `group_id` int(10) unsigned NOT NULL,
+  `private` tinyint(1) NOT NULL,
+  `free` tinyint(1) NOT NULL,
+  `disabled` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `group_id` (`group_id`),
   CONSTRAINT `private_group_table` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`)
@@ -282,7 +287,7 @@ CREATE TABLE `tables` (
 
 LOCK TABLES `tables` WRITE;
 /*!40000 ALTER TABLE `tables` DISABLE KEYS */;
-INSERT INTO `tables` VALUES (1,'Brastos g. 15, LT-47183','Kaunas','08:00:00','20:00:00',1,1);
+INSERT INTO `tables` VALUES (1,'Brastos g. 15, LT-47183','Kaunas','08:00:00','20:00:00','http://wonderwall.ox.nfq.lt/kickertable/api/v1/events',1,1,1,0);
 /*!40000 ALTER TABLE `tables` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -377,7 +382,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,1,'Laurynas','Baltrėnas','Laurynas.Baltrenas@gmail.com','123',1,0,0),(2,2,'Klemensas','Dranseika','Klemensas.Dranseika@ktu.edu','123',1,0,0),(3,3,'Saulius','Baltutis','S.Baltutis@gmail.com','123',1,0,0);
+INSERT INTO `users` VALUES (1,4255291,'Laurynas','Baltrėnas','Laurynas.Baltrenas@gmail.com','123',1,0,0),(2,4248132,'Saulius','Baltutis','S.Baltutis@gmail.com','123',1,0,0);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -406,7 +411,7 @@ CREATE TABLE `users_groups` (
 
 LOCK TABLES `users_groups` WRITE;
 /*!40000 ALTER TABLE `users_groups` DISABLE KEYS */;
-INSERT INTO `users_groups` VALUES (1,1,1),(2,2,1),(3,3,1);
+INSERT INTO `users_groups` VALUES (1,1,1),(2,2,1);
 /*!40000 ALTER TABLE `users_groups` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -419,4 +424,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-03-25 20:48:15
+-- Dump completed on 2015-04-01 19:57:23

@@ -41,11 +41,32 @@ class Tables
     private $availableTo;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="api", type="string", length=100, nullable=false)
+     */
+    private $api;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="private", type="boolean", nullable=false)
      */
     private $private;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="free", type="boolean", nullable=false)
+     */
+    private $free;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="disabled", type="boolean", nullable=false)
+     */
+    private $disabled;
 
     /**
      * @var integer
@@ -161,6 +182,29 @@ class Tables
     }
 
     /**
+     * Set api
+     *
+     * @param string $api
+     * @return Tables
+     */
+    public function setApi($api)
+    {
+        $this->api = $api;
+
+        return $this;
+    }
+
+    /**
+     * Get api
+     *
+     * @return string
+     */
+    public function getApi()
+    {
+        return $this->api;
+    }
+
+    /**
      * Set private
      *
      * @param boolean $private
@@ -181,6 +225,52 @@ class Tables
     public function getPrivate()
     {
         return $this->private;
+    }
+
+    /**
+     * Set free
+     *
+     * @param boolean $free
+     * @return Tables
+     */
+    public function setFree($free)
+    {
+        $this->free = $free;
+
+        return $this;
+    }
+
+    /**
+     * Get free
+     *
+     * @return boolean
+     */
+    public function getFree()
+    {
+        return $this->free;
+    }
+
+    /**
+     * Set disabled
+     *
+     * @param boolean $disabled
+     * @return Tables
+     */
+    public function setDisabled($disabled)
+    {
+        $this->disabled = $disabled;
+
+        return $this;
+    }
+
+    /**
+     * Get disabled
+     *
+     * @return boolean
+     */
+    public function getDisabled()
+    {
+        return $this->disabled;
     }
 
     /**
