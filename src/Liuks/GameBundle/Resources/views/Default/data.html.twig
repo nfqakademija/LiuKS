@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% if game != null  %}
+        <h1>Game Information</h1>
+        <h3>{{ game.getGoals(0) }} : {{ game.getGoals(1) }}</h3>
+        <table>
+            <tr>
+                <td>
+                    {{ game.getUser(0) is empty ? 'Svečias' : game.user(0).getName() }}
+                </td>
+                <td>
+                    {{ game.getUser(2) is empty ? 'Svečias' : game.user(2).getName() }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    {{ game.getUser(1) is empty ? 'Svečias' : game.user(1).getName() }}
+                </td>
+                <td>
+                    {{ game.getUser(3) is empty ? 'Svečias' : game.user(3).getName() }}
+                </td>
+            </tr>
+        </table>
+    {% endif %}
+    <p>Last table shake happened: {{ shake|date('Y-m-d H:i:s') }}</p>
+    <p>Last action: {{ action }}</p>
+{% endblock %}
