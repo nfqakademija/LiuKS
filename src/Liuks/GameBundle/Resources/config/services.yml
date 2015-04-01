@@ -3,3 +3,5 @@ services:
         class: Liuks\GameBundle\Services\GameService
         calls:
             - [setContainer, [@service_container]]
+    api_data.service:
+        class: Liuks\GameBundle\Services\DataService
