@@ -3,17 +3,28 @@
 namespace Liuks\GameBundle\Services;
 
 
-class DataService
+use Liuks\GameBundle\Events\ApiResponseEvent;
+use Symfony\Component\DependencyInjection\ContainerAware;
+
+class DataService extends ContainerAware
 {
+    /**
+     * @param $api
+     * @param $last_id
+     * @return mixed
+     */
     public function getData($api, $last_id)
     {
         $url = $api."?rows=10&from-id=".$last_id;
         //$response = $this->getResponse($url);
         $response = $this->getTestData($last_id);
-
         return $this->parseData($response);
     }
 
+    /**
+     * @param $url
+     * @return mixed
+     */
     private function getResponse($url)
     {
         $username = 'nfq';
@@ -39,28 +50,41 @@ class DataService
         return $response;
     }
 
+    /**
+     * @param $response
+     * @return mixed
+     */
     private function parseData($response)
     {
+        $apiEvent = new ApiResponseEvent();
+        $apiEvent->setResponse($response);
+
+        $dispatcher = $this->container->get('event_dispatcher');
+
         $data = json_decode($response);
 
         if (!$data || $data->status != 'ok')
         {
-            //error, because API is down.
-            return null;
+            $dispatcher->dispatch($apiEvent::APIERROR, $apiEvent);
         }
-        else
+
+        foreach ($data->records as $record)
         {
-            foreach ($data->records as $record)
+            if ($record->data)
             {
-                if ($record->data)
-                {
-                    $record->data = json_decode($record->data);
-                }
+                $record->data = json_decode($record->data);
             }
-            return $data->records;
         }
+
+        $dispatcher->dispatch($apiEvent::APISUCCESS, $apiEvent);
+
+        return $data->records;
     }
 
+    /**
+     * @param $last_id
+     * @return bool|string
+     */
     private function getTestData($last_id)
     {
         $response = '
@@ -103,7 +127,7 @@ class DataService
         }
         else
         {
-            $data = null;
+            return false;
         }
         return json_encode($data);
     }

@@ -5,3 +5,12 @@ services:
             - [setContainer, [@service_container]]
     api_data.service:
         class: Liuks\GameBundle\Services\DataService
+        calls:
+            - [setContainer, [@service_container]]
+
+
+    api_response.listener:
+        class: Liuks\GameBundle\EventListeners\ApiResponseEventListener
+        tags:
+            - { name: kernel.event_listener, event: api_response_error_event, method: onApiResponseError }
+            - { name: kernel.event_listener, event: api_response_error_event, method: onApiResponseSuccess }
