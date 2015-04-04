@@ -13,4 +13,11 @@ services:
         class: Liuks\GameBundle\EventListeners\ApiResponseEventListener
         tags:
             - { name: kernel.event_listener, event: api_response_error_event, method: onApiResponseError }
-            - { name: kernel.event_listener, event: api_response_error_event, method: onApiResponseSuccess }
+            - { name: kernel.event_listener, event: api_response_success_event, method: onApiResponseSuccess }
+    game_status.listener:
+        class: Liuks\GameBundle\EventListeners\GameStatusEventListener
+        tags:
+            - { name: kernel.event_listener, event: game_created_event, method: onGameCreate }
+            - { name: kernel.event_listener, event: game_over_event, method: onGameOver }
+        calls:
+            - [setContainer, [@service_container]]

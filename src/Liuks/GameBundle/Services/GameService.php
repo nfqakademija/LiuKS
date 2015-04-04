@@ -2,8 +2,8 @@
 
 namespace Liuks\GameBundle\Services;
 
-
 use Liuks\GameBundle\Entity\Games;
+use Liuks\GameBundle\Events\GameStatusEvent;
 use Symfony\Component\DependencyInjection\ContainerAware;
 
 class GameService extends ContainerAware
@@ -31,8 +31,7 @@ class GameService extends ContainerAware
         if (!$game)
         {
             $table = $em->getRepository('LiuksTableBundle:Tables')->find($table_id);
-            $table->setFree(false);
-            $em->flush($table);
+
 
             $start_time = $shake->getLastShake();
             if ($start_time == 0)
@@ -49,6 +48,10 @@ class GameService extends ContainerAware
             $game->setEndTime(0);
             $em->persist($game);
             $em->flush($game);
+
+            $gameEvent = new GameStatusEvent();
+            $gameEvent->setTable($game->getTable());
+            $this->container->get('event_dispatcher')->dispatch($gameEvent::GAMECREATED, $gameEvent);
         }
         return $game;
     }
@@ -127,14 +130,9 @@ class GameService extends ContainerAware
                 $em->flush($user);
             }
 
-            $table = $game->getTable();
-            $table->setFree(true);
-            $em->flush($table);
-
-            $shake = $em->getRepository('LiuksTableBundle:Tableshake')->findOneBy(['table' => $table->getId()]);
-            $shake->setLastShake(0);
-            $em->flush($shake);
-
+            $gameEvent = new GameStatusEvent();
+            $gameEvent->setTable($game->getTable());
+            $this->container->get('event_dispatcher')->dispatch($gameEvent::GAMEOVER, $gameEvent);
         }
         return $game;
     }
