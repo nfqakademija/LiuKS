@@ -1,0 +1,55 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Tables list</h1>
+
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Address</th>
+                <th>City</th>
+                <th>Availablefrom</th>
+                <th>Availableto</th>
+                <th>Api</th>
+                <th>Private</th>
+                <th>Free</th>
+                <th>Disabled</th>
+                <th>Id</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('tables_show', { 'id': entity.id }) }}">{{ entity.address }}</a></td>
+                <td>{{ entity.city }}</td>
+                <td>{{ entity.availableFrom|date('H:i') }}</td>
+                <td>{{ entity.availableTo|date('H:i') }}</td>
+                <td>{{ entity.api }}</td>
+                <td>{{ entity.private }}</td>
+                <td>{{ entity.free }}</td>
+                <td>{{ entity.disabled }}</td>
+                <td>{{ entity.id }}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('tables_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('tables_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+        <ul>
+        <li>
+            <a href="{{ path('tables_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+    {% endblock %}

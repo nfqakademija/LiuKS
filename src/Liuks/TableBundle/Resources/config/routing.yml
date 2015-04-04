@@ -1,3 +1,7 @@
+liuks_table_tables:
+    resource: "@LiuksTableBundle/Resources/config/routing/tables.yml"
+    prefix:   /table
+
 liuks_table_homepage:
     path:     /hello/{name}
     defaults: { _controller: LiuksTableBundle:Default:index }

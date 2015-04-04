@@ -1,4 +1,8 @@
 services:
-#    liuks_table.example:
-#        class: Liuks\TableBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
+
+    table_creation.listener:
+        class: Liuks\TableBundle\EventListeners\TableCreationEventListener
+        tags:
+            - { name: kernel.event_listener, event: table_created_successfully, method: onTableCreate }
+        calls:
+            - [setContainer, [@service_container]]
