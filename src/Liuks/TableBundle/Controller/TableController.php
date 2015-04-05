@@ -102,6 +102,9 @@ class TableController extends Controller
     /**
      * Finds and displays a Table entity.
      *
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
      */
     public function showAction($id)
     {
@@ -124,6 +127,8 @@ class TableController extends Controller
     /**
      * Displays a form to edit an existing Table entity.
      *
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function editAction($id)
     {
@@ -163,9 +168,13 @@ class TableController extends Controller
 
         return $form;
     }
+
     /**
      * Edits an existing Table entity.
      *
+     * @param Request $request
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function updateAction(Request $request, $id)
     {
@@ -193,9 +202,13 @@ class TableController extends Controller
             'delete_form' => $deleteForm->createView(),
         ));
     }
+
     /**
      * Deletes a Table entity.
      *
+     * @param Request $request
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteAction(Request $request, $id)
     {
@@ -234,6 +247,10 @@ class TableController extends Controller
         ;
     }
 
+    /**
+     * @param int $id Table id
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function dataAction($id)
     {
         $em = $this->get('doctrine.orm.default_entity_manager');
@@ -249,33 +266,7 @@ class TableController extends Controller
         foreach ($records as $record)
         {
             $action = $record->type;
-            $action_time = $record->timeSec;
-            switch ($record->type)
-            {
-                case "TableShake":
-                    if ($table->getLastShake() == 0)
-                    {
-                        $table->setLastShake($action_time);
-                    }
-                    //TODO: set lastShake to 0 every 1 minute
-                    break;
-                case "AutoGoal":
-                    $this->get('game_utils.service')->calculatePoints($id, $record->data->team, $action_time);
-                    break;
-                case "CardSwipe":
-                    $user = $em->getRepository('LiuksUserBundle:Users')->findOneBy(['cardId' => $record->data->card_id]);
-                    if (!$user)
-                    {
-                        //TODO: create new user (event or service)
-                    }
-                    else
-                    {
-                        $this->get('game_utils.service')->addPlayer($id, $record->data->team, $record->data->player, $user);
-                    }
-                    break;
-                default:
-                    break;
-            }
+            $this->get('table_actions.service')->handleTableAction($table, $record);
         }
         $table->setLastEventId(end($records)->id);
         $em->flush($table);

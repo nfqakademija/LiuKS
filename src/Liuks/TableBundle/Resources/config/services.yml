@@ -1,4 +1,8 @@
 services:
+    table_actions.service:
+        class: Liuks\TableBundle\Services\TableService
+        calls:
+            - [setContainer, [@service_container]]
 
     table_creation.listener:
         class: Liuks\TableBundle\EventListeners\TableCreationEventListener
