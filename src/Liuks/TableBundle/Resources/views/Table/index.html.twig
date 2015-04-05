@@ -1,55 +1,48 @@
 {% extends '::base.html.twig' %}
 
+{% block title -%}Stalai |{% endblock %}
+
 {% block body -%}
-    <h1>Tables list</h1>
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Stalai</h1>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Adresas</th>
+                        <th>Miestas</th>
+                        <th>Prieinamumas</th>
+                        <th>API</th>
+                        <th>Privatus?</th>
+                        <th>Veiksmai</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for entity in entities %}
+                    <tr>
+                        <td>{{ entity.address }}</td>
+                        <td>{{ entity.city }}</td>
+                        <td>{{ entity.availableFrom|date('H:i') }} - {{ entity.availableTo|date('H:i') }}</td>
+                        <td>{{ entity.api }}</td>
+                        <td>{{ entity.private == 1 ? 'Taip' : 'Ne' }}</td>
+                        <td>
+                            <ul class="list-inline">
+                                <li>
+                                    <a href="{{ path('table_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('table_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-chevron-right"></span></a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
 
-    <table class="records_list">
-        <thead>
-            <tr>
-                <th>Address</th>
-                <th>City</th>
-                <th>Availablefrom</th>
-                <th>Availableto</th>
-                <th>Api</th>
-                <th>Private</th>
-                <th>Free</th>
-                <th>Disabled</th>
-                <th>Id</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for entity in entities %}
-            <tr>
-                <td><a href="{{ path('table_show', { 'id': entity.id }) }}">{{ entity.address }}</a></td>
-                <td>{{ entity.city }}</td>
-                <td>{{ entity.availableFrom|date('H:i') }}</td>
-                <td>{{ entity.availableTo|date('H:i') }}</td>
-                <td>{{ entity.api }}</td>
-                <td>{{ entity.private }}</td>
-                <td>{{ entity.free }}</td>
-                <td>{{ entity.disabled }}</td>
-                <td>{{ entity.id }}</td>
-                <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('table_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('table_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-        <ul>
-        <li>
-            <a href="{{ path('table_new') }}">
-                Create a new entry
+            <a class="btn btn-success" href="{{ path('table_new') }}">
+                <span class="glyphicon glyphicon-plus"></span> Naujas Stalas
             </a>
-        </li>
-    </ul>
-    {% endblock %}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends '::base.html.twig' %}
+
+{% block title -%}Naudotojai |{% endblock %}
+
+{% block body -%}
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Naudotojai</h1>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Kortelės ID</th>
+                    <th>Pilnas vardas</th>
+                    <th>El. paštas</th>
+                    <th>Tipas</th>
+                    <th>Žaista</th>
+                    <th>Laimėta</th>
+                    <th>Veiksmai</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for entity in entities %}
+                    <tr>
+                        <td><a href="{{ path('users_show', { 'id': entity.id }) }}">{{ entity.cardId }}</a></td>
+                        <td>{{ entity.name }} {{ entity.surname }}</td>
+                        <td>{{ entity.email }}</td>
+                        <td>{{ entity.type }}</td>
+                        <td>{{ entity.gamesPlayed }}</td>
+                        <td>{{ entity.gamesWon }}</td>
+                        <td>
+                            <ul class="list-inline">
+                                <li>
+                                    <a href="{{ path('users_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('users_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-chevron-right"></span></a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <a class="btn btn-success" href="{{ path('users_new') }}">
+                <span class="glyphicon glyphicon-plus"></span> Naujas Naudotojas
+            </a>
+        </div>
+    </div>
+{% endblock %}
