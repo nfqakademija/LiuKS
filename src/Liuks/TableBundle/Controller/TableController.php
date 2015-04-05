@@ -108,18 +108,22 @@ class TableController extends Controller
      */
     public function showAction($id)
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->get('doctrine.orm.default_entity_manager');
 
-        $entity = $em->getRepository('LiuksTableBundle:Table')->find($id);
+        $table = $em->getRepository('LiuksTableBundle:Table')->find($id);
 
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Table entity.');
+        if (!$table) {
+            throw $this->createNotFoundException('Ooops, it looks like this table is in another dimension...');
         }
+        $games = $em->getRepository('LiuksGameBundle:Games')->findBy(['table' => $table->getId()]);
 
+        $game = $this->get('game_utils.service')->getCurrentGame($id);
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('LiuksTableBundle:Table:show.html.twig', array(
-            'entity'      => $entity,
+            'table'      => $table,
+            'game'        => $game,
+            'games'        => $games,
             'delete_form' => $deleteForm->createView(),
         ));
     }
@@ -242,7 +246,7 @@ class TableController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('table_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->add('submit', 'submit', array('label' => 'Ištrinti'))
             ->getForm()
         ;
     }
