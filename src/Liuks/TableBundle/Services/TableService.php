@@ -21,11 +21,10 @@ class TableService extends ContainerAware
         switch ($action)
         {
             case "TableShake":
-                if ($table->getLastShake() == 0)
+                if ($table->getFree() && ($table->getLastShake() == 0 || $action_time - $table->getLastShake() >= 60))
                 {
                     $table->setLastShake($action_time);
                 }
-                //TODO: set lastShake to 0 every 1 minute
                 break;
             case "AutoGoal":
                 $this->container->get('game_utils.service')->calculatePoints($table->getId(), $record->data->team, $action_time);
