@@ -6,27 +6,27 @@ use Liuks\TableBundle\Events\TableCreationEvent;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-use Liuks\TableBundle\Entity\Tables;
-use Liuks\TableBundle\Form\TablesType;
+use Liuks\TableBundle\Entity\Table;
+use Liuks\TableBundle\Form\TableType;
 
 /**
- * Tables controller.
+ * Table controller.
  *
  */
 class TableController extends Controller
 {
 
     /**
-     * Lists all Tables entities.
+     * Lists all Table entities.
      *
      */
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('LiuksTableBundle:Tables')->findAll();
+        $entities = $em->getRepository('LiuksTableBundle:Table')->findAll();
 
-        return $this->render('LiuksTableBundle:Tables:index.html.twig', array(
+        return $this->render('LiuksTableBundle:Table:index.html.twig', array(
             'entities' => $entities,
         ));
     }
@@ -37,7 +37,7 @@ class TableController extends Controller
      */
     public function createAction(Request $request)
     {
-        $entity = new Tables();
+        $entity = new Table();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
@@ -45,6 +45,8 @@ class TableController extends Controller
             $em = $this->getDoctrine()->getManager();
             $entity->setDisabled(0);
             $entity->setFree(1);
+            $entity->setLastShake(0);
+            $entity->setLastEventId(0);
             $entity->setGroup($em->getRepository('LiuksUserBundle:Groups')->find(1)); //TODO: get from user which creates table
             $em->persist($entity);
             $em->flush();
@@ -54,26 +56,26 @@ class TableController extends Controller
             $dispatcher = $this->container->get('event_dispatcher');
             $dispatcher->dispatch($tableEvent::TABLECREATED, $tableEvent);
 
-            return $this->redirect($this->generateUrl('tables_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('table_show', array('id' => $entity->getId())));
         }
 
-        return $this->render('LiuksTableBundle:Tables:new.html.twig', array(
+        return $this->render('LiuksTableBundle:Table:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
     }
 
     /**
-     * Creates a form to create a Tables entity.
+     * Creates a form to create a Table entity.
      *
-     * @param Tables $entity The entity
+     * @param Table $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(Tables $entity)
+    private function createCreateForm(Table $entity)
     {
-        $form = $this->createForm(new TablesType(), $entity, array(
-            'action' => $this->generateUrl('tables_create'),
+        $form = $this->createForm(new TableType(), $entity, array(
+            'action' => $this->generateUrl('table_create'),
             'method' => 'POST',
         ));
 
@@ -83,60 +85,60 @@ class TableController extends Controller
     }
 
     /**
-     * Displays a form to create a new Tables entity.
+     * Displays a form to create a new Table entity.
      *
      */
     public function newAction()
     {
-        $entity = new Tables();
+        $entity = new Table();
         $form   = $this->createCreateForm($entity);
 
-        return $this->render('LiuksTableBundle:Tables:new.html.twig', array(
+        return $this->render('LiuksTableBundle:Table:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
     }
 
     /**
-     * Finds and displays a Tables entity.
+     * Finds and displays a Table entity.
      *
      */
     public function showAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('LiuksTableBundle:Tables')->find($id);
+        $entity = $em->getRepository('LiuksTableBundle:Table')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Tables entity.');
+            throw $this->createNotFoundException('Unable to find Table entity.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('LiuksTableBundle:Tables:show.html.twig', array(
+        return $this->render('LiuksTableBundle:Table:show.html.twig', array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Displays a form to edit an existing Tables entity.
+     * Displays a form to edit an existing Table entity.
      *
      */
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('LiuksTableBundle:Tables')->find($id);
+        $entity = $em->getRepository('LiuksTableBundle:Table')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Tables entity.');
+            throw $this->createNotFoundException('Unable to find Table entity.');
         }
 
         $editForm = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('LiuksTableBundle:Tables:edit.html.twig', array(
+        return $this->render('LiuksTableBundle:Table:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -144,16 +146,16 @@ class TableController extends Controller
     }
 
     /**
-    * Creates a form to edit a Tables entity.
+    * Creates a form to edit a Table entity.
     *
-    * @param Tables $entity The entity
+    * @param Table $entity The entity
     *
     * @return \Symfony\Component\Form\Form The form
     */
-    private function createEditForm(Tables $entity)
+    private function createEditForm(Table $entity)
     {
-        $form = $this->createForm(new TablesType(), $entity, array(
-            'action' => $this->generateUrl('tables_update', array('id' => $entity->getId())),
+        $form = $this->createForm(new TableType(), $entity, array(
+            'action' => $this->generateUrl('table_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
 
@@ -162,17 +164,17 @@ class TableController extends Controller
         return $form;
     }
     /**
-     * Edits an existing Tables entity.
+     * Edits an existing Table entity.
      *
      */
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('LiuksTableBundle:Tables')->find($id);
+        $entity = $em->getRepository('LiuksTableBundle:Table')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Tables entity.');
+            throw $this->createNotFoundException('Unable to find Table entity.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -182,17 +184,17 @@ class TableController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('tables_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('table_edit', array('id' => $id)));
         }
 
-        return $this->render('LiuksTableBundle:Tables:edit.html.twig', array(
+        return $this->render('LiuksTableBundle:Table:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
     }
     /**
-     * Deletes a Tables entity.
+     * Deletes a Table entity.
      *
      */
     public function deleteAction(Request $request, $id)
@@ -202,10 +204,10 @@ class TableController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('LiuksTableBundle:Tables')->find($id);
+            $entity = $em->getRepository('LiuksTableBundle:Table')->find($id);
 
             if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Tables entity.');
+                throw $this->createNotFoundException('Unable to find Table entity.');
             }
 
             $em->remove($entity);
@@ -216,7 +218,7 @@ class TableController extends Controller
     }
 
     /**
-     * Creates a form to delete a Tables entity by id.
+     * Creates a form to delete a Table entity by id.
      *
      * @param mixed $id The entity id
      *
@@ -225,10 +227,60 @@ class TableController extends Controller
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('tables_delete', array('id' => $id)))
+            ->setAction($this->generateUrl('table_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
         ;
+    }
+
+    public function dataAction($id)
+    {
+        $em = $this->get('doctrine.orm.default_entity_manager');
+
+        $table = $em->getRepository('LiuksTableBundle:Table')->find($id);
+        if (!$table)
+        {
+            throw $this->createNotFoundException('Ooops, it looks like this table is in another dimension...');
+        }
+        $records = $this->get('api_data.service')->getData($table->getApi(), $table->getLastEventId());
+
+        $action = ''; //for debug
+        foreach ($records as $record)
+        {
+            $action = $record->type;
+            $action_time = $record->timeSec;
+            switch ($record->type)
+            {
+                case "TableShake":
+                    if ($table->getLastShake() == 0)
+                    {
+                        $table->setLastShake($action_time);
+                    }
+                    //TODO: set lastShake to 0 every 1 minute
+                    break;
+                case "AutoGoal":
+                    $this->get('game_utils.service')->calculatePoints($id, $record->data->team, $action_time);
+                    break;
+                case "CardSwipe":
+                    $user = $em->getRepository('LiuksUserBundle:Users')->findOneBy(['cardId' => $record->data->card_id]);
+                    if (!$user)
+                    {
+                        //TODO: create new user (event or service)
+                    }
+                    else
+                    {
+                        $this->get('game_utils.service')->addPlayer($id, $record->data->team, $record->data->player, $user);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        $table->setLastEventId(end($records)->id);
+        $em->flush($table);
+
+        $game = $this->get('game_utils.service')->getCurrentGame($id);
+        return $this->render('LiuksTableBundle:Table:data.html.twig', ['game' => $game, 'shake' => $table->getLastShake(), 'action' => $action]);
     }
 }

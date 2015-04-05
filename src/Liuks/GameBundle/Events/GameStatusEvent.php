@@ -10,12 +10,12 @@ class GameStatusEvent extends Event
     const GAMEOVER = 'game_over_event';
 
     /**
-     * @var \Liuks\TableBundle\Entity\Tables
+     * @var \Liuks\TableBundle\Entity\Table
      */
     private $table;
 
     /**
-     * @return \Liuks\TableBundle\Entity\Tables
+     * @return \Liuks\TableBundle\Entity\Table
      */
     public function getTable()
     {
@@ -23,7 +23,7 @@ class GameStatusEvent extends Event
     }
 
     /**
-     * @param \Liuks\TableBundle\Entity\Tables $table
+     * @param \Liuks\TableBundle\Entity\Table $table
      */
     public function setTable($table)
     {

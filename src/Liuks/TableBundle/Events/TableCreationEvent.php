@@ -8,12 +8,12 @@ class TableCreationEvent extends Event
     const TABLECREATED = 'table_created_successfully';
 
     /**
-     * @var \Liuks\TableBundle\Entity\Tables
+     * @var \Liuks\TableBundle\Entity\Table
      */
     private $table;
 
     /**
-     * @return \Liuks\TableBundle\Entity\Tables
+     * @return \Liuks\TableBundle\Entity\Table
      */
     public function getTable()
     {
@@ -21,7 +21,7 @@ class TableCreationEvent extends Event
     }
 
     /**
-     * @param \Liuks\TableBundle\Entity\Tables $table
+     * @param \Liuks\TableBundle\Entity\Table $table
      */
     public function setTable($table)
     {

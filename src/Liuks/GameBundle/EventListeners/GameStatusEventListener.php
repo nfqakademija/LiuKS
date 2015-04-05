@@ -23,9 +23,7 @@ class GameStatusEventListener extends ContainerAware
 
         $table = $event->getTable();
         $table->setFree(true);
-
-        $shake = $em->getRepository('LiuksTableBundle:Tableshake')->findOneBy(['table' => $table->getId()]);
-        $shake->setLastShake(0);
-        $em->flush([$table, $shake]);
+        $table->setLastShake(0);
+        $em->flush($table);
     }
 }

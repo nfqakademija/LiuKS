@@ -46,9 +46,9 @@ class Reservations
     private $user;
 
     /**
-     * @var \Liuks\TableBundle\Entity\Tables
+     * @var \Liuks\TableBundle\Entity\Table
      *
-     * @ORM\ManyToOne(targetEntity="Liuks\TableBundle\Entity\Tables")
+     * @ORM\ManyToOne(targetEntity="Liuks\TableBundle\Entity\Table")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="table_id", referencedColumnName="id")
      * })
@@ -139,10 +139,10 @@ class Reservations
     /**
      * Set table
      *
-     * @param \Liuks\TableBundle\Entity\Tables $table
+     * @param \Liuks\TableBundle\Entity\Table $table
      * @return Reservations
      */
-    public function setTable(\Liuks\TableBundle\Entity\Tables $table = null)
+    public function setTable(\Liuks\TableBundle\Entity\Table $table = null)
     {
         $this->table = $table;
 
@@ -152,7 +152,7 @@ class Reservations
     /**
      * Get table
      *
-     * @return \Liuks\TableBundle\Entity\Tables
+     * @return \Liuks\TableBundle\Entity\Table
      */
     public function getTable()
     {

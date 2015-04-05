@@ -1,3 +1,0 @@
-liuks_game_homepage:
-    path:     /data/{table_id}
-    defaults: { _controller: LiuksGameBundle:Game:data }

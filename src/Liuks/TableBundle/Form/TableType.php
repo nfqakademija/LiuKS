@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class TablesType extends AbstractType
+class TableType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -30,7 +30,7 @@ class TablesType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Liuks\TableBundle\Entity\Tables'
+            'data_class' => 'Liuks\TableBundle\Entity\Table'
         ));
     }
 
@@ -39,6 +39,6 @@ class TablesType extends AbstractType
      */
     public function getName()
     {
-        return 'liuks_tablebundle_tables';
+        return 'liuks_tablebundle_table';
     }
 }

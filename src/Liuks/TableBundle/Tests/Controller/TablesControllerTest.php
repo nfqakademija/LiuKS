@@ -13,13 +13,13 @@ class TableControllerTest extends WebTestCase
         $client = static::createClient();
 
         // Create a new entry in the database
-        $crawler = $client->request('GET', '/tables/');
-        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "Unexpected HTTP status code for GET /tables/");
+        $crawler = $client->request('GET', '/table/');
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "Unexpected HTTP status code for GET /table/");
         $crawler = $client->click($crawler->selectLink('Create a new entry')->link());
 
         // Fill in the form and submit it
         $form = $crawler->selectButton('Create')->form(array(
-            'liuks_tablebundle_tables[field_name]'  => 'Test',
+            'liuks_tablebundle_table[field_name]'  => 'Test',
             // ... other fields to fill
         ));
 
@@ -33,7 +33,7 @@ class TableControllerTest extends WebTestCase
         $crawler = $client->click($crawler->selectLink('Edit')->link());
 
         $form = $crawler->selectButton('Update')->form(array(
-            'liuks_tablebundle_tables[field_name]'  => 'Foo',
+            'liuks_tablebundle_table[field_name]'  => 'Foo',
             // ... other fields to fill
         ));
 

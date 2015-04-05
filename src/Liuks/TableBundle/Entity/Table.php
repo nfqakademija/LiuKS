@@ -5,12 +5,12 @@ namespace Liuks\TableBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Tables
+ * Table
  *
  * @ORM\Table(name="tables", indexes={@ORM\Index(name="group_id", columns={"group_id"})})
  * @ORM\Entity
  */
-class Tables
+class Table
 {
     /**
      * @var string
@@ -55,6 +55,20 @@ class Tables
     private $private;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="last_event_id", type="integer", nullable=false)
+     */
+    private $lastEventId;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="last_shake", type="integer", nullable=false)
+     */
+    private $lastShake;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="free", type="boolean", nullable=false)
@@ -93,7 +107,7 @@ class Tables
      * Set address
      *
      * @param string $address
-     * @return Tables
+     * @return Table
      */
     public function setAddress($address)
     {
@@ -116,7 +130,7 @@ class Tables
      * Set city
      *
      * @param string $city
-     * @return Tables
+     * @return Table
      */
     public function setCity($city)
     {
@@ -139,7 +153,7 @@ class Tables
      * Set availableFrom
      *
      * @param \DateTime $availableFrom
-     * @return Tables
+     * @return Table
      */
     public function setAvailableFrom($availableFrom)
     {
@@ -162,7 +176,7 @@ class Tables
      * Set availableTo
      *
      * @param \DateTime $availableTo
-     * @return Tables
+     * @return Table
      */
     public function setAvailableTo($availableTo)
     {
@@ -185,7 +199,7 @@ class Tables
      * Set api
      *
      * @param string $api
-     * @return Tables
+     * @return Table
      */
     public function setApi($api)
     {
@@ -208,7 +222,7 @@ class Tables
      * Set private
      *
      * @param boolean $private
-     * @return Tables
+     * @return Table
      */
     public function setPrivate($private)
     {
@@ -228,10 +242,56 @@ class Tables
     }
 
     /**
+     * Set lastId
+     *
+     * @param integer $lastEventId
+     * @return Table
+     */
+    public function setLastEventId($lastEventId)
+    {
+        $this->lastEventId = $lastEventId;
+
+        return $this;
+    }
+
+    /**
+     * Get lastId
+     *
+     * @return integer
+     */
+    public function getLastEventId()
+    {
+        return $this->lastEventId;
+    }
+
+    /**
+     * Set lastShake
+     *
+     * @param integer $lastShake
+     * @return Table
+     */
+    public function setLastShake($lastShake)
+    {
+        $this->lastShake = $lastShake;
+
+        return $this;
+    }
+
+    /**
+     * Get lastShake
+     *
+     * @return integer
+     */
+    public function getLastShake()
+    {
+        return $this->lastShake;
+    }
+
+    /**
      * Set free
      *
      * @param boolean $free
-     * @return Tables
+     * @return Table
      */
     public function setFree($free)
     {
@@ -254,7 +314,7 @@ class Tables
      * Set disabled
      *
      * @param boolean $disabled
-     * @return Tables
+     * @return Table
      */
     public function setDisabled($disabled)
     {
@@ -287,7 +347,7 @@ class Tables
      * Set group
      *
      * @param \Liuks\UserBundle\Entity\Groups $group
-     * @return Tables
+     * @return Table
      */
     public function setGroup(\Liuks\UserBundle\Entity\Groups $group = null)
     {

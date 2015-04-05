@@ -21,7 +21,7 @@
         <tbody>
         {% for entity in entities %}
             <tr>
-                <td><a href="{{ path('tables_show', { 'id': entity.id }) }}">{{ entity.address }}</a></td>
+                <td><a href="{{ path('table_show', { 'id': entity.id }) }}">{{ entity.address }}</a></td>
                 <td>{{ entity.city }}</td>
                 <td>{{ entity.availableFrom|date('H:i') }}</td>
                 <td>{{ entity.availableTo|date('H:i') }}</td>
@@ -33,10 +33,10 @@
                 <td>
                 <ul>
                     <li>
-                        <a href="{{ path('tables_show', { 'id': entity.id }) }}">show</a>
+                        <a href="{{ path('table_show', { 'id': entity.id }) }}">show</a>
                     </li>
                     <li>
-                        <a href="{{ path('tables_edit', { 'id': entity.id }) }}">edit</a>
+                        <a href="{{ path('table_edit', { 'id': entity.id }) }}">edit</a>
                     </li>
                 </ul>
                 </td>
@@ -47,7 +47,7 @@
 
         <ul>
         <li>
-            <a href="{{ path('tables_new') }}">
+            <a href="{{ path('table_new') }}">
                 Create a new entry
             </a>
         </li>

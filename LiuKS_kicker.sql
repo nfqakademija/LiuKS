@@ -204,60 +204,6 @@ LOCK TABLES `reservations` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `tableShake`
---
-
-DROP TABLE IF EXISTS `tableShake`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tableShake` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `table_id` int(10) unsigned NOT NULL,
-  `last_shake` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `table_id` (`table_id`),
-  CONSTRAINT `fk_table_id` FOREIGN KEY (`table_id`) REFERENCES `tables` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tableShake`
---
-
-LOCK TABLES `tableShake` WRITE;
-/*!40000 ALTER TABLE `tableShake` DISABLE KEYS */;
-INSERT INTO `tableShake` VALUES (1,1,0);
-/*!40000 ALTER TABLE `tableShake` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `tableUpdate`
---
-
-DROP TABLE IF EXISTS `tableUpdate`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tableUpdate` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `table_id` int(10) unsigned NOT NULL,
-  `last_id` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `index2` (`table_id`),
-  CONSTRAINT `fk_tableUpdate_1` FOREIGN KEY (`table_id`) REFERENCES `tables` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tableUpdate`
---
-
-LOCK TABLES `tableUpdate` WRITE;
-/*!40000 ALTER TABLE `tableUpdate` DISABLE KEYS */;
-INSERT INTO `tableUpdate` VALUES (1,1,164117);
-/*!40000 ALTER TABLE `tableUpdate` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `tables`
 --
 
@@ -273,12 +219,14 @@ CREATE TABLE `tables` (
   `api` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `group_id` int(10) unsigned NOT NULL,
   `private` tinyint(1) NOT NULL,
+  `last_shake` int(10) unsigned NOT NULL,
+  `last_event_id` int(10) unsigned NOT NULL,
   `free` tinyint(1) NOT NULL,
   `disabled` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `group_id` (`group_id`),
   CONSTRAINT `private_group_table` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -287,7 +235,7 @@ CREATE TABLE `tables` (
 
 LOCK TABLES `tables` WRITE;
 /*!40000 ALTER TABLE `tables` DISABLE KEYS */;
-INSERT INTO `tables` VALUES (1,'Brastos g. 15, LT-47183','Kaunas','08:00:00','20:00:00','http://wonderwall.ox.nfq.lt/kickertable/api/v1/events',1,1,1,0);
+INSERT INTO `tables` VALUES (1,'Brastos g. 15, LT-47183','Kaunas','08:00:00','20:00:00','http://wonderwall.ox.nfq.lt/kickertable/api/v1/events',1,1,0,0,1,0);
 /*!40000 ALTER TABLE `tables` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -373,7 +321,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `card_id` (`card_id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -402,7 +350,7 @@ CREATE TABLE `users_groups` (
   KEY `group_id` (`group_id`),
   CONSTRAINT `users_groups_group_id` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`),
   CONSTRAINT `users_groups_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -424,4 +372,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-04-01 19:57:23
+-- Dump completed on 2015-04-05  3:42:09

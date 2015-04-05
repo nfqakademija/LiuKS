@@ -1,7 +1,7 @@
 {% extends '::base.html.twig' %}
 
 {% block body -%}
-    <h1>Tables</h1>
+    <h1>Table</h1>
 
     <table class="record_properties">
         <tbody>
@@ -51,7 +51,7 @@
         </a>
     </li>
     <li>
-        <a href="{{ path('tables_edit', { 'id': entity.id }) }}">
+        <a href="{{ path('table_edit', { 'id': entity.id }) }}">
             Edit
         </a>
     </li>

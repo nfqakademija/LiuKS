@@ -25,20 +25,18 @@ class GameService extends ContainerAware
     public function newGame($table_id)
     {
         $em = $this->container->get('doctrine.orm.default_entity_manager');
-        $shake = $em->getRepository('LiuksTableBundle:Tableshake')->findOneBy(['table' => $table_id]);
-        $game = $em->getRepository('LiuksGameBundle:Games')->findOneBy(['table' => $table_id, 'startTime' => $shake->getLastShake(), 'endTime' => 0]);
 
+        $table = $em->getRepository('LiuksTableBundle:Table')->find($table_id);
+        $start_time = $table->getLastShake();
+
+        $game = $em->getRepository('LiuksGameBundle:Games')->findOneBy(['table' => $table_id, 'startTime' => $start_time, 'endTime' => 0]);
         if (!$game)
         {
-            $table = $em->getRepository('LiuksTableBundle:Tables')->find($table_id);
-
-
-            $start_time = $shake->getLastShake();
             if ($start_time == 0)
             {
                 $start_time = time();
-                $shake->setLastShake($start_time);
-                $em->flush($shake);
+                $table->setLastShake($start_time);
+                $em->flush($table);
             }
             $game = new Games();
             $game->setStartTime($start_time);

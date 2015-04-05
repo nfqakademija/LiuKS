@@ -2,29 +2,33 @@ tables:
     path:     /
     defaults: { _controller: "LiuksTableBundle:Table:index" }
 
-tables_show:
+table_status:
+    path:     /{id}/data
+    defaults: { _controller: "LiuksTableBundle:Table:data" }
+
+table_show:
     path:     /{id}/show
     defaults: { _controller: "LiuksTableBundle:Table:show" }
 
-tables_new:
+table_new:
     path:     /new
     defaults: { _controller: "LiuksTableBundle:Table:new" }
 
-tables_create:
+table_create:
     path:     /create
     defaults: { _controller: "LiuksTableBundle:Table:create" }
     methods:  POST
 
-tables_edit:
+table_edit:
     path:     /{id}/edit
     defaults: { _controller: "LiuksTableBundle:Table:edit" }
 
-tables_update:
+table_update:
     path:     /{id}/update
     defaults: { _controller: "LiuksTableBundle:Table:update" }
     methods:  [POST, PUT]
 
-tables_delete:
+table_delete:
     path:     /{id}/delete
     defaults: { _controller: "LiuksTableBundle:Table:delete" }
     methods:  [POST, DELETE]
