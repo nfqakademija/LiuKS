@@ -1,4 +1,6 @@
 services:
-#    liuks_user.example:
-#        class: Liuks\UserBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
+    oauth_user.provider:
+#        class: HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUserProvider
+        class: Liuks\UserBundle\Auth\OAuthProvider
+        calls:
+            - [ setContainer, [@service_container] ]

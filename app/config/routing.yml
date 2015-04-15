@@ -1,3 +1,10 @@
+hwi_oauth_redirect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
+    prefix:   /connect
+
+facebook_login:
+    pattern: /login/check-facebook
+
 liuks_game:
     resource: "@LiuksGameBundle/Resources/config/routing.yml"
     prefix:   /
@@ -9,4 +16,3 @@ liuks_table:
 liuks_user:
     resource: "@LiuksUserBundle/Resources/config/routing.yml"
     prefix:   /
-

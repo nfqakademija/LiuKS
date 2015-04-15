@@ -1,3 +1,14 @@
+login_page:
+    path: /login
+    defaults: { _controller: "LiuksUserBundle:Login:login" }
+
+logout_page:
+    path: /logout
+
+hello_page:
+    path: /
+    defaults: { _controller: "LiuksUserBundle:Login:hello"}
+
 liuks_user_users:
     resource: "@LiuksUserBundle/Resources/config/routing/users.yml"
     prefix:   /users

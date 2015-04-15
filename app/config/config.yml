@@ -71,3 +71,18 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
+
+hwi_oauth:
+    firewall_name: secured_area
+    resource_owners:
+        facebook:
+            type:               facebook
+            client_id:          "%facebook_id%"
+            client_secret:      "%facebook_secret%"
+            scope:              "email"
+            infos_url:          "https://graph.facebook.com/me?fields=id,name,email,picture.type(square)"
+            options:
+                display:        popup
+            paths:
+                email:          email
+                profilepicture: picture.data.url
