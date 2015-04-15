@@ -5,24 +5,24 @@ namespace Liuks\TableBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Reservations
+ * Reservation
  *
  * @ORM\Table(name="reservations", indexes={@ORM\Index(name="table_id", columns={"table_id"}), @ORM\Index(name="user_id", columns={"user_id"})})
  * @ORM\Entity
  */
-class Reservations
+class Reservation
 {
     /**
      * @var integer
      *
-     * @ORM\Column(name="start_time", type="integer", nullable=false)
+     * @ORM\Column(name="start_time", type="integer")
      */
     private $startTime;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="end_time", type="integer", nullable=false)
+     * @ORM\Column(name="end_time", type="integer")
      */
     private $endTime;
 
@@ -31,14 +31,14 @@ class Reservations
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
     /**
-     * @var \Liuks\UserBundle\Entity\Users
+     * @var \Liuks\UserBundle\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="Liuks\UserBundle\Entity\Users")
+     * @ORM\ManyToOne(targetEntity="Liuks\UserBundle\Entity\User")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      * })
@@ -84,7 +84,7 @@ class Reservations
      * Set endTime
      *
      * @param integer $endTime
-     * @return Reservations
+     * @return Reservation
      */
     public function setEndTime($endTime)
     {
@@ -116,10 +116,10 @@ class Reservations
     /**
      * Set user
      *
-     * @param \Liuks\UserBundle\Entity\Users $user
-     * @return Reservations
+     * @param \Liuks\UserBundle\Entity\User $user
+     * @return Reservation
      */
-    public function setUser(\Liuks\UserBundle\Entity\Users $user = null)
+    public function setUser(\Liuks\UserBundle\Entity\User $user = null)
     {
         $this->user = $user;
 
@@ -129,7 +129,7 @@ class Reservations
     /**
      * Get user
      *
-     * @return \Liuks\UserBundle\Entity\Users
+     * @return \Liuks\UserBundle\Entity\User
      */
     public function getUser()
     {
@@ -140,7 +140,7 @@ class Reservations
      * Set table
      *
      * @param \Liuks\TableBundle\Entity\Table $table
-     * @return Reservations
+     * @return Reservation
      */
     public function setTable(\Liuks\TableBundle\Entity\Table $table = null)
     {

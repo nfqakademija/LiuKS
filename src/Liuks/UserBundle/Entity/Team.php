@@ -5,54 +5,33 @@ namespace Liuks\UserBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Teams
+ * Team
  *
  * @ORM\Table(name="teams", uniqueConstraints={@ORM\UniqueConstraint(name="name", columns={"name"})}, indexes={@ORM\Index(name="captain_id", columns={"captain_id"}), @ORM\Index(name="player_id", columns={"player_id"})})
  * @ORM\Entity
  */
-class Teams
+class Team
 {
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=50, nullable=false)
-     */
-    private $name;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="games_won", type="integer", nullable=false)
-     */
-    private $gamesWon;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="games_played", type="integer", nullable=false)
-     */
-    private $gamesPlayed;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="total_goals", type="integer", nullable=false)
-     */
-    private $totalGoals;
-
     /**
      * @var integer
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
     /**
-     * @var \Liuks\UserBundle\Entity\Users
+     * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Liuks\UserBundle\Entity\Users")
+     * @ORM\Column(name="name", type="string", length=50)
+     */
+    private $name;
+
+    /**
+     * @var \Liuks\UserBundle\Entity\User
+     *
+     * @ORM\ManyToOne(targetEntity="Liuks\UserBundle\Entity\User")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="player_id", referencedColumnName="id")
      * })
@@ -60,22 +39,51 @@ class Teams
     private $player;
 
     /**
-     * @var \Liuks\UserBundle\Entity\Users
+     * @var \Liuks\UserBundle\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="Liuks\UserBundle\Entity\Users")
+     * @ORM\ManyToOne(targetEntity="Liuks\UserBundle\Entity\User")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="captain_id", referencedColumnName="id")
      * })
      */
     private $captain;
 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="games_won", type="integer")
+     */
+    private $gamesWon;
 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="games_played", type="integer")
+     */
+    private $gamesPlayed;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="total_goals", type="integer")
+     */
+    private $totalGoals;
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set name
      *
      * @param string $name
-     * @return Teams
+     * @return Team
      */
     public function setName($name)
     {
@@ -98,7 +106,7 @@ class Teams
      * Set gamesWon
      *
      * @param integer $gamesWon
-     * @return Teams
+     * @return Team
      */
     public function setGamesWon($gamesWon)
     {
@@ -121,7 +129,7 @@ class Teams
      * Set gamesPlayed
      *
      * @param integer $gamesPlayed
-     * @return Teams
+     * @return Team
      */
     public function setGamesPlayed($gamesPlayed)
     {
@@ -144,7 +152,7 @@ class Teams
      * Set totalGoals
      *
      * @param integer $totalGoals
-     * @return Teams
+     * @return Team
      */
     public function setTotalGoals($totalGoals)
     {
@@ -164,22 +172,12 @@ class Teams
     }
 
     /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
      * Set player
      *
-     * @param \Liuks\UserBundle\Entity\Users $player
-     * @return Teams
+     * @param \Liuks\UserBundle\Entity\User $player
+     * @return Team
      */
-    public function setPlayer(\Liuks\UserBundle\Entity\Users $player = null)
+    public function setPlayer(\Liuks\UserBundle\Entity\User $player = null)
     {
         $this->player = $player;
 
@@ -189,7 +187,7 @@ class Teams
     /**
      * Get player
      *
-     * @return \Liuks\UserBundle\Entity\Users
+     * @return \Liuks\UserBundle\Entity\User 
      */
     public function getPlayer()
     {
@@ -199,10 +197,10 @@ class Teams
     /**
      * Set captain
      *
-     * @param \Liuks\UserBundle\Entity\Users $captain
-     * @return Teams
+     * @param \Liuks\UserBundle\Entity\User $captain
+     * @return Team
      */
-    public function setCaptain(\Liuks\UserBundle\Entity\Users $captain = null)
+    public function setCaptain(\Liuks\UserBundle\Entity\User $captain = null)
     {
         $this->captain = $captain;
 
@@ -212,7 +210,7 @@ class Teams
     /**
      * Get captain
      *
-     * @return \Liuks\UserBundle\Entity\Users
+     * @return \Liuks\UserBundle\Entity\User 
      */
     public function getCaptain()
     {

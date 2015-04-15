@@ -17,14 +17,14 @@ class UsersGroups
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
     /**
-     * @var \Liuks\UserBundle\Entity\Users
+     * @var \Liuks\UserBundle\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="Liuks\UserBundle\Entity\Users")
+     * @ORM\ManyToOne(targetEntity="Liuks\UserBundle\Entity\User")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      * })
@@ -32,9 +32,9 @@ class UsersGroups
     private $user;
 
     /**
-     * @var \Liuks\UserBundle\Entity\Groups
+     * @var \Liuks\UserBundle\Entity\Group
      *
-     * @ORM\ManyToOne(targetEntity="Liuks\UserBundle\Entity\Groups")
+     * @ORM\ManyToOne(targetEntity="Liuks\UserBundle\Entity\Group")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="group_id", referencedColumnName="id")
      * })
@@ -56,10 +56,10 @@ class UsersGroups
     /**
      * Set user
      *
-     * @param \Liuks\UserBundle\Entity\Users $user
+     * @param \Liuks\UserBundle\Entity\User $user
      * @return UsersGroups
      */
-    public function setUser(\Liuks\UserBundle\Entity\Users $user = null)
+    public function setUser(User $user = null)
     {
         $this->user = $user;
 
@@ -69,7 +69,7 @@ class UsersGroups
     /**
      * Get user
      *
-     * @return \Liuks\UserBundle\Entity\Users
+     * @return \Liuks\UserBundle\Entity\User
      */
     public function getUser()
     {
@@ -79,10 +79,10 @@ class UsersGroups
     /**
      * Set group
      *
-     * @param \Liuks\UserBundle\Entity\Groups $group
+     * @param \Liuks\UserBundle\Entity\Group $group
      * @return UsersGroups
      */
-    public function setGroup(\Liuks\UserBundle\Entity\Groups $group = null)
+    public function setGroup(Group $group = null)
     {
         $this->group = $group;
 
@@ -92,7 +92,7 @@ class UsersGroups
     /**
      * Get group
      *
-     * @return \Liuks\UserBundle\Entity\Groups
+     * @return \Liuks\UserBundle\Entity\Group
      */
     public function getGroup()
     {

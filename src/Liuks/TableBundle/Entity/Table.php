@@ -13,95 +13,93 @@ use Doctrine\ORM\Mapping as ORM;
 class Table
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
      * @var string
      *
-     * @ORM\Column(name="address", type="string", length=255, nullable=false)
+     * @ORM\Column(name="address", type="string", length=255)
      */
     private $address;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="city", type="string", length=50, nullable=false)
+     * @ORM\Column(name="city", type="string", length=50)
      */
     private $city;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="available_from", type="time", nullable=false)
+     * @ORM\Column(name="available_from", type="time")
      */
     private $availableFrom;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="available_to", type="time", nullable=false)
+     * @ORM\Column(name="available_to", type="time")
      */
     private $availableTo;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="api", type="string", length=100, nullable=false)
+     * @ORM\Column(name="api", type="string", length=100)
      */
     private $api;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="private", type="boolean", nullable=false)
+     * @ORM\Column(name="private", type="boolean")
      */
     private $private;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="last_event_id", type="integer", nullable=false)
+     * @ORM\Column(name="last_event_id", type="integer")
      */
     private $lastEventId;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="last_shake", type="integer", nullable=false)
+     * @ORM\Column(name="last_shake", type="integer")
      */
     private $lastShake;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="free", type="boolean", nullable=false)
+     * @ORM\Column(name="free", type="boolean")
      */
     private $free;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="disabled", type="boolean", nullable=false)
+     * @ORM\Column(name="disabled", type="boolean")
      */
     private $disabled;
 
     /**
-     * @var integer
+     * @var \Liuks\UserBundle\Entity\Group
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var \Liuks\UserBundle\Entity\Groups
-     *
-     * @ORM\ManyToOne(targetEntity="Liuks\UserBundle\Entity\Groups")
+     * @ORM\ManyToOne(targetEntity="Liuks\UserBundle\Entity\Group")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="group_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="group_id", referencedColumnName="id", nullable=true)
      * })
      */
     private $group;
-
-
 
     /**
      * Set address
@@ -346,10 +344,10 @@ class Table
     /**
      * Set group
      *
-     * @param \Liuks\UserBundle\Entity\Groups $group
+     * @param \Liuks\UserBundle\Entity\Group $group
      * @return Table
      */
-    public function setGroup(\Liuks\UserBundle\Entity\Groups $group = null)
+    public function setGroup(\Liuks\UserBundle\Entity\Group $group = null)
     {
         $this->group = $group;
 
@@ -359,7 +357,7 @@ class Table
     /**
      * Get group
      *
-     * @return \Liuks\UserBundle\Entity\Groups
+     * @return \Liuks\UserBundle\Entity\Group
      */
     public function getGroup()
     {

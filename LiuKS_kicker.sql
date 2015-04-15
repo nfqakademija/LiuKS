@@ -25,15 +25,15 @@ DROP TABLE IF EXISTS `competitors`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `competitors` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `tournament_id` int(10) unsigned NOT NULL,
-  `team_id` int(10) unsigned NOT NULL,
-  `round` tinyint(3) unsigned NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `tournament_id` int(11) DEFAULT NULL,
+  `team_id` int(11) DEFAULT NULL,
+  `round` smallint(6) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `tournament_id` (`tournament_id`),
-  KEY `team_id` (`team_id`),
-  CONSTRAINT `competitors_team_id` FOREIGN KEY (`team_id`) REFERENCES `teams` (`id`),
-  CONSTRAINT `competitors_tournament_id` FOREIGN KEY (`tournament_id`) REFERENCES `tournaments` (`id`)
+  KEY `IDX_2DED50C633D1A3E7` (`tournament_id`),
+  KEY `IDX_2DED50C6296CD8AE` (`team_id`),
+  CONSTRAINT `FK_2DED50C6296CD8AE` FOREIGN KEY (`team_id`) REFERENCES `teams` (`id`),
+  CONSTRAINT `FK_2DED50C633D1A3E7` FOREIGN KEY (`tournament_id`) REFERENCES `tournaments` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -54,33 +54,36 @@ DROP TABLE IF EXISTS `games`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `games` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `table_id` int(10) unsigned NOT NULL,
-  `user1` int(10) unsigned DEFAULT NULL,
-  `user2` int(10) unsigned DEFAULT NULL,
-  `user3` int(10) unsigned DEFAULT NULL,
-  `user4` int(10) unsigned DEFAULT NULL,
-  `team1` int(10) unsigned DEFAULT NULL,
-  `team2` int(10) unsigned DEFAULT NULL,
-  `goals1` tinyint(2) unsigned NOT NULL,
-  `goals2` tinyint(2) unsigned NOT NULL,
-  `start_time` int(10) unsigned NOT NULL,
-  `end_time` int(10) unsigned NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user1` int(11) DEFAULT NULL,
+  `user2` int(11) DEFAULT NULL,
+  `user3` int(11) DEFAULT NULL,
+  `user4` int(11) DEFAULT NULL,
+  `team1` int(11) DEFAULT NULL,
+  `team2` int(11) DEFAULT NULL,
+  `table_id` int(11) DEFAULT NULL,
+  `tournament_id` int(11) DEFAULT NULL,
+  `goals1` int(11) NOT NULL,
+  `goals2` int(11) NOT NULL,
+  `start_time` int(11) NOT NULL,
+  `end_time` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `table_id` (`table_id`),
-  KEY `user1` (`user1`),
-  KEY `user2` (`user2`),
-  KEY `user3` (`user3`),
-  KEY `user4` (`user4`),
-  KEY `team1` (`team1`),
-  KEY `team2` (`team2`),
-  CONSTRAINT `games_table_id` FOREIGN KEY (`table_id`) REFERENCES `tables` (`id`),
-  CONSTRAINT `games_team1_id` FOREIGN KEY (`team1`) REFERENCES `teams` (`id`),
-  CONSTRAINT `games_team2_id` FOREIGN KEY (`team2`) REFERENCES `teams` (`id`),
-  CONSTRAINT `games_user1_id` FOREIGN KEY (`user1`) REFERENCES `users` (`id`),
-  CONSTRAINT `games_user2_id` FOREIGN KEY (`user2`) REFERENCES `users` (`id`),
-  CONSTRAINT `games_user3_id` FOREIGN KEY (`user3`) REFERENCES `users` (`id`),
-  CONSTRAINT `games_user4_id` FOREIGN KEY (`user4`) REFERENCES `users` (`id`)
+  KEY `IDX_FF232B318C518555` (`user1`),
+  KEY `IDX_FF232B311558D4EF` (`user2`),
+  KEY `IDX_FF232B31625FE479` (`user3`),
+  KEY `IDX_FF232B31FC3B71DA` (`user4`),
+  KEY `IDX_FF232B31E1002E4` (`team1`),
+  KEY `IDX_FF232B319719535E` (`team2`),
+  KEY `IDX_FF232B31ECFF285C` (`table_id`),
+  KEY `IDX_FF232B3133D1A3E7` (`tournament_id`),
+  CONSTRAINT `FK_FF232B3133D1A3E7` FOREIGN KEY (`tournament_id`) REFERENCES `tournaments` (`id`),
+  CONSTRAINT `FK_FF232B311558D4EF` FOREIGN KEY (`user2`) REFERENCES `users` (`id`),
+  CONSTRAINT `FK_FF232B31625FE479` FOREIGN KEY (`user3`) REFERENCES `users` (`id`),
+  CONSTRAINT `FK_FF232B318C518555` FOREIGN KEY (`user1`) REFERENCES `users` (`id`),
+  CONSTRAINT `FK_FF232B319719535E` FOREIGN KEY (`team2`) REFERENCES `teams` (`id`),
+  CONSTRAINT `FK_FF232B31E1002E4` FOREIGN KEY (`team1`) REFERENCES `teams` (`id`),
+  CONSTRAINT `FK_FF232B31ECFF285C` FOREIGN KEY (`table_id`) REFERENCES `tables` (`id`),
+  CONSTRAINT `FK_FF232B31FC3B71DA` FOREIGN KEY (`user4`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -101,13 +104,13 @@ DROP TABLE IF EXISTS `groups`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `groups` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `owner` int(11) DEFAULT NULL,
   `name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-  `owner` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
-  KEY `owner` (`owner`),
-  CONSTRAINT `group_owner_id` FOREIGN KEY (`owner`) REFERENCES `users` (`id`)
+  KEY `IDX_F06D3970CF60E67C` (`owner`),
+  CONSTRAINT `FK_F06D3970CF60E67C` FOREIGN KEY (`owner`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -117,7 +120,7 @@ CREATE TABLE `groups` (
 
 LOCK TABLES `groups` WRITE;
 /*!40000 ALTER TABLE `groups` DISABLE KEYS */;
-INSERT INTO `groups` VALUES (1,'NFQ Kaunas',1);
+INSERT INTO `groups` VALUES (1,1,'NFQ Kaunas');
 /*!40000 ALTER TABLE `groups` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -129,38 +132,38 @@ DROP TABLE IF EXISTS `matches`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `matches` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `table_id` int(10) unsigned NOT NULL,
-  `tournament_id` int(10) unsigned DEFAULT NULL,
-  `user1` int(10) unsigned DEFAULT NULL,
-  `user2` int(10) unsigned DEFAULT NULL,
-  `user3` int(10) unsigned DEFAULT NULL,
-  `user4` int(10) unsigned DEFAULT NULL,
-  `team1` int(10) unsigned DEFAULT NULL,
-  `team2` int(10) unsigned DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user2` int(11) DEFAULT NULL,
+  `user3` int(11) DEFAULT NULL,
+  `user4` int(11) DEFAULT NULL,
+  `user1` int(11) DEFAULT NULL,
+  `tournament_id` int(11) DEFAULT NULL,
+  `team1` int(11) DEFAULT NULL,
+  `team2` int(11) DEFAULT NULL,
+  `table_id` int(11) DEFAULT NULL,
   `approved1` tinyint(1) NOT NULL,
   `approved2` tinyint(1) NOT NULL,
   `approved3` tinyint(1) NOT NULL,
   `approved4` tinyint(1) NOT NULL,
-  `start_time` int(10) NOT NULL,
-  `end_time` int(10) NOT NULL,
+  `start_time` int(11) NOT NULL,
+  `end_time` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `table_id` (`table_id`),
-  KEY `tournament_id` (`tournament_id`),
-  KEY `user1` (`user1`),
-  KEY `user2` (`user2`),
-  KEY `user3` (`user3`),
-  KEY `user4` (`user4`),
-  KEY `team1` (`team1`),
-  KEY `team2` (`team2`),
-  CONSTRAINT `matches_table_id` FOREIGN KEY (`table_id`) REFERENCES `tables` (`id`),
-  CONSTRAINT `matches_team1_id` FOREIGN KEY (`team1`) REFERENCES `teams` (`id`),
-  CONSTRAINT `matches_team2_id` FOREIGN KEY (`team2`) REFERENCES `teams` (`id`),
-  CONSTRAINT `matches_tournament_id` FOREIGN KEY (`tournament_id`) REFERENCES `tournaments` (`id`),
-  CONSTRAINT `matches_user1_id` FOREIGN KEY (`user1`) REFERENCES `users` (`id`),
-  CONSTRAINT `matches_user2_id` FOREIGN KEY (`user2`) REFERENCES `users` (`id`),
-  CONSTRAINT `matches_user3_id` FOREIGN KEY (`user3`) REFERENCES `users` (`id`),
-  CONSTRAINT `matches_user4_id` FOREIGN KEY (`user4`) REFERENCES `users` (`id`)
+  KEY `IDX_62615BA1558D4EF` (`user2`),
+  KEY `IDX_62615BA625FE479` (`user3`),
+  KEY `IDX_62615BAFC3B71DA` (`user4`),
+  KEY `IDX_62615BA8C518555` (`user1`),
+  KEY `IDX_62615BA33D1A3E7` (`tournament_id`),
+  KEY `IDX_62615BAE1002E4` (`team1`),
+  KEY `IDX_62615BA9719535E` (`team2`),
+  KEY `IDX_62615BAECFF285C` (`table_id`),
+  CONSTRAINT `FK_62615BAECFF285C` FOREIGN KEY (`table_id`) REFERENCES `tables` (`id`),
+  CONSTRAINT `FK_62615BA1558D4EF` FOREIGN KEY (`user2`) REFERENCES `users` (`id`),
+  CONSTRAINT `FK_62615BA33D1A3E7` FOREIGN KEY (`tournament_id`) REFERENCES `tournaments` (`id`),
+  CONSTRAINT `FK_62615BA625FE479` FOREIGN KEY (`user3`) REFERENCES `users` (`id`),
+  CONSTRAINT `FK_62615BA8C518555` FOREIGN KEY (`user1`) REFERENCES `users` (`id`),
+  CONSTRAINT `FK_62615BA9719535E` FOREIGN KEY (`team2`) REFERENCES `teams` (`id`),
+  CONSTRAINT `FK_62615BAE1002E4` FOREIGN KEY (`team1`) REFERENCES `teams` (`id`),
+  CONSTRAINT `FK_62615BAFC3B71DA` FOREIGN KEY (`user4`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -181,16 +184,16 @@ DROP TABLE IF EXISTS `reservations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `reservations` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `table_id` int(10) unsigned NOT NULL,
-  `user_id` int(10) unsigned NOT NULL,
-  `start_time` int(10) unsigned NOT NULL,
-  `end_time` int(10) unsigned NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `table_id` int(11) DEFAULT NULL,
+  `start_time` int(11) NOT NULL,
+  `end_time` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `table_id` (`table_id`),
-  KEY `user_id` (`user_id`),
-  CONSTRAINT `reservations_table_id` FOREIGN KEY (`table_id`) REFERENCES `tables` (`id`),
-  CONSTRAINT `reservations_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+  KEY `IDX_4DA239A76ED395` (`user_id`),
+  KEY `IDX_4DA239ECFF285C` (`table_id`),
+  CONSTRAINT `FK_4DA239ECFF285C` FOREIGN KEY (`table_id`) REFERENCES `tables` (`id`),
+  CONSTRAINT `FK_4DA239A76ED395` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -211,22 +214,22 @@ DROP TABLE IF EXISTS `tables`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tables` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `group_id` int(11) DEFAULT NULL,
   `address` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `city` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `available_from` time NOT NULL,
   `available_to` time NOT NULL,
   `api` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-  `group_id` int(10) unsigned NOT NULL,
   `private` tinyint(1) NOT NULL,
-  `last_shake` int(10) unsigned NOT NULL,
-  `last_event_id` int(10) unsigned NOT NULL,
+  `last_event_id` int(11) NOT NULL,
+  `last_shake` int(11) NOT NULL,
   `free` tinyint(1) NOT NULL,
   `disabled` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `group_id` (`group_id`),
-  CONSTRAINT `private_group_table` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  KEY `IDX_84470221FE54D947` (`group_id`),
+  CONSTRAINT `FK_84470221FE54D947` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -235,7 +238,7 @@ CREATE TABLE `tables` (
 
 LOCK TABLES `tables` WRITE;
 /*!40000 ALTER TABLE `tables` DISABLE KEYS */;
-INSERT INTO `tables` VALUES (1,'Brastos g. 15, LT-47183','Kaunas','08:00:00','20:00:00','http://wonderwall.ox.nfq.lt/kickertable/api/v1/events',1,1,0,0,1,0);
+INSERT INTO `tables` VALUES (1,1,'Brastos g. 15, LT-47183','Kaunas','08:00:00','20:00:00','http://wonderwall.ox.nfq.lt/kickertable/api/v1/events',1,0,0,1,0);
 /*!40000 ALTER TABLE `tables` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -247,19 +250,19 @@ DROP TABLE IF EXISTS `teams`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `teams` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `player_id` int(11) DEFAULT NULL,
+  `captain_id` int(11) DEFAULT NULL,
   `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `captain_id` int(10) unsigned NOT NULL,
-  `player_id` int(10) unsigned NOT NULL,
-  `games_won` mediumint(8) unsigned NOT NULL,
-  `games_played` mediumint(8) unsigned NOT NULL,
-  `total_goals` mediumint(8) unsigned NOT NULL,
+  `games_won` int(11) NOT NULL,
+  `games_played` int(11) NOT NULL,
+  `total_goals` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
-  KEY `captain_id` (`captain_id`),
-  KEY `player_id` (`player_id`),
-  CONSTRAINT `teams_captain_id` FOREIGN KEY (`captain_id`) REFERENCES `users` (`id`),
-  CONSTRAINT `teams_player_id` FOREIGN KEY (`player_id`) REFERENCES `users` (`id`)
+  KEY `IDX_96C2225899E6F5DF` (`player_id`),
+  KEY `IDX_96C222583346729B` (`captain_id`),
+  CONSTRAINT `FK_96C222583346729B` FOREIGN KEY (`captain_id`) REFERENCES `users` (`id`),
+  CONSTRAINT `FK_96C2225899E6F5DF` FOREIGN KEY (`player_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -280,15 +283,15 @@ DROP TABLE IF EXISTS `tournaments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tournaments` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `organizer_id` int(10) unsigned NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `organizer_id` int(11) DEFAULT NULL,
   `name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-  `start_time` int(10) unsigned NOT NULL,
-  `end_time` int(10) unsigned NOT NULL,
+  `start_time` int(11) NOT NULL,
+  `end_time` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
-  KEY `organizer_id` (`organizer_id`),
-  CONSTRAINT `tournament_organizer_id` FOREIGN KEY (`organizer_id`) REFERENCES `users` (`id`)
+  KEY `IDX_E4BCFAC3876C4DDA` (`organizer_id`),
+  CONSTRAINT `FK_E4BCFAC3876C4DDA` FOREIGN KEY (`organizer_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -309,19 +312,20 @@ DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `users` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `card_id` int(10) unsigned NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `facebookId` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `roles` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `surname` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `email` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `password` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `type` tinyint(1) NOT NULL,
-  `games_played` mediumint(8) unsigned NOT NULL,
-  `games_won` mediumint(8) unsigned NOT NULL,
+  `password` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `picture` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `games_played` int(11) NOT NULL,
+  `games_won` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `card_id` (`card_id`),
+  UNIQUE KEY `UNIQ_1483A5E9E17C91E8` (`facebookId`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -330,7 +334,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,4255291,'Laurynas','Baltrėnas','Laurynas.Baltrenas@gmail.com','123',1,0,0),(2,4248132,'Saulius','Baltutis','S.Baltutis@gmail.com','123',1,0,0);
+INSERT INTO `users` VALUES (1,'802226453158747','ROLE_ADMIN, ROLE_USER','Laurynas','Baltrėnas','laruxo@gmail.com',NULL,'https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xap1/v/t1.0-1/c44.44.552.552/s50x50/1098011_533977953316933_295705552_n.jpg?oh=30c411f7b160a7cf44909cfda1255c50&oe=559CE086&__gda__=1436559699_0e4d76acbe5e7361918f3e5933b8c8e4',0,0);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -342,15 +346,15 @@ DROP TABLE IF EXISTS `users_groups`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `users_groups` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(10) unsigned NOT NULL,
-  `group_id` int(10) unsigned NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `group_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`),
-  KEY `group_id` (`group_id`),
-  CONSTRAINT `users_groups_group_id` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`),
-  CONSTRAINT `users_groups_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  KEY `IDX_FF8AB7E0A76ED395` (`user_id`),
+  KEY `IDX_FF8AB7E0FE54D947` (`group_id`),
+  CONSTRAINT `FK_FF8AB7E0FE54D947` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`),
+  CONSTRAINT `FK_FF8AB7E0A76ED395` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -359,7 +363,6 @@ CREATE TABLE `users_groups` (
 
 LOCK TABLES `users_groups` WRITE;
 /*!40000 ALTER TABLE `users_groups` DISABLE KEYS */;
-INSERT INTO `users_groups` VALUES (1,1,1),(2,2,1);
 /*!40000 ALTER TABLE `users_groups` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -372,4 +375,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-04-05  3:42:09
+-- Dump completed on 2015-04-15 15:08:13
