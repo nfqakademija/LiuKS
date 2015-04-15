@@ -9,10 +9,10 @@
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th>Kortelės ID</th>
+                    <th>Facebook ID</th>
                     <th>Pilnas vardas</th>
                     <th>El. paštas</th>
-                    <th>Tipas</th>
+                    <th>Rolės</th>
                     <th>Žaista</th>
                     <th>Laimėta</th>
                     <th>Veiksmai</th>
@@ -21,10 +21,10 @@
                 <tbody>
                 {% for entity in entities %}
                     <tr>
-                        <td><a href="{{ path('users_show', { 'id': entity.id }) }}">{{ entity.cardId }}</a></td>
+                        <td><a href="{{ path('users_show', { 'id': entity.id }) }}">{{ entity.facebookId }}</a></td>
                         <td>{{ entity.name }} {{ entity.surname }}</td>
                         <td>{{ entity.email }}</td>
-                        <td>{{ entity.type }}</td>
+                        <td>{{ entity.roles }}</td>
                         <td>{{ entity.gamesPlayed }}</td>
                         <td>{{ entity.gamesWon }}</td>
                         <td>

@@ -5,7 +5,7 @@ namespace Liuks\UserBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-use Liuks\UserBundle\Entity\Users;
+use Liuks\UserBundle\Entity\User;
 use Liuks\UserBundle\Form\UsersType;
 
 /**
@@ -27,67 +27,10 @@ class UsersController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('LiuksUserBundle:Users')->findAll();
+        $entities = $em->getRepository('LiuksUserBundle:User')->findAll();
 
         return $this->render('LiuksUserBundle:Users:index.html.twig', array(
             'entities' => $entities,
-        ));
-    }
-    /**
-     * Creates a new Users entity.
-     *
-     */
-    public function createAction(Request $request)
-    {
-        $entity = new Users();
-        $form = $this->createCreateForm($entity);
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('users_show', array('id' => $entity->getId())));
-        }
-
-        return $this->render('LiuksUserBundle:Users:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        ));
-    }
-
-    /**
-     * Creates a form to create a Users entity.
-     *
-     * @param Users $entity The entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createCreateForm(Users $entity)
-    {
-        $form = $this->createForm(new UsersType(), $entity, array(
-            'action' => $this->generateUrl('users_create'),
-            'method' => 'POST',
-        ));
-
-        $form->add('submit', 'submit', array('label' => 'Create'));
-
-        return $form;
-    }
-
-    /**
-     * Displays a form to create a new Users entity.
-     *
-     */
-    public function newAction()
-    {
-        $entity = new Users();
-        $form   = $this->createCreateForm($entity);
-
-        return $this->render('LiuksUserBundle:Users:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
         ));
     }
 
@@ -99,10 +42,10 @@ class UsersController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('LiuksUserBundle:Users')->find($id);
+        $entity = $em->getRepository('LiuksUserBundle:User')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Users entity.');
+            throw $this->createNotFoundException('Unable to find User entity.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -121,10 +64,10 @@ class UsersController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('LiuksUserBundle:Users')->find($id);
+        $entity = $em->getRepository('LiuksUserBundle:User')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Users entity.');
+            throw $this->createNotFoundException('Unable to find User entity.');
         }
 
         $editForm = $this->createEditForm($entity);
@@ -140,11 +83,11 @@ class UsersController extends Controller
     /**
     * Creates a form to edit a Users entity.
     *
-    * @param Users $entity The entity
+    * @param User $entity The entity
     *
     * @return \Symfony\Component\Form\Form The form
     */
-    private function createEditForm(Users $entity)
+    private function createEditForm(User $entity)
     {
         $form = $this->createForm(new UsersType(), $entity, array(
             'action' => $this->generateUrl('users_update', array('id' => $entity->getId())),
@@ -163,10 +106,10 @@ class UsersController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('LiuksUserBundle:Users')->find($id);
+        $entity = $em->getRepository('LiuksUserBundle:User')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Users entity.');
+            throw $this->createNotFoundException('Unable to find User entity.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -196,10 +139,10 @@ class UsersController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('LiuksUserBundle:Users')->find($id);
+            $entity = $em->getRepository('LiuksUserBundle:User')->find($id);
 
             if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Users entity.');
+                throw $this->createNotFoundException('Unable to find User entity.');
             }
 
             $em->remove($entity);
