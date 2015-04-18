@@ -9,42 +9,44 @@
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th>Facebook ID</th>
+                    <th>Foto</th>
                     <th>Pilnas vardas</th>
                     <th>El. paštas</th>
-                    <th>Rolės</th>
                     <th>Žaista</th>
                     <th>Laimėta</th>
-                    <th>Veiksmai</th>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <th>Facebook ID</th>
+                        <th>Rolės</th>
+                        <th>Veiksmai</th>
+                    {% endif %}
                 </tr>
                 </thead>
                 <tbody>
-                {% for entity in entities %}
+                {% for user in users %}
                     <tr>
-                        <td><a href="{{ path('users_show', { 'id': entity.id }) }}">{{ entity.facebookId }}</a></td>
-                        <td>{{ entity.name }} {{ entity.surname }}</td>
-                        <td>{{ entity.email }}</td>
-                        <td>{{ entity.roles }}</td>
-                        <td>{{ entity.gamesPlayed }}</td>
-                        <td>{{ entity.gamesWon }}</td>
-                        <td>
-                            <ul class="list-inline">
-                                <li>
-                                    <a href="{{ path('users_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
-                                </li>
-                                <li>
-                                    <a href="{{ path('users_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-chevron-right"></span></a>
-                                </li>
-                            </ul>
-                        </td>
+                        <td><a href="{{ path('users_show', { 'id': user.id }) }}"><img src="{{ user.picture }}"/></a></td>
+                        <td>{{ user.name }} {{ user.surname }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.gamesPlayed }}</td>
+                        <td>{{ user.gamesWon }}</td>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <td>{{ user.facebookId }}</td>
+                            <td>{{ user.roles|join(', ') }}</td>
+                            <td>
+                                <ul class="list-inline">
+                                    <li>
+                                        <a href="{{ path('users_edit', { 'id': user.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('users_show', { 'id': user.id }) }}"><span class="glyphicon glyphicon-chevron-right"></span></a>
+                                    </li>
+                                </ul>
+                            </td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
-
-            <a class="btn btn-success" href="{{ path('users_new') }}">
-                <span class="glyphicon glyphicon-plus"></span> Naujas Naudotojas
-            </a>
         </div>
     </div>
 {% endblock %}

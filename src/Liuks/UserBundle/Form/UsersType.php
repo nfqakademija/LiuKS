@@ -15,14 +15,9 @@ class UsersType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('cardId')
             ->add('name')
             ->add('surname')
             ->add('email')
-            ->add('password')
-            ->add('type')
-            ->add('gamesPlayed')
-            ->add('gamesWon')
         ;
     }
     
@@ -32,7 +27,7 @@ class UsersType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Liuks\UserBundle\Entity\Users'
+            'data_class' => 'Liuks\UserBundle\Entity\User'
         ));
     }
 
@@ -41,6 +36,6 @@ class UsersType extends AbstractType
      */
     public function getName()
     {
-        return 'liuks_userbundle_users';
+        return 'liuks_userbundle_user';
     }
 }

@@ -1,6 +1,6 @@
 {% extends '::base.html.twig' %}
 
-{% block title -%}Naudotojas {{ entity.name }} {{ entity.surname }} |{% endblock %}
+{% block title -%}Naudotojas {{ user.name }} {{ user.surname }} |{% endblock %}
 
 {% block body -%}
     <div class="row">
@@ -9,35 +9,39 @@
             <table class="table table-striped">
                 <tbody>
                 <tr>
+                    <th>Foto</th>
+                    <td><img src="{{ user.picture }}"/></td>
+                </tr>
+                <tr>
                     <th>Facebook ID</th>
-                    <td>{{ entity.facebookId }}</td>
+                    <td>{{ user.facebookId }}</td>
                 </tr>
                 <tr>
                     <th>Pilnas vardas</th>
-                    <td>{{ entity.name }} {{ entity.surname }}</td>
+                    <td>{{ user.name }} {{ user.surname }}</td>
                 </tr>
                 <tr>
                     <th>El. paštas</th>
-                    <td>{{ entity.email }}</td>
+                    <td>{{ user.email }}</td>
                 </tr>
                 <tr>
                     <th>Rolės</th>
-                    <td>{{ entity.roles }}</td>
+                    <td>{{ user.roles|join(', ') }}</td>
                 </tr>
                 <tr>
                     <th>Žaista</th>
-                    <td>{{ entity.gamesPlayed }}</td>
+                    <td>{{ user.gamesPlayed }}</td>
                 </tr>
                 <tr>
                     <th>Laimėta</th>
-                    <td>{{ entity.gamesWon }}</td>
+                    <td>{{ user.gamesWon }}</td>
                 </tr>
                 </tbody>
             </table>
 
             <ul class="list-inline">
                 <li><a href="{{ path('users') }}"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></a></li>
-                <li><a href="{{ path('users_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></li>
+                <li><a href="{{ path('users_edit', { 'id': user.id }) }}"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></li>
                 <li>{{ form(delete_form) }}</li>
             </ul>
         </div>

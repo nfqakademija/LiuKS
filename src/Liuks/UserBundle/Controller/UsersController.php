@@ -2,6 +2,7 @@
 
 namespace Liuks\UserBundle\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -14,11 +15,6 @@ use Liuks\UserBundle\Form\UsersType;
  */
 class UsersController extends Controller
 {
-    public function newUserAction($card_id)
-    {
-        return $card_id;
-    }
-
     /**
      * Lists all Users entities.
      *
@@ -27,38 +23,46 @@ class UsersController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('LiuksUserBundle:User')->findAll();
+        $users = $em->getRepository('LiuksUserBundle:User')->findAll();
 
         return $this->render('LiuksUserBundle:Users:index.html.twig', array(
-            'entities' => $entities,
+            'users' => $users,
         ));
     }
 
     /**
-     * Finds and displays a Users entity.
+     * Finds and displays a sigle user based on id
      *
+     * @Security("has_role('ROLE_ADMIN')")
+     *
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function showAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('LiuksUserBundle:User')->find($id);
+        $user = $em->getRepository('LiuksUserBundle:User')->find($id);
 
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find User entity.');
+        if (!$user) {
+            throw $this->createNotFoundException('This User Does Not Exists.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('LiuksUserBundle:Users:show.html.twig', array(
-            'entity'      => $entity,
+            'user'      => $user,
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Displays a form to edit an existing Users entity.
+     * Displays a form to edit an existing Users.
      *
+     * @Security("has_role('ROLE_ADMIN')")
+     *
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function editAction($id)
     {
@@ -67,7 +71,7 @@ class UsersController extends Controller
         $entity = $em->getRepository('LiuksUserBundle:User')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find User entity.');
+            throw $this->createNotFoundException('Unable to find User.');
         }
 
         $editForm = $this->createEditForm($entity);
@@ -82,6 +86,7 @@ class UsersController extends Controller
 
     /**
     * Creates a form to edit a Users entity.
+    * @Security("has_role('ROLE_ADMIN')")
     *
     * @param User $entity The entity
     *
@@ -100,6 +105,8 @@ class UsersController extends Controller
     }
     /**
      * Edits an existing Users entity.
+     *
+     * @Security("has_role('ROLE_ADMIN')")
      *
      */
     public function updateAction(Request $request, $id)
@@ -131,6 +138,8 @@ class UsersController extends Controller
     /**
      * Deletes a Users entity.
      *
+     * @Security("has_role('ROLE_ADMIN')")
+     *
      */
     public function deleteAction(Request $request, $id)
     {
@@ -154,6 +163,8 @@ class UsersController extends Controller
 
     /**
      * Creates a form to delete a Users entity by id.
+     *
+     * @Security("has_role('ROLE_ADMIN')")
      *
      * @param mixed $id The entity id
      *
