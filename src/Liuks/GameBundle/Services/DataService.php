@@ -134,16 +134,18 @@ class DataService extends ContainerAware
 
         $data = json_decode($response);
         $records = [];
+        $count = 0;
         foreach ($data->records as $record)
         {
-            if ($record->id > $last_id)
+            if ($record->id > $last_id && $count < 10)
             {
                 $records[] = $record;
+                $count++;
             }
         }
         if (count($records) > 0)
         {
-            $data->records = [$records[0]];
+            $data->records = [$records];
         }
         else
         {
