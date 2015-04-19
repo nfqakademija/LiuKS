@@ -218,7 +218,7 @@ CREATE TABLE `tables` (
   `available_from` time NOT NULL,
   `available_to` time NOT NULL,
   `owner` int(11) NOT NULL,
-  `api` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `api` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `private` tinyint(1) NOT NULL,
   `last_event_id` int(11) NOT NULL,
   `last_shake` int(11) NOT NULL,
