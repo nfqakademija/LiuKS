@@ -12,7 +12,6 @@
 
     <script>
         window.fbAsyncInit = function() {
-            // init the FB JS SDK
             FB.init({
                 appId      : '808404612584687',
                 status     : true,
@@ -31,20 +30,24 @@
         }(document, 'script', 'facebook-jssdk'));
 
         function fb_login() {
-            FB.getLoginStatus(function(response) {
-                console.log(response);
-                if (response.status === 'connected') {
-                    // connected
-                    console.log(response);
-                    alert('Already connected, redirect to login page to create token.');
+            FB.getLoginStatus(function(response)
+            {
+                if (response.status === 'connected')
+                {
                     document.location = "{{ url("hwi_oauth_service_redirect", {service: "facebook"}) }}";
-                } else {
+                }
+                else
+                {
                     // not_authorized
-                    FB.login(function(response) {
-                        if (response.authResponse) {
+                    FB.login(function(response)
+                    {
+                        if (response.authResponse)
+                        {
                             document.location = "{{ url("hwi_oauth_service_redirect", {service: "facebook"}) }}";
-                        } else {
-                            alert('Cancelled.');
+                        }
+                        else
+                        {
+                            //canceled, do something
                         }
                     }, {scope: 'email'});
                 }
