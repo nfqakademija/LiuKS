@@ -322,9 +322,12 @@ CREATE TABLE `users` (
   `picture` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `games_played` int(11) NOT NULL,
   `games_won` int(11) NOT NULL,
+  `default_table` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNIQ_1483A5E9E17C91E8` (`facebookId`),
-  UNIQUE KEY `email` (`email`)
+  UNIQUE KEY `email` (`email`),
+  KEY `IDX_1483A5E91F0FDB48` (`default_table`),
+  CONSTRAINT `FK_1483A5E91F0FDB48` FOREIGN KEY (`default_table`) REFERENCES `tables` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -334,7 +337,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'802226453158747','ROLE_ADMIN, ROLE_USER','Laurynas','Baltrėnas','laruxo@gmail.com',NULL,'https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xap1/v/t1.0-1/c44.44.552.552/s50x50/1098011_533977953316933_295705552_n.jpg?oh=30c411f7b160a7cf44909cfda1255c50&oe=559CE086&__gda__=1436559699_0e4d76acbe5e7361918f3e5933b8c8e4',0,0);
+INSERT INTO `users` VALUES (1,'802226453158747','ROLE_ADMIN, ROLE_USER','Laurynas','Baltrėnas','laruxo@gmail.com',NULL,'https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xap1/v/t1.0-1/c44.44.552.552/s50x50/1098011_533977953316933_295705552_n.jpg?oh=30c411f7b160a7cf44909cfda1255c50&oe=559CE086&__gda__=1436559699_0e4d76acbe5e7361918f3e5933b8c8e4',0,0,NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -375,4 +378,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-04-18 14:23:14
+-- Dump completed on 2015-04-19 18:59:46

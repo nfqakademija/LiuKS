@@ -72,6 +72,16 @@ class User implements UserInterface
     private $picture;
 
     /**
+     * @var \Liuks\TableBundle\Entity\Table
+     *
+     * @ORM\ManyToOne(targetEntity="Liuks\TableBundle\Entity\Table")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="default_table", referencedColumnName="id", nullable=true)
+     * })
+     */
+    private $defaultTable;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="games_played", type="integer")
@@ -337,5 +347,28 @@ class User implements UserInterface
     public function getGamesWon()
     {
         return $this->gamesWon;
+    }
+
+    /**
+     * Set defaultTable
+     *
+     * @param \Liuks\TableBundle\Entity\Table $defaultTable
+     * @return User
+     */
+    public function setDefaultTable(\Liuks\TableBundle\Entity\Table $defaultTable = null)
+    {
+        $this->defaultTable = $defaultTable;
+
+        return $this;
+    }
+
+    /**
+     * Get defaultTable
+     *
+     * @return \Liuks\TableBundle\Entity\Table 
+     */
+    public function getDefaultTable()
+    {
+        return $this->defaultTable;
     }
 }
