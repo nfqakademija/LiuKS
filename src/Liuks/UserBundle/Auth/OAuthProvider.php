@@ -30,18 +30,12 @@ class OAuthProvider implements UserProviderInterface, OAuthAwareUserProviderInte
     {
         $em = $this->container->get('doctrine.orm.default_entity_manager');
         $user = $em->getRepository('LiuksUserBundle:User')->findOneBy(['facebookId' => $username]);
-        if ($user)
-        {
-            $token = new UsernamePasswordToken($user, null, 'user_provider', $user->getRoles());
-            $this->container->get('security.context')->setToken($token);
-        }
         return $user;
     }
 
     public function loadUserByOAuthUserResponse(UserResponseInterface $response)
     {
         $fb_id = $response->getUsername();
-
         $user = $this->loadUserByUsername($fb_id);
 
         if (!$user)
@@ -59,10 +53,9 @@ class OAuthProvider implements UserProviderInterface, OAuthAwareUserProviderInte
             $user->setGamesWon(0);
             $em->persist($user);
             $em->flush($user);
-        }
 
-        $token = new UsernamePasswordToken($user, null, 'user_provider', $user->getRoles());
-        $this->container->get('security.context')->setToken($token);
+            $user->setRoles('ROLE_USER, ROLE_NEW_USER');
+        }
 
         return $user;
     }

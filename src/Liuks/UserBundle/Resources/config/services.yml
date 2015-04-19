@@ -1,6 +1,11 @@
 services:
     oauth_user.provider:
-#        class: HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUserProvider
         class: Liuks\UserBundle\Auth\OAuthProvider
         calls:
             - [ setContainer, [@service_container] ]
+
+    oauth_user.handler:
+        class: Liuks\UserBundle\Auth\AuthHandler
+        public: false
+        calls:
+            - [setRouter, [@router]]

@@ -35,6 +35,8 @@ security:
                     facebook:      /login/check-facebook
                 login_path:        /login
                 failure_path:      /login
+                success_handler:   oauth_user.handler
+                failure_handler:   oauth_user.handler
                 oauth_user_provider:
                     service: oauth_user.provider
 
