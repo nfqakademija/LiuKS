@@ -9,12 +9,15 @@
 
         {% block stylesheets %}{% endblock %}
         <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/jquery.bracket.min.css') }}" rel="stylesheet">
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
     <body>
         <div class="container">
             {% block body %}{% endblock %}
         </div>
+        <script src="{{ asset('js/jquery-1.11.2.js') }}"></script>
+        <script src="{{ asset('js/jquery.bracket.min.js') }}"></script>
         {% block javascripts %}{% endblock %}
     </body>
 </html>
