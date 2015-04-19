@@ -11,10 +11,4 @@ class LoginController extends Controller
     {
         return $this->render('LiuksUserBundle::login.html.twig');
     }
-
-    public function helloAction()
-    {
-        dump($this->getUser()); die();
-    }
-
 }

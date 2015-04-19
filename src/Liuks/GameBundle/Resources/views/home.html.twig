@@ -1,0 +1,17 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-6">
+            <h1>Sveiki atvykę</h1>
+        </div>
+        <div class="col-md-6">
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                {{ dump(app.user) }}
+                <a class="btn btn-primary" href="{{ url("logout_page") }}">Logout</a>
+            {% else %}
+                {% include 'LiuksUserBundle::login.html.twig' %}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
