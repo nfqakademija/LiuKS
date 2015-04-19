@@ -62,7 +62,7 @@ class Table
     /**
      * @var string
      *
-     * @ORM\Column(name="api", type="string", length=100)
+     * @ORM\Column(name="api", type="string", length=100, nullable=true)
      */
     private $api;
 
