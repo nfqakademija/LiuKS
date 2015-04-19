@@ -6,15 +6,6 @@ users_show:
     path:     /{id}/show
     defaults: { _controller: "LiuksUserBundle:Users:show" }
 
-users_new:
-    path:     /new
-    defaults: { _controller: "LiuksUserBundle:Users:new" }
-
-users_create:
-    path:     /create
-    defaults: { _controller: "LiuksUserBundle:Users:create" }
-    methods:  POST
-
 users_edit:
     path:     /{id}/edit
     defaults: { _controller: "LiuksUserBundle:Users:edit" }
@@ -29,6 +20,6 @@ users_delete:
     defaults: { _controller: "LiuksUserBundle:Users:delete" }
     methods:  [POST, DELETE]
 
-users_test:
-    path:     /get/{card_id}
-    defaults: { _controller: "LiuksUserBundle:Users:newUser" }
+users_locator:
+    path:     /locator/
+    defaults: { _controller: "LiuksUserBundle:Users:locator" }

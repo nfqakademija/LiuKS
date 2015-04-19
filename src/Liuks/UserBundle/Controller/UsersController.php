@@ -180,4 +180,14 @@ class UsersController extends Controller
             ->getForm()
         ;
     }
+
+    /**
+     * Creates a view where user can chose his default table.
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function locatorAction()
+    {
+        return $this->render('LiuksUserBundle:Users:locate.html.twig');
+    }
 }
