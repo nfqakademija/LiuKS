@@ -30,7 +30,7 @@ class TableService extends ContainerAware
                 $this->container->get('game_utils.service')->calculatePoints($table->getId(), $record->data->team, $action_time);
                 break;
             case "CardSwipe":
-                $user = $em->getRepository('LiuksUserBundle:Users')->findOneBy(['cardId' => $record->data->card_id]);
+                $user = $em->getRepository('LiuksUserBundle:User')->findOneBy(['cardId' => $record->data->card_id]);
                 if (!$user)
                 {
                     //TODO: create new user (event or service)

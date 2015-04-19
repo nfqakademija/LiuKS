@@ -1,15 +1,47 @@
 {% extends '::base.html.twig' %}
 
+{% block title -%}Stalo kūrimas |{% endblock %}
+
 {% block body -%}
     <h1>Table creation</h1>
 
-    {{ form(form) }}
+    {{ form_start(form) }}
+        {{ form_errors(form) }}
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('tables') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
+        {{ form_row(form.address) }}
+        {{ form_row(form.city) }}
+        {{ form_row(form.availableFrom) }}
+        {{ form_row(form.availableTo) }}
+        {{ form_row(form.api) }}
+        {% if is_granted('ROLE_ADMIN') %}
+            {{ form_row(form.disabled) }}
+        {% endif %}
+        {{ form_row(form.private) }}
+        {{ form_row(form.group) }}
+    {{ form_end(form) }}
+
+    <ul class="list-inline">
+        <li><a href="{{ path('tables') }}"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></a></li>
+    </ul>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        (function()
+        {
+            document.getElementById('liuks_tablebundle_table_group').parentElement.setAttribute('class', 'hidden');
+        })();
+
+        function groupToggle()
+        {
+            if(document.getElementById('liuks_tablebundle_table_private').checked)
+            {
+                document.getElementById('liuks_tablebundle_table_group').parentElement.setAttribute('class', '');
+            }
+            else
+            {
+                document.getElementById('liuks_tablebundle_table_group').parentElement.setAttribute('class', 'hidden');
+            }
+        }
+    </script>
 {% endblock %}

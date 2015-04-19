@@ -12,37 +12,48 @@
                         <th>Adresas</th>
                         <th>Miestas</th>
                         <th>Prieinamumas</th>
-                        <th>API</th>
-                        <th>Privatus?</th>
+                        <th>Savininkas</th>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <th>API</th>
+                            <th>Privatus?</th>
+                            <th>Išjungtas?</th>
+                        {% endif %}
                         <th>Veiksmai</th>
                     </tr>
                 </thead>
                 <tbody>
-                {% for entity in entities %}
+                {% for table in tables %}
                     <tr>
-                        <td>{{ entity.address }}</td>
-                        <td>{{ entity.city }}</td>
-                        <td>{{ entity.availableFrom|date('H:i') }} - {{ entity.availableTo|date('H:i') }}</td>
-                        <td>{{ entity.api }}</td>
-                        <td>{{ entity.private == 1 ? 'Taip' : 'Ne' }}</td>
-                        <td>
-                            <ul class="list-inline">
-                                <li>
-                                    <a href="{{ path('table_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
-                                </li>
-                                <li>
-                                    <a href="{{ path('table_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-chevron-right"></span></a>
-                                </li>
-                            </ul>
-                        </td>
+                        <td>{{ table.address }}</td>
+                        <td>{{ table.city }}</td>
+                        <td>{{ table.availableFrom|date('H:i') }} - {{ table.availableTo|date('H:i') }}</td>
+                        <td>{{ table.owner.email }}</td>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <td>{{ table.api }}</td>
+                            <td>{{ table.private == 1 ? 'Taip' : 'Ne' }}</td>
+                            <td>{{ table.disabled == 1 ? 'Taip' : 'Ne' }}</td>
+                        {% endif %}
+                            <td>
+                                <ul class="list-inline">
+                                    {% if table.owner == app.user or is_granted('ROLE_ADMIN') %}
+                                        <li>
+                                            <a href="{{ path('table_edit', { 'id': table.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                                        </li>
+                                    {% endif %}
+                                    <li>
+                                        <a href="{{ path('table_show', { 'id': table.id }) }}"><span class="glyphicon glyphicon-chevron-right"></span></a>
+                                    </li>
+                                </ul>
+                            </td>
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
-
-            <a class="btn btn-success" href="{{ path('table_new') }}">
-                <span class="glyphicon glyphicon-plus"></span> Naujas Stalas
-            </a>
+            {% if app.user %}
+                <a class="btn btn-success" href="{{ path('table_new') }}">
+                    Turi Stalą? Registruok!
+                </a>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

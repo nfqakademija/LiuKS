@@ -2,7 +2,7 @@
 
 namespace Liuks\GameBundle\Services;
 
-use Liuks\GameBundle\Entity\Games;
+use Liuks\GameBundle\Entity\Game;
 use Liuks\GameBundle\Events\GameStatusEvent;
 use Symfony\Component\DependencyInjection\ContainerAware;
 
@@ -10,17 +10,17 @@ class GameService extends ContainerAware
 {
     /**
      * @param $table_id
-     * @return Games
+     * @return Game
      */
     public function getCurrentGame($table_id)
     {
         $em = $this->container->get('doctrine.orm.default_entity_manager');
-        return $em->getRepository('LiuksGameBundle:Games')->findOneBy(['table' => $table_id, 'endTime' => 0], ['startTime' => 'DESC']);
+        return $em->getRepository('LiuksGameBundle:Game')->findOneBy(['table' => $table_id, 'endTime' => 0], ['startTime' => 'DESC']);
     }
 
     /**
      * @param $table_id
-     * @return Games
+     * @return Game
      */
     public function newGame($table_id)
     {
@@ -29,7 +29,7 @@ class GameService extends ContainerAware
         $table = $em->getRepository('LiuksTableBundle:Table')->find($table_id);
         $start_time = $table->getLastShake();
 
-        $game = $em->getRepository('LiuksGameBundle:Games')->findOneBy(['table' => $table_id, 'startTime' => $start_time, 'endTime' => 0]);
+        $game = $em->getRepository('LiuksGameBundle:Game')->findOneBy(['table' => $table_id, 'startTime' => $start_time, 'endTime' => 0]);
         if (!$game)
         {
             if ($start_time == 0)
@@ -38,7 +38,7 @@ class GameService extends ContainerAware
                 $table->setLastShake($start_time);
                 $em->flush($table);
             }
-            $game = new Games();
+            $game = new Game();
             $game->setStartTime($start_time);
             $game->setTable($table);
             $game->setGoals(0, 0);
@@ -59,7 +59,7 @@ class GameService extends ContainerAware
      * @param $team
      * @param $player
      * @param $user
-     * @return Games
+     * @return Game
      */
     public function addPlayer($table_id, $team, $player, $user)
     {
@@ -82,7 +82,7 @@ class GameService extends ContainerAware
      * @param $table_id
      * @param $team
      * @param $action_time
-     * @return Games
+     * @return Game
      */
     public function calculatePoints($table_id, $team, $action_time)
     {
@@ -101,10 +101,10 @@ class GameService extends ContainerAware
     }
 
     /**
-     * @param $game Games
+     * @param $game Game
      * @param $winner_side
      * @param $action_time
-     * @return Games
+     * @return Game
      */
     private function resolveGame($game, $winner_side, $action_time)
     {

@@ -3,6 +3,7 @@
 namespace Liuks\TableBundle\Controller;
 
 use Liuks\TableBundle\Events\TableCreationEvent;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -22,12 +23,27 @@ class TableController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->get('doctrine.orm.default_entity_manager');
 
-        $entities = $em->getRepository('LiuksTableBundle:Table')->findAll();
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN'))
+        {
+            $tables = $em->getRepository('LiuksTableBundle:Table')->findAll();
+        }
+        else if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
+        {
+            $tables = $em->createQuery('
+              SELECT t FROM LiuksTableBundle:Table t
+              WHERE t.owner = :owner OR t.private = 0')
+            ->setParameter('owner', $this->getUser())
+            ->getResult();
+        }
+        else
+        {
+            $tables = $em->getRepository('LiuksTableBundle:Table')->findBy(['disabled' => false, 'private' => false]);
+        }
 
         return $this->render('LiuksTableBundle:Table:index.html.twig', array(
-            'entities' => $entities,
+            'tables' => $tables,
         ));
     }
 
@@ -37,30 +53,37 @@ class TableController extends Controller
      */
     public function createAction(Request $request)
     {
-        $entity = new Table();
-        $form = $this->createCreateForm($entity);
+        $table = new Table();
+        $form = $this->createCreateForm($table);
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
+
+        if ($form->isValid())
+        {
             $em = $this->getDoctrine()->getManager();
-            $entity->setDisabled(0);
-            $entity->setFree(1);
-            $entity->setLastShake(0);
-            $entity->setLastEventId(0);
-            $entity->setGroup($em->getRepository('LiuksUserBundle:Groups')->find(1)); //TODO: get from user which creates table
-            $em->persist($entity);
-            $em->flush();
+            $table->setDisabled(1);
+            $table->setFree(1);
+            $table->setLastShake(0);
+            $table->setLastEventId(0);
+            $table->setOwner($this->getUser()); //TODO: get from user which creates table
+            if ($table->getGroup())
+            {
+                $em->persist($table->getGroup());
+                $em->flush($table->getGroup());
+            }
+            $em->persist($table);
+            $em->flush($table);
 
             $tableEvent = new TableCreationEvent();
-            $tableEvent->setTable($entity);
+            $tableEvent->setTable($table);
             $dispatcher = $this->container->get('event_dispatcher');
             $dispatcher->dispatch($tableEvent::TABLECREATED, $tableEvent);
 
-            return $this->redirect($this->generateUrl('table_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('table_show', array('id' => $table->getId())));
         }
 
         return $this->render('LiuksTableBundle:Table:new.html.twig', array(
-            'entity' => $entity,
+            'table' => $table,
             'form'   => $form->createView(),
         ));
     }
@@ -68,18 +91,18 @@ class TableController extends Controller
     /**
      * Creates a form to create a Table entity.
      *
-     * @param Table $entity The entity
+     * @param Table $table
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(Table $entity)
+    private function createCreateForm(Table $table)
     {
-        $form = $this->createForm(new TableType(), $entity, array(
+        $form = $this->createForm(new TableType(), $table, array(
             'action' => $this->generateUrl('table_create'),
             'method' => 'POST',
-        ));
-
-        $form->add('submit', 'submit', array('label' => 'Create'));
+            'attr'   => ['class' => 'form-horizontal']
+        ))
+        ->add('submit', 'submit', array('label' => 'Sukurti'));
 
         return $form;
     }
@@ -87,14 +110,15 @@ class TableController extends Controller
     /**
      * Displays a form to create a new Table entity.
      *
+     * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
      */
     public function newAction()
     {
-        $entity = new Table();
-        $form   = $this->createCreateForm($entity);
+        $table = new Table();
+        $form   = $this->createCreateForm($table);
 
         return $this->render('LiuksTableBundle:Table:new.html.twig', array(
-            'entity' => $entity,
+            'table' => $table,
             'form'   => $form->createView(),
         ));
     }
@@ -115,7 +139,7 @@ class TableController extends Controller
         if (!$table) {
             throw $this->createNotFoundException('Ooops, it looks like this table is in another dimension...');
         }
-        $games = $em->getRepository('LiuksGameBundle:Games')->findBy(['table' => $table->getId()]);
+        $games = $em->getRepository('LiuksGameBundle:Game')->findBy(['table' => $table->getId()]);
 
         $game = $this->get('game_utils.service')->getCurrentGame($id);
         $deleteForm = $this->createDeleteForm($id);
@@ -138,18 +162,24 @@ class TableController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('LiuksTableBundle:Table')->find($id);
+        $table = $em->getRepository('LiuksTableBundle:Table')->find($id);
 
-        if (!$entity) {
+        if (!$table)
+        {
             throw $this->createNotFoundException('Unable to find Table entity.');
         }
 
-        $editForm = $this->createEditForm($entity);
+        if (false === $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') || $this->getUser() != $table->getOwner())
+        {
+            throw $this->createAccessDeniedException('Unable to access this page!');
+        }
+
+        $form = $this->createEditForm($table);
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('LiuksTableBundle:Table:edit.html.twig', array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity'      => $table,
+            'form'        => $form->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
     }
@@ -158,7 +188,6 @@ class TableController extends Controller
     * Creates a form to edit a Table entity.
     *
     * @param Table $entity The entity
-    *
     * @return \Symfony\Component\Form\Form The form
     */
     private function createEditForm(Table $entity)
@@ -168,7 +197,7 @@ class TableController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => 'Atnaujinti'));
 
         return $form;
     }
@@ -184,24 +213,31 @@ class TableController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('LiuksTableBundle:Table')->find($id);
+        $table = $em->getRepository('LiuksTableBundle:Table')->find($id);
 
-        if (!$entity) {
+        if (!$table)
+        {
             throw $this->createNotFoundException('Unable to find Table entity.');
         }
 
+        if (false === $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') || $this->getUser() != $table->getOwner())
+        {
+            throw $this->createAccessDeniedException('Unable to access this page!');
+        }
+
         $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createEditForm($entity);
+        $editForm = $this->createEditForm($table);
         $editForm->handleRequest($request);
 
-        if ($editForm->isValid()) {
+        if ($editForm->isValid())
+        {
             $em->flush();
 
             return $this->redirect($this->generateUrl('table_edit', array('id' => $id)));
         }
 
         return $this->render('LiuksTableBundle:Table:edit.html.twig', array(
-            'entity'      => $entity,
+            'entity'      => $table,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
@@ -221,13 +257,25 @@ class TableController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('LiuksTableBundle:Table')->find($id);
+            $table = $em->getRepository('LiuksTableBundle:Table')->find($id);
 
-            if (!$entity) {
+            if (!$table)
+            {
                 throw $this->createNotFoundException('Unable to find Table entity.');
             }
 
-            $em->remove($entity);
+            if (false === $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') || $this->getUser() != $table->getOwner())
+            {
+                throw $this->createAccessDeniedException('Unable to access this page!');
+            }
+
+            $group = $table->getGroup();
+            if ($group)
+            {
+                $em->remove($group);
+            }
+
+            $em->remove($table);
             $em->flush();
         }
 

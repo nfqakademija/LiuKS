@@ -1,6 +1,6 @@
 liuks_table_tables:
     resource: "@LiuksTableBundle/Resources/config/routing/tables.yml"
-    prefix:   /table
+    prefix:   /tables
 
 liuks_table_homepage:
     path:     /hello/{name}

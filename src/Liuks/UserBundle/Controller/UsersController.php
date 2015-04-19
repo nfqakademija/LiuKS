@@ -68,17 +68,18 @@ class UsersController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('LiuksUserBundle:User')->find($id);
+        $user = $em->getRepository('LiuksUserBundle:User')->find($id);
 
-        if (!$entity) {
+        if (!$user)
+        {
             throw $this->createNotFoundException('Unable to find User.');
         }
 
-        $editForm = $this->createEditForm($entity);
+        $editForm = $this->createEditForm($user);
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('LiuksUserBundle:Users:edit.html.twig', array(
-            'entity'      => $entity,
+            'entity'      => $user,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));

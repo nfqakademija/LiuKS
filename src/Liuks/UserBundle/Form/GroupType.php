@@ -1,13 +1,12 @@
 <?php
 
-namespace Liuks\TableBundle\Form;
+namespace Liuks\UserBundle\Form;
 
-use Liuks\UserBundle\Form\GroupType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class TableType extends AbstractType
+class GroupType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -16,24 +15,17 @@ class TableType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('address')
-            ->add('city')
-            ->add('availableFrom')
-            ->add('availableTo')
-            ->add('api')
-            ->add('disabled', null, ['required' => false, 'attr' => ['checked' => 'checked']])
-            ->add('private', null, ['attr' => ['onclick' => 'groupToggle()'], 'required' => false])
-            ->add('group', new GroupType(), ['required' => false])
+            ->add('name')
         ;
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Liuks\TableBundle\Entity\Table'
+            'data_class' => 'Liuks\UserBundle\Entity\Group'
         ));
     }
 
@@ -42,6 +34,6 @@ class TableType extends AbstractType
      */
     public function getName()
     {
-        return 'liuks_tablebundle_table';
+        return 'liuks_userbundle_group';
     }
 }
