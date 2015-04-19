@@ -76,8 +76,8 @@ CREATE TABLE `games` (
   KEY `IDX_FF232B319719535E` (`team2`),
   KEY `IDX_FF232B31ECFF285C` (`table_id`),
   KEY `IDX_FF232B3133D1A3E7` (`tournament_id`),
-  CONSTRAINT `FK_FF232B3133D1A3E7` FOREIGN KEY (`tournament_id`) REFERENCES `tournaments` (`id`),
   CONSTRAINT `FK_FF232B311558D4EF` FOREIGN KEY (`user2`) REFERENCES `users` (`id`),
+  CONSTRAINT `FK_FF232B3133D1A3E7` FOREIGN KEY (`tournament_id`) REFERENCES `tournaments` (`id`),
   CONSTRAINT `FK_FF232B31625FE479` FOREIGN KEY (`user3`) REFERENCES `users` (`id`),
   CONSTRAINT `FK_FF232B318C518555` FOREIGN KEY (`user1`) REFERENCES `users` (`id`),
   CONSTRAINT `FK_FF232B319719535E` FOREIGN KEY (`team2`) REFERENCES `teams` (`id`),
@@ -105,12 +105,9 @@ DROP TABLE IF EXISTS `groups`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `groups` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `owner` int(11) DEFAULT NULL,
   `name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`),
-  KEY `IDX_F06D3970CF60E67C` (`owner`),
-  CONSTRAINT `FK_F06D3970CF60E67C` FOREIGN KEY (`owner`) REFERENCES `users` (`id`)
+  UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -120,7 +117,7 @@ CREATE TABLE `groups` (
 
 LOCK TABLES `groups` WRITE;
 /*!40000 ALTER TABLE `groups` DISABLE KEYS */;
-INSERT INTO `groups` VALUES (1,1,'NFQ Kaunas');
+INSERT INTO `groups` VALUES (1,'NFQ Kaunas');
 /*!40000 ALTER TABLE `groups` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -156,13 +153,13 @@ CREATE TABLE `matches` (
   KEY `IDX_62615BAE1002E4` (`team1`),
   KEY `IDX_62615BA9719535E` (`team2`),
   KEY `IDX_62615BAECFF285C` (`table_id`),
-  CONSTRAINT `FK_62615BAECFF285C` FOREIGN KEY (`table_id`) REFERENCES `tables` (`id`),
   CONSTRAINT `FK_62615BA1558D4EF` FOREIGN KEY (`user2`) REFERENCES `users` (`id`),
   CONSTRAINT `FK_62615BA33D1A3E7` FOREIGN KEY (`tournament_id`) REFERENCES `tournaments` (`id`),
   CONSTRAINT `FK_62615BA625FE479` FOREIGN KEY (`user3`) REFERENCES `users` (`id`),
   CONSTRAINT `FK_62615BA8C518555` FOREIGN KEY (`user1`) REFERENCES `users` (`id`),
   CONSTRAINT `FK_62615BA9719535E` FOREIGN KEY (`team2`) REFERENCES `teams` (`id`),
   CONSTRAINT `FK_62615BAE1002E4` FOREIGN KEY (`team1`) REFERENCES `teams` (`id`),
+  CONSTRAINT `FK_62615BAECFF285C` FOREIGN KEY (`table_id`) REFERENCES `tables` (`id`),
   CONSTRAINT `FK_62615BAFC3B71DA` FOREIGN KEY (`user4`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -192,8 +189,8 @@ CREATE TABLE `reservations` (
   PRIMARY KEY (`id`),
   KEY `IDX_4DA239A76ED395` (`user_id`),
   KEY `IDX_4DA239ECFF285C` (`table_id`),
-  CONSTRAINT `FK_4DA239ECFF285C` FOREIGN KEY (`table_id`) REFERENCES `tables` (`id`),
-  CONSTRAINT `FK_4DA239A76ED395` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+  CONSTRAINT `FK_4DA239A76ED395` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  CONSTRAINT `FK_4DA239ECFF285C` FOREIGN KEY (`table_id`) REFERENCES `tables` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -220,6 +217,7 @@ CREATE TABLE `tables` (
   `city` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `available_from` time NOT NULL,
   `available_to` time NOT NULL,
+  `owner` int(11) NOT NULL,
   `api` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `private` tinyint(1) NOT NULL,
   `last_event_id` int(11) NOT NULL,
@@ -228,6 +226,8 @@ CREATE TABLE `tables` (
   `disabled` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_84470221FE54D947` (`group_id`),
+  KEY `IDX_84470221CF60E67C` (`owner`),
+  CONSTRAINT `FK_84470221CF60E67C` FOREIGN KEY (`owner`) REFERENCES `users` (`id`),
   CONSTRAINT `FK_84470221FE54D947` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -238,7 +238,7 @@ CREATE TABLE `tables` (
 
 LOCK TABLES `tables` WRITE;
 /*!40000 ALTER TABLE `tables` DISABLE KEYS */;
-INSERT INTO `tables` VALUES (1,1,'Brastos g. 15, LT-47183','Kaunas','08:00:00','20:00:00','http://wonderwall.ox.nfq.lt/kickertable/api/v1/events',1,0,0,1,0);
+INSERT INTO `tables` VALUES (1,1,'Brastos g. 15, LT-47183','Kaunas','08:00:00','20:00:00',1,'http://wonderwall.ox.nfq.lt/kickertable/api/v1/events',1,0,0,1,0);
 /*!40000 ALTER TABLE `tables` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -352,8 +352,8 @@ CREATE TABLE `users_groups` (
   PRIMARY KEY (`id`),
   KEY `IDX_FF8AB7E0A76ED395` (`user_id`),
   KEY `IDX_FF8AB7E0FE54D947` (`group_id`),
-  CONSTRAINT `FK_FF8AB7E0FE54D947` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`),
-  CONSTRAINT `FK_FF8AB7E0A76ED395` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+  CONSTRAINT `FK_FF8AB7E0A76ED395` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  CONSTRAINT `FK_FF8AB7E0FE54D947` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -375,4 +375,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-04-15 15:08:13
+-- Dump completed on 2015-04-18 14:23:14

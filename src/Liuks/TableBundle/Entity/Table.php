@@ -50,6 +50,16 @@ class Table
     private $availableTo;
 
     /**
+     * @var integer
+     *
+     * @ORM\ManyToOne(targetEntity="Liuks\UserBundle\Entity\User")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="owner", referencedColumnName="id", nullable=false)
+     * })
+     */
+    private $owner;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="api", type="string", length=100)
@@ -102,6 +112,16 @@ class Table
     private $group;
 
     /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
      * Set address
      *
      * @param string $address
@@ -117,7 +137,7 @@ class Table
     /**
      * Get address
      *
-     * @return string 
+     * @return string
      */
     public function getAddress()
     {
@@ -140,7 +160,7 @@ class Table
     /**
      * Get city
      *
-     * @return string 
+     * @return string
      */
     public function getCity()
     {
@@ -163,7 +183,7 @@ class Table
     /**
      * Get availableFrom
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getAvailableFrom()
     {
@@ -186,7 +206,7 @@ class Table
     /**
      * Get availableTo
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getAvailableTo()
     {
@@ -232,7 +252,7 @@ class Table
     /**
      * Get private
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getPrivate()
     {
@@ -240,7 +260,7 @@ class Table
     }
 
     /**
-     * Set lastId
+     * Set lastEventId
      *
      * @param integer $lastEventId
      * @return Table
@@ -253,7 +273,7 @@ class Table
     }
 
     /**
-     * Get lastId
+     * Get lastEventId
      *
      * @return integer
      */
@@ -332,13 +352,26 @@ class Table
     }
 
     /**
-     * Get id
+     * Set owner
      *
-     * @return integer 
+     * @param \Liuks\UserBundle\Entity\User $owner
+     * @return Table
      */
-    public function getId()
+    public function setOwner(\Liuks\UserBundle\Entity\User $owner = null)
     {
-        return $this->id;
+        $this->owner = $owner;
+
+        return $this;
+    }
+
+    /**
+     * Get owner
+     *
+     * @return \Liuks\UserBundle\Entity\User
+     */
+    public function getOwner()
+    {
+        return $this->owner;
     }
 
     /**

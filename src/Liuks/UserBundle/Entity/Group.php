@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Group
  *
- * @ORM\Table(name="groups", uniqueConstraints={@ORM\UniqueConstraint(name="name", columns={"name"})}, indexes={@ORM\Index(name="owner", columns={"owner"})})
+ * @ORM\Table(name="groups", uniqueConstraints={@ORM\UniqueConstraint(name="name", columns={"name"})})
  * @ORM\Entity
  */
 class Group
@@ -28,18 +28,6 @@ class Group
      * @ORM\Column(name="name", type="string", length=100)
      */
     private $name;
-
-    /**
-     * @var \Liuks\UserBundle\Entity\User
-     *
-     * @ORM\ManyToOne(targetEntity="Liuks\UserBundle\Entity\User")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="owner", referencedColumnName="id")
-     * })
-     */
-    private $owner;
-
-
 
     /**
      * Get id
@@ -72,28 +60,5 @@ class Group
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * Set owner
-     *
-     * @param \Liuks\UserBundle\Entity\User $owner
-     * @return Group
-     */
-    public function setOwner(\Liuks\UserBundle\Entity\User $owner = null)
-    {
-        $this->owner = $owner;
-
-        return $this;
-    }
-
-    /**
-     * Get owner
-     *
-     * @return \Liuks\UserBundle\Entity\User 
-     */
-    public function getOwner()
-    {
-        return $this->owner;
     }
 }
