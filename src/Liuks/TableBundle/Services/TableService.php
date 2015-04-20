@@ -46,4 +46,32 @@ class TableService extends ContainerAware
         }
         return true;
     }
+
+    /**
+     * @param float $lat
+     * @param float $long
+     * @return array|\Liuks\TableBundle\Entity\Table[]
+     */
+    public function findClosestTables($lat, $long)
+    {
+        $em = $this->container->get('doctrine.orm.default_entity_manager');
+        $tables = $em->getRepository('LiuksTableBundle:Table')->findAll();
+        $t = [];
+        $R = 6371000; // gives d in metres
+        $latU = deg2rad($lat);
+        $longU = deg2rad($long);
+        foreach ($tables as $table)
+        {
+            $latT = deg2rad($table->getLat());
+            $longT = deg2rad($table->getLong());
+            $x = ($longT - $longU) * cos(($latU + $latT)/2);
+            $y = $latT - $latU;
+            $t[$table->getId()] = ['dist' => sqrt($x*$x + $y*$y) * $R, 'table' => $table];
+        }
+        asort($t);
+        $t = array_slice($t, 0, 5);
+        $tables = array_column($t, 'table');
+
+        return $tables;
+    }
 }
