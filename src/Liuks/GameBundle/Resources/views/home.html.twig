@@ -2,16 +2,20 @@
 
 {% block body %}
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-9">
             <h1>Sveiki atvykę</h1>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-3">
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                 {{ dump(app.user) }}
-                <a class="btn btn-primary" href="{{ url("logout_page") }}">Logout</a>
+                <a class="btn btn-primary" href="{{ url("logout_page") }}">Atsijungti</a>
             {% else %}
-                {% include 'LiuksUserBundle::login.html.twig' %}
+                {% include('LiuksUserBundle::login.html.twig') %}
             {% endif %}
         </div>
     </div>
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        <a class="btn btn-primary" href="{{ url("users_locator") }}">Keisti pagrindinį stalą</a>
+        {{ render(controller('LiuksTableBundle:Table:show', { 'id': app.user.defaultTable.id })) }}
+    {% endif %}
 {% endblock %}
