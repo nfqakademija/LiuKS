@@ -18,6 +18,8 @@ class TableType extends AbstractType
         $builder
             ->add('address')
             ->add('city')
+            ->add('lat')
+            ->add('long')
             ->add('availableFrom')
             ->add('availableTo')
             ->add('api')

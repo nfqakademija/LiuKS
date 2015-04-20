@@ -29,6 +29,20 @@ class Table
     private $address;
 
     /**
+     * @var float
+     *
+     * @ORM\Column(name="lat", type="decimal", precision=10, scale=7)
+     */
+    private $lat;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="long", type="decimal", precision=10, scale=7)
+     */
+    private $long;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="city", type="string", length=50)
@@ -395,5 +409,52 @@ class Table
     public function getGroup()
     {
         return $this->group;
+    }
+
+
+    /**
+     * Set lat
+     *
+     * @param string $lat
+     * @return Table
+     */
+    public function setLat($lat)
+    {
+        $this->lat = $lat;
+
+        return $this;
+    }
+
+    /**
+     * Get lat
+     *
+     * @return string 
+     */
+    public function getLat()
+    {
+        return $this->lat;
+    }
+
+    /**
+     * Set long
+     *
+     * @param string $long
+     * @return Table
+     */
+    public function setLong($long)
+    {
+        $this->long = $long;
+
+        return $this;
+    }
+
+    /**
+     * Get long
+     *
+     * @return string 
+     */
+    public function getLong()
+    {
+        return $this->long;
     }
 }
