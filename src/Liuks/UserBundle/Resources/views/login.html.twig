@@ -1,14 +1,7 @@
-{% extends '::base.html.twig' %}
-
 {% block body %}
-    <div class="row">
-        <div class="col-md-6">
-            <h1>Please Login</h1>
-            <div id="fb-root"></div>
-            <a class="btn btn-primary" href="#" onclick="fb_login();">Facebook Connect Button</a>
-            <a class="btn btn-primary" href="{{ url("logout_page") }}">Logout</a>
-        </div>
-    </div>
+    <h1>Please Login</h1>
+    <div id="fb-root"></div>
+    <a class="btn btn-primary btn-lg btn-block" href="#" onclick="fb_login();">Connect</a>
 
     <script>
         window.fbAsyncInit = function() {
