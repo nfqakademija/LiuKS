@@ -3,10 +3,50 @@
 {% block title %}Stalo pasirinkimas |{% endblock %}
 
 {% block body %}
+    <div id="closest-tables"></div>
+{% endblock %}
 
-    <div class="row">
-        <div class="col-md-12">
-            <h1>Numatytasis stalas</h1>
-        </div>
-    </div>
+{% block javascripts %}
+    <script>
+        (function($) {
+            $(document).ready(function ()
+            {
+                if (navigator.geolocation)
+                {
+                    navigator.geolocation.getCurrentPosition(showPosition);
+                }
+                else
+                {
+                    $('h1').html("Geolocation is not supported by this browser.");
+                }
+
+                function showPosition(position)
+                {
+                    $.ajax({
+                        method: "post",
+                        url: "{{ url('users_closest_table') }}",
+                        data: { lat: position.coords.latitude, long: position.coords.longitude },
+                        success: function(msg)
+                        {
+                            if (msg)
+                            {
+                                $('#closest-tables').replaceWith(msg);
+                                var $form = $('.default-table-form > form');
+                                $('.list-group-item').on('click', function(e)
+                                {
+                                    e.preventDefault();
+                                    var $this = $(this);
+                                    $this.siblings().removeClass('active');
+                                    $this.addClass('active');
+                                    var id = $this.attr('data-id');
+                                    var oldAction = $form.attr('action');
+                                    $form.attr('action', oldAction.substr(0, oldAction.lastIndexOf('/')+1)+id)
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+        })(jQuery);
+    </script>
 {% endblock %}

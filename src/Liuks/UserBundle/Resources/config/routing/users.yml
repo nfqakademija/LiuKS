@@ -21,5 +21,15 @@ users_delete:
     methods:  [POST, DELETE]
 
 users_locator:
-    path:     /locator/
+    path:     /locator
     defaults: { _controller: "LiuksUserBundle:Users:locator" }
+
+users_closest_table:
+    path:     /locator/table
+    defaults: { _controller: "LiuksUserBundle:Users:closestTable" }
+    methods:  [POST]
+
+users_set_default_table:
+    path:     /locator/table/set/{id}
+    defaults: { _controller: "LiuksUserBundle:Users:setDefaultTable" }
+    methods:  [POST, PUT]

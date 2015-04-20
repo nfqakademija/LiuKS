@@ -3,11 +3,13 @@
 namespace Liuks\UserBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Liuks\UserBundle\Entity\User;
 use Liuks\UserBundle\Form\UsersType;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Users controller.
@@ -188,6 +190,45 @@ class UsersController extends Controller
      */
     public function locatorAction()
     {
+        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
+        {
+            throw $this->createAccessDeniedException('Unable to access this page!');
+        }
         return $this->render('LiuksUserBundle:Users:locate.html.twig');
+    }
+
+    public function closestTableAction()
+    {
+        $request = $this->container->get('request');
+        $lat = $request->get('lat');
+        $long = $request->get('long');
+        $tables = $this->container->get('table_actions.service')->findClosestTables($lat, $long);
+
+        $form = $this->createFormBuilder()
+            ->setAction($this->generateUrl('users_set_default_table', array('id' => $tables[0]->getId())))
+            ->setMethod('PUT')
+            ->add('submit', 'submit', array('label' => 'Pasirinkti'))
+            ->getForm()->createView();
+
+        return $this->render('LiuksUserBundle:Users:closestTable.html.twig',
+            [
+                'tables' => $tables,
+                'setTableForm' => $form
+            ]);
+    }
+
+    public function setDefaultTableAction(Request $request, $id)
+    {
+        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
+        {
+            throw $this->createAccessDeniedException('Unable to access this page!');
+        }
+        $em = $this->container->get('doctrine.orm.default_entity_manager');
+        $table = $em->getRepository('LiuksTableBundle:Table')->find($id);
+        $user = $this->getUser();
+        $user->setDefaultTable($table);
+        $em->flush($user);
+
+        return $this->redirectToRoute('home_page');
     }
 }

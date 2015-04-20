@@ -1,0 +1,12 @@
+<div class="row">
+    <div class="col-md-12 default-table-form">
+        <h1>Artimiausi stalai</h1>
+        <div class="list-group">
+            <a href="#" class="list-group-item active" data-id="{{ tables[0].id }}">{{ tables[0].address }}</a>
+            {% for table in tables[1:] %}
+                <a href="#" class="list-group-item" data-id="{{ table.id }}">{{ table.address }}</a>
+            {% endfor %}
+        </div>
+        {{ form(setTableForm) }}
+    </div>
+</div>
