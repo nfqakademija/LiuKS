@@ -29,25 +29,25 @@ class Table
     private $address;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="city", type="string", length=50)
+     */
+    private $city;
+
+    /**
      * @var float
      *
-     * @ORM\Column(name="lat", type="decimal", precision=10, scale=7)
+     * @ORM\Column(name="latitude", type="decimal", precision=10, scale=7)
      */
     private $lat;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="long", type="decimal", precision=10, scale=7)
+     * @ORM\Column(name="longitude", type="decimal", precision=10, scale=7)
      */
     private $long;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="city", type="string", length=50)
-     */
-    private $city;
 
     /**
      * @var \DateTime
@@ -128,7 +128,7 @@ class Table
     /**
      * Get id
      *
-     * @return integer
+     * @return integer 
      */
     public function getId()
     {
@@ -151,11 +151,57 @@ class Table
     /**
      * Get address
      *
-     * @return string
+     * @return string 
      */
     public function getAddress()
     {
         return $this->address;
+    }
+
+    /**
+     * Set lat
+     *
+     * @param float $lat
+     * @return Table
+     */
+    public function setLat($lat)
+    {
+        $this->lat = $lat;
+
+        return $this;
+    }
+
+    /**
+     * Get lat
+     *
+     * @return float
+     */
+    public function getLat()
+    {
+        return $this->lat;
+    }
+
+    /**
+     * Set long
+     *
+     * @param float $long
+     * @return Table
+     */
+    public function setLong($long)
+    {
+        $this->long = $long;
+
+        return $this;
+    }
+
+    /**
+     * Get long
+     *
+     * @return float
+     */
+    public function getLong()
+    {
+        return $this->long;
     }
 
     /**
@@ -174,7 +220,7 @@ class Table
     /**
      * Get city
      *
-     * @return string
+     * @return string 
      */
     public function getCity()
     {
@@ -197,7 +243,7 @@ class Table
     /**
      * Get availableFrom
      *
-     * @return \DateTime
+     * @return \DateTime 
      */
     public function getAvailableFrom()
     {
@@ -220,7 +266,7 @@ class Table
     /**
      * Get availableTo
      *
-     * @return \DateTime
+     * @return \DateTime 
      */
     public function getAvailableTo()
     {
@@ -243,7 +289,7 @@ class Table
     /**
      * Get api
      *
-     * @return string
+     * @return string 
      */
     public function getApi()
     {
@@ -266,7 +312,7 @@ class Table
     /**
      * Get private
      *
-     * @return boolean
+     * @return boolean 
      */
     public function getPrivate()
     {
@@ -289,7 +335,7 @@ class Table
     /**
      * Get lastEventId
      *
-     * @return integer
+     * @return integer 
      */
     public function getLastEventId()
     {
@@ -312,7 +358,7 @@ class Table
     /**
      * Get lastShake
      *
-     * @return integer
+     * @return integer 
      */
     public function getLastShake()
     {
@@ -335,7 +381,7 @@ class Table
     /**
      * Get free
      *
-     * @return boolean
+     * @return boolean 
      */
     public function getFree()
     {
@@ -358,7 +404,7 @@ class Table
     /**
      * Get disabled
      *
-     * @return boolean
+     * @return boolean 
      */
     public function getDisabled()
     {
@@ -371,7 +417,7 @@ class Table
      * @param \Liuks\UserBundle\Entity\User $owner
      * @return Table
      */
-    public function setOwner(\Liuks\UserBundle\Entity\User $owner = null)
+    public function setOwner(\Liuks\UserBundle\Entity\User $owner)
     {
         $this->owner = $owner;
 
@@ -381,7 +427,7 @@ class Table
     /**
      * Get owner
      *
-     * @return \Liuks\UserBundle\Entity\User
+     * @return \Liuks\UserBundle\Entity\User 
      */
     public function getOwner()
     {
@@ -404,57 +450,10 @@ class Table
     /**
      * Get group
      *
-     * @return \Liuks\UserBundle\Entity\Group
+     * @return \Liuks\UserBundle\Entity\Group 
      */
     public function getGroup()
     {
         return $this->group;
-    }
-
-
-    /**
-     * Set lat
-     *
-     * @param string $lat
-     * @return Table
-     */
-    public function setLat($lat)
-    {
-        $this->lat = $lat;
-
-        return $this;
-    }
-
-    /**
-     * Get lat
-     *
-     * @return string 
-     */
-    public function getLat()
-    {
-        return $this->lat;
-    }
-
-    /**
-     * Set long
-     *
-     * @param string $long
-     * @return Table
-     */
-    public function setLong($long)
-    {
-        $this->long = $long;
-
-        return $this;
-    }
-
-    /**
-     * Get long
-     *
-     * @return string 
-     */
-    public function getLong()
-    {
-        return $this->long;
     }
 }
