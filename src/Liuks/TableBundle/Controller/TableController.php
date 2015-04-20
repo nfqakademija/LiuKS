@@ -57,11 +57,9 @@ class TableController extends Controller
         $form = $this->createCreateForm($table);
         $form->handleRequest($request);
 
-
         if ($form->isValid())
         {
             $em = $this->getDoctrine()->getManager();
-            $table->setDisabled(1);
             $table->setFree(1);
             $table->setLastShake(0);
             $table->setLastEventId(0);
@@ -76,7 +74,7 @@ class TableController extends Controller
 
             $tableEvent = new TableCreationEvent();
             $tableEvent->setTable($table);
-            $dispatcher = $this->container->get('event_dispatcher');
+            $dispatcher = $this->get('event_dispatcher');
             $dispatcher->dispatch($tableEvent::TABLECREATED, $tableEvent);
 
             return $this->redirect($this->generateUrl('table_show', array('id' => $table->getId())));
@@ -160,7 +158,7 @@ class TableController extends Controller
      */
     public function editAction($id)
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->get('doctrine.orm.default_entity_manager');
 
         $table = $em->getRepository('LiuksTableBundle:Table')->find($id);
 
@@ -211,7 +209,7 @@ class TableController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->get('doctrine.orm.default_entity_manager');
 
         $table = $em->getRepository('LiuksTableBundle:Table')->find($id);
 
@@ -256,7 +254,7 @@ class TableController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->get('doctrine.orm.default_entity_manager');
             $table = $em->getRepository('LiuksTableBundle:Table')->find($id);
 
             if (!$table)
