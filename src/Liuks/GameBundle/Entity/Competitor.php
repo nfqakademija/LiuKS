@@ -29,6 +29,13 @@ class Competitor
     private $round;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="matchup", type="smallint")
+     */
+    private $matchup;
+
+    /**
      * @var \Liuks\GameBundle\Entity\Tournament
      *
      * @ORM\ManyToOne(targetEntity="Liuks\GameBundle\Entity\Tournament")
@@ -51,7 +58,7 @@ class Competitor
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -74,11 +81,34 @@ class Competitor
     /**
      * Get round
      *
-     * @return integer 
+     * @return integer
      */
     public function getRound()
     {
         return $this->round;
+    }
+
+    /**
+     * Set matchup
+     *
+     * @param integer $matchup
+     * @return Competitor
+     */
+    public function setMatchup($matchup)
+    {
+        $this->matchup = $matchup;
+
+        return $this;
+    }
+
+    /**
+     * Get matchup
+     *
+     * @return integer
+     */
+    public function getMatchup()
+    {
+        return $this->matchup;
     }
 
     /**

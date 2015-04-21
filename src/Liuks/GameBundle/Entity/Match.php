@@ -56,6 +56,20 @@ class Match
     private $goals2;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="round", type="smallint")
+     */
+    private $round;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="matchup", type="smallint")
+     */
+    private $matchup;
+
+    /**
      * @var \Liuks\GameBundle\Entity\Tournament
      *
      * @ORM\ManyToOne(targetEntity="Liuks\GameBundle\Entity\Tournament")
@@ -90,11 +104,10 @@ class Match
      */
     private $endTime;
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -117,7 +130,7 @@ class Match
     /**
      * Get goals1
      *
-     * @return integer 
+     * @return integer
      */
     public function getGoals1()
     {
@@ -140,11 +153,57 @@ class Match
     /**
      * Get goals2
      *
-     * @return integer 
+     * @return integer
      */
     public function getGoals2()
     {
         return $this->goals2;
+    }
+
+    /**
+     * Set round
+     *
+     * @param integer $round
+     * @return Match
+     */
+    public function setRound($round)
+    {
+        $this->round = $round;
+
+        return $this;
+    }
+
+    /**
+     * Get round
+     *
+     * @return integer
+     */
+    public function getRound()
+    {
+        return $this->round;
+    }
+
+    /**
+     * Set matchup
+     *
+     * @param integer $matchup
+     * @return Match
+     */
+    public function setMatchup($matchup)
+    {
+        $this->matchup = $matchup;
+
+        return $this;
+    }
+
+    /**
+     * Get matchup
+     *
+     * @return integer
+     */
+    public function getMatchup()
+    {
+        return $this->matchup;
     }
 
     /**
@@ -163,7 +222,7 @@ class Match
     /**
      * Get startTime
      *
-     * @return integer 
+     * @return integer
      */
     public function getStartTime()
     {
@@ -186,7 +245,7 @@ class Match
     /**
      * Get endTime
      *
-     * @return integer 
+     * @return integer
      */
     public function getEndTime()
     {
@@ -209,7 +268,7 @@ class Match
     /**
      * Get competitor1
      *
-     * @return \Liuks\GameBundle\Entity\Competitor 
+     * @return \Liuks\GameBundle\Entity\Competitor
      */
     public function getCompetitor1()
     {
@@ -232,7 +291,7 @@ class Match
     /**
      * Get competitor2
      *
-     * @return \Liuks\GameBundle\Entity\Competitor 
+     * @return \Liuks\GameBundle\Entity\Competitor
      */
     public function getCompetitor2()
     {
@@ -255,7 +314,7 @@ class Match
     /**
      * Get tournament
      *
-     * @return \Liuks\GameBundle\Entity\Tournament 
+     * @return \Liuks\GameBundle\Entity\Tournament
      */
     public function getTournament()
     {
@@ -278,7 +337,7 @@ class Match
     /**
      * Get table
      *
-     * @return \Liuks\TableBundle\Entity\Table 
+     * @return \Liuks\TableBundle\Entity\Table
      */
     public function getTable()
     {
