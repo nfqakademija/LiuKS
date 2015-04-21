@@ -42,6 +42,20 @@ class Match
     private $competitor2;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="goals1", type="smallint")
+     */
+    private $goals1;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="goals2", type="smallint")
+     */
+    private $goals2;
+
+    /**
      * @var \Liuks\GameBundle\Entity\Tournament
      *
      * @ORM\ManyToOne(targetEntity="Liuks\GameBundle\Entity\Tournament")
@@ -76,6 +90,7 @@ class Match
      */
     private $endTime;
 
+
     /**
      * Get id
      *
@@ -84,6 +99,52 @@ class Match
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set goals1
+     *
+     * @param integer $goals1
+     * @return Match
+     */
+    public function setGoals1($goals1)
+    {
+        $this->goals1 = $goals1;
+
+        return $this;
+    }
+
+    /**
+     * Get goals1
+     *
+     * @return integer 
+     */
+    public function getGoals1()
+    {
+        return $this->goals1;
+    }
+
+    /**
+     * Set goals2
+     *
+     * @param integer $goals2
+     * @return Match
+     */
+    public function setGoals2($goals2)
+    {
+        $this->goals2 = $goals2;
+
+        return $this;
+    }
+
+    /**
+     * Get goals2
+     *
+     * @return integer 
+     */
+    public function getGoals2()
+    {
+        return $this->goals2;
     }
 
     /**
