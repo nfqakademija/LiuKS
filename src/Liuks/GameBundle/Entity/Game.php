@@ -120,16 +120,6 @@ class Game
     private $table;
 
     /**
-     * @var \Liuks\GameBundle\Entity\Tournament
-     *
-     * @ORM\ManyToOne(targetEntity="Liuks\GameBundle\Entity\Tournament")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="tournament_id", referencedColumnName="id")
-     * })
-     */
-    private $tournament;
-
-    /**
      * Set goals based on team
      *
      * @param integer $goals
@@ -491,28 +481,5 @@ class Game
     public function getGoals2()
     {
         return $this->goals2;
-    }
-
-    /**
-     * Set tournament
-     *
-     * @param \Liuks\GameBundle\Entity\Tournament $tournament
-     * @return Game
-     */
-    public function setTournament(\Liuks\GameBundle\Entity\Tournament $tournament = null)
-    {
-        $this->tournament = $tournament;
-
-        return $this;
-    }
-
-    /**
-     * Get tournament
-     *
-     * @return \Liuks\GameBundle\Entity\Tournament 
-     */
-    public function getTournament()
-    {
-        return $this->tournament;
     }
 }
