@@ -10,12 +10,17 @@ class GameService extends ContainerAware
 {
     /**
      * @param $table_id
-     * @return Game
+     * @return Game|null
      */
     public function getCurrentGame($table_id)
     {
         $em = $this->container->get('doctrine.orm.default_entity_manager');
-        return $em->getRepository('LiuksGameBundle:Game')->findOneBy(['table' => $table_id, 'endTime' => 0], ['startTime' => 'DESC']);
+        $game = $em->getRepository('LiuksGameBundle:Game')->findOneBy(['table' => $table_id, 'endTime' => 0], ['startTime' => 'DESC']);
+        if ($game)
+        {
+            return $game;
+        }
+        return null;
     }
 
     /**
