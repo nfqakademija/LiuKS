@@ -10,7 +10,6 @@
             </h1>
         </div>
     </div>
-
     {% if table.owner == app.user or is_granted('ROLE_ADMIN') %}
         <div class="row">
             <div class="col-md-12">
@@ -22,18 +21,18 @@
             </div>
         </div>
     {% endif %}
-    <div class="row">
-        {% if table.private %}
-            <div class="col-md-12">
-                <p><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Prie šio stalo gali žaisti tik {{ table.group.name }} grupės nariai.</p>
-            </div>
-        {% endif %}
-    </div>
+    {% if table.private %}
+        <div class="row">
+                <div class="col-md-12">
+                    <p><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Prie šio stalo gali žaisti tik {{ table.group.name }} grupės nariai.</p>
+                </div>
+        </div>
+    {% endif %}
     <div class="row">
         <div class="col-md-12">
             {% if table.free %}
                 <h2>Stalas yra laisvas!</h2>
-            {% else %}
+            {% elseif game %}
                 <h2>Šiuo metu vyksta žaidimas</h2>
                 <h3 class="text-center">{{ game.getGoals(0) }} : {{ game.getGoals(1) }}</h3>
                 <table class="table table-striped text-center">
@@ -59,11 +58,10 @@
                         </td>
                     </tr>
                 </table>
+            {% else %}
+                <h2>Šiuo metu vyksta turnyras</h2>
+                <div id="tournament"></div>
             {% endif %}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
         </div>
     </div>
     <div class="row">
@@ -99,5 +97,24 @@
         </div>
     </div>
 
-
+{% endblock %}
+{% block javascripts %}
+    <script>
+        jQuery(document).ready(function($)
+        {
+            var tournament = $('#tournament');
+            if (tournament.length > 0)
+            {
+                $.ajax({
+                    method: "get",
+                    url: "{{ url('table_tournament', {'table_id': table.id}) }}",
+                    success: function(msg)
+                    {
+                        var script = $.grep($(msg), function(e){ return e.id == 'tournament-script'; });
+                        $('body').append(script);
+                    }
+                });
+            }
+        });
+    </script>
 {% endblock %}

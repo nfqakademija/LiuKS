@@ -134,18 +134,20 @@ class TableController extends Controller
 
         $table = $em->getRepository('LiuksTableBundle:Table')->find($id);
 
-        if (!$table) {
+        if (!$table)
+        {
             throw $this->createNotFoundException('Ooops, it looks like this table is in another dimension...');
         }
+
         $games = $em->getRepository('LiuksGameBundle:Game')->findBy(['table' => $table->getId()]);
 
         $game = $this->get('game_utils.service')->getCurrentGame($id);
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('LiuksTableBundle:Table:show.html.twig', array(
-            'table'      => $table,
-            'game'        => $game,
-            'games'        => $games,
+            'table' => $table,
+            'game' => $game,
+            'games' => $games,
             'delete_form' => $deleteForm->createView(),
         ));
     }

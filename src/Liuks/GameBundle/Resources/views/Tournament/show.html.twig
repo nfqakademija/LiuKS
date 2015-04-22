@@ -1,0 +1,24 @@
+{% extends '::base.html.twig' %}
+
+{% block title -%} Turnyras {{ tournament.name }} |{% endblock %}
+
+{% block body -%}
+    <div class="row">
+        <div class="col-md-12">
+            <div id="tournament"></div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script id="tournament-script">
+        jQuery(document).ready(function($){
+            var data = {{ data|json_encode|raw }};
+            if (data.length > 0)
+            {
+                $('#tournament').bracket({
+                    init: data
+                });
+            }
+        });
+    </script>
+{% endblock %}
