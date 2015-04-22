@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Match
  *
- * @ORM\Table(name="matches", indexes={@ORM\Index(name="table_id", columns={"table_id"}), @ORM\Index(name="tournament_id", columns={"tournament_id"}), @ORM\Index(name="competitor1", columns={"competitor1"}), @ORM\Index(name="competitor2", columns={"competitor2"})})
+ * @ORM\Table(name="matches", indexes={@ORM\Index(name="tournament_id", columns={"tournament_id"}), @ORM\Index(name="competitor1", columns={"competitor1"}), @ORM\Index(name="competitor2", columns={"competitor2"})})
  * @ORM\Entity
  */
 class Match
@@ -79,16 +79,6 @@ class Match
      */
 
     private $tournament;
-
-    /**
-     * @var \Liuks\TableBundle\Entity\Table
-     *
-     * @ORM\ManyToOne(targetEntity="Liuks\TableBundle\Entity\Table")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="table_id", referencedColumnName="id", nullable=false)
-     * })
-     */
-    private $table;
 
     /**
      * @var integer
@@ -319,28 +309,5 @@ class Match
     public function getTournament()
     {
         return $this->tournament;
-    }
-
-    /**
-     * Set table
-     *
-     * @param \Liuks\TableBundle\Entity\Table $table
-     * @return Match
-     */
-    public function setTable(\Liuks\TableBundle\Entity\Table $table)
-    {
-        $this->table = $table;
-
-        return $this;
-    }
-
-    /**
-     * Get table
-     *
-     * @return \Liuks\TableBundle\Entity\Table
-     */
-    public function getTable()
-    {
-        return $this->table;
     }
 }
