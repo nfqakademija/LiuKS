@@ -3,6 +3,10 @@ services:
         class: Liuks\GameBundle\Services\GameService
         calls:
             - [setContainer, [@service_container]]
+    tournament_utils.service:
+        class: Liuks\GameBundle\Services\TournamentService
+        calls:
+            - [setContainer, [@service_container]]
     api_data.service:
         class: Liuks\GameBundle\Services\DataService
         calls:
