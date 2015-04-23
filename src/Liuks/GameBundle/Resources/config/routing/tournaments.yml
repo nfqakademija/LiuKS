@@ -1,0 +1,30 @@
+tournaments:
+    path:     /
+    defaults: { _controller: "LiuksGameBundle:Tournament:index" }
+
+tournament_show:
+    path:     /{id}/show
+    defaults: { _controller: "LiuksGameBundle:Tournament:show" }
+
+tournament_new:
+    path:     /new
+    defaults: { _controller: "LiuksGameBundle:Tournament:new" }
+
+tournament_create:
+    path:     /create
+    defaults: { _controller: "LiuksGameBundle:Tournament:create" }
+    methods:  POST
+
+tournament_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "LiuksGameBundle:Tournament:edit" }
+
+tournament_update:
+    path:     /{id}/update
+    defaults: { _controller: "LiuksGameBundle:Tournament:update" }
+    methods:  [POST, PUT]
+
+tournament_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "LiuksGameBundle:Tournament:delete" }
+    methods:  [POST, DELETE]

@@ -1,3 +1,7 @@
 home_page:
     path: /
     defaults: { _controller: "LiuksGameBundle:Game:index"}
+
+liuks_user_users:
+    resource: "@LiuksGameBundle/Resources/config/routing/tournaments.yml"
+    prefix:   /tournaments

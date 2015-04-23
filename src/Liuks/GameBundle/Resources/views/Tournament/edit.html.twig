@@ -1,0 +1,18 @@
+{% extends '::base.html.twig' %}
+
+{% block title -%}Turnyro redagavimas |{% endblock %}
+
+{% block body -%}
+    <h1>Turnyro redagavimas</h1>
+
+    {{ form_start(form) }}
+        {{ form_errors(form) }}
+        {{ form_row(form.name) }}
+        {{ form_row(form.table) }}
+    {{ form_end(form) }}
+
+    <ul class="list-inline">
+        <li><a href="{{ path('tournaments') }}"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></a></li>
+        <li>{{ form(delete_form) }}</li>
+    </ul>
+{% endblock %}

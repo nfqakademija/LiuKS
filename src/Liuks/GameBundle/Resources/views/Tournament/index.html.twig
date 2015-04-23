@@ -1,0 +1,51 @@
+{% extends '::base.html.twig' %}
+
+{% block title -%}Turnyrai |{% endblock %}
+
+{% block body -%}
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Turnyrai</h1>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Pavadinimas</th>
+                        <th>Organizatorius</th>
+                        <th>Stalas</th>
+                        <th>Pradžia</th>
+                        <th>Pabaiga</th>
+                        <th>Veiksmai</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for tournament in tournaments %}
+                    <tr>
+                        <td>{{ tournament.name }}</td>
+                        <td>{{ tournament.organizer.name }}</td>
+                        <td>{{ tournament.table.address }}</td>
+                        <td>{{ tournament.startTime|date('Y-m-d H:i') }}</td>
+                        <td>{{ tournament.endTime == 0 ? '-' : tournament.endTime|date('H:i') }}</td>
+                        <td>
+                            <ul class="list-inline">
+                                {% if tournament.table.owner == app.user or is_granted('ROLE_ADMIN') %}
+                                    <li>
+                                        <a href="{{ path('tournament_edit', { 'id': tournament.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                                    </li>
+                                {% endif %}
+                                <li>
+                                    <a href="{{ path('tournament_show', { 'id': tournament.id }) }}"><span class="glyphicon glyphicon-chevron-right"></span></a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                <a class="btn btn-success" href="{{ path('tournament_new') }}">
+                    Naujas Turnyras
+                </a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
