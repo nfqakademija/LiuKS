@@ -1,5 +1,6 @@
 {
-    "name": "Klemensas/Liuks",
+    "name": "laurynas/liuks",
+    "description": "NFQ projektas, 3 komanda",
     "license": "proprietary",
     "type": "project",
     "autoload": {
@@ -24,7 +25,8 @@
         "hwi/oauth-bundle": "0.4.*@dev"
     },
     "require-dev": {
-        "sensio/generator-bundle": "~2.3"
+        "sensio/generator-bundle": "~2.3",
+        "phpunit/phpunit": "4.6.*"
     },
     "scripts": {
         "post-root-package-install": [
