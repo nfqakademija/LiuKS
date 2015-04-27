@@ -28,7 +28,7 @@
                 </div>
         </div>
     {% endif %}
-    <div class="row">
+    <div id="game-info" class="row">
         <div class="col-md-12">
             {% if table.free %}
                 <h2>Stalas yra laisvas!</h2>
@@ -59,7 +59,6 @@
                     </tr>
                 </table>
             {% else %}
-                <h2>Šiuo metu vyksta turnyras</h2>
                 <div id="tournament"></div>
             {% endif %}
         </div>
@@ -110,7 +109,10 @@
                     url: "{{ url('table_tournament', {'table_id': table.id}) }}",
                     success: function(msg)
                     {
-                        var script = $.grep($(msg), function(e){ return e.id == 'tournament-script'; });
+                        var $resp = $(msg);
+                        var tournament_info = $resp.find('#tournament-info');
+                        var script = $.grep($resp, function(e){ return e.id == 'tournament-script'; });
+                        $('#game-info').replaceWith(tournament_info);
                         $('body').append(script);
                     }
                 });
