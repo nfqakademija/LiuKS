@@ -1,4 +1,9 @@
 services:
+    users_util.service:
+        class: Liuks\UserBundle\Services\UserService
+        calls:
+            - [ setContainer, [@service_container] ]
+
     oauth_user.provider:
         class: Liuks\UserBundle\Auth\OAuthProvider
         calls:
