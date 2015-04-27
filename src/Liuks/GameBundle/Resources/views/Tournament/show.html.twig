@@ -38,21 +38,59 @@
         </div>
     {% endif %}
 
-    <div class="row">
+    <div id="tournament-info" class="row">
         <div class="col-md-12">
-            <div id="tournament"></div>
+            {% if tournament.startTime != 0 %}
+                <h3>Šiuo metu vyksta turnyras</h3>
+                <div id="tournament"></div>
+            {% elseif not isCompetitor %}
+                <h3>Prisijunkite prie turnyro</h3>
+                <div class="list-group">
+                    <a href="#" class="play list-group-item" data-team="new">Nauja komanda</a>
+                    {% for competitor in competitors %}
+                        {% if competitor.team.player == null %}
+                            <a href="#" class="play list-group-item" data-team="{{ competitor.team.id }}">
+                                {{ competitor.team.captain.name }} {{ competitor.team.captain.surname }} komanda
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% elseif is_granted('IS_AUTHENTICATED_FULLY') %}
+                <h3>Jūs jau dalyvaujate šiame turnyre.</h3>
+            {% endif %}
         </div>
     </div>
+
 {% endblock %}
 {% block javascripts %}
     <script id="tournament-script">
         jQuery(document).ready(function($){
             var data = {{ data|json_encode|raw }};
-            if (typeof data != "undefined")
+            var $tournament = $('#tournament');
+            if (typeof data != "undefined" && $tournament.length != 0)
             {
-                $('#tournament').bracket({
+                $tournament.bracket({
                     init: data
                 });
+            }
+            else
+            {
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    $('.play').on('click', function(e){
+                        e.preventDefault();
+                        $.ajax({
+                            method: 'POST',
+                            url: '{{ url('tournament_add_player', {id: tournament.id }) }}',
+                            data: {team: $(this).attr('data-team')},
+                            success: function(msg){
+                                if (msg)
+                                {
+                                    $('#tournament-info > div').html('<h3>Sveikinu! Jūs užsiregistravote į turnyrą.</h3>');
+                                }
+                            }
+                        });
+                    });
+                {% endif %}
             }
         });
     </script>

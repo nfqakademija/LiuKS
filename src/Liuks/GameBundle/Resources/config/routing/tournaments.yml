@@ -28,3 +28,8 @@ tournament_delete:
     path:     /{id}/delete
     defaults: { _controller: "LiuksGameBundle:Tournament:delete" }
     methods:  [POST, DELETE]
+
+tournament_add_player:
+    path:     /{id}/add-player
+    defaults: { _controller: "LiuksGameBundle:Tournament:addPlayer" }
+    methods:  [POST, PUT]

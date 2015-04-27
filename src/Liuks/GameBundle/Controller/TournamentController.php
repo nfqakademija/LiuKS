@@ -8,6 +8,7 @@ use Liuks\GameBundle\Form\TournamentType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class TournamentController extends Controller
 {
@@ -27,14 +28,7 @@ class TournamentController extends Controller
         {
             throw $this->createNotFoundException('Unable to find Tournament entity.');
         }
-        $data = $this->get('tournament_utils.service')->getTournamentData($tournament);
-        $form = $this->createDeleteForm($tournament->getId());
-        return $this->render('LiuksGameBundle:Tournament:show.html.twig',
-            [
-                'data' => $data,
-                'tournament' => $tournament,
-                'delete_form' => $form->createView()
-            ]);
+        return $this->showAction($tournament->getId());
     }
 
     /**
@@ -147,13 +141,25 @@ class TournamentController extends Controller
     {
         $em = $this->get('doctrine.orm.default_entity_manager');
         $tournament = $em->getRepository('LiuksGameBundle:Tournament')->find($id);
-        $data = $this->get('tournament_utils.service')->getTournamentData($tournament);
-        $form = $this->createDeleteForm($id);
+        if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
+        {
+            $tournament_utils = $this->get('tournament_utils.service');
+            $competitors = $em->getRepository('LiuksGameBundle:Competitor')->findBy(['tournament' => $tournament]);
+            $data = $tournament_utils->getTournamentData($tournament);
+            $form = $this->createDeleteForm($id)->createView();
+            $isCompetitor = $tournament_utils->isCompetitor($tournament, $this->getUser());
+        }
+        else
+        {
+            $competitors = $data = $form = $isCompetitor = null;
+        }
         return $this->render('LiuksGameBundle:Tournament:show.html.twig',
             [
-                'data' => $data,
                 'tournament' => $tournament,
-                'delete_form' => $form->createView()
+                'data' => $data,
+                'competitors' => $competitors,
+                'isCompetitor' => $isCompetitor,
+                'delete_form' => $form
             ]);
     }
 
@@ -303,5 +309,28 @@ class TournamentController extends Controller
             ->add('submit', 'submit', array('label' => 'Ištrinti'))
             ->getForm()
             ;
+    }
+
+    /**
+     * Adds current user to Tournament based on tournament id.
+     *
+     * @param integer $id Tournament id
+     * @return Response
+     */
+    public function addPlayerAction($id)
+    {
+        $em = $this->get('doctrine.orm.default_entity_manager');
+        $tournament = $em->getRepository('LiuksGameBundle:Tournament')->find($id);
+        $team_id = $_POST['team'];
+        if ($team_id == 'new')
+        {
+            $team = $this->get('users_util.service')->createTeam($this->getUser());
+            $this->get('tournament_utils.service')->addCompetitor($tournament, $team);
+        }
+        else
+        {
+            $this->get('users_util.service')->addTeamMember($team_id, $this->getUser());
+        }
+        return new Response('success');
     }
 }
