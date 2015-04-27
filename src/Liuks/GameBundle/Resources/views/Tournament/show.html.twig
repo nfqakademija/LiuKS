@@ -40,7 +40,7 @@
 
     <div id="tournament-info" class="row">
         <div class="col-md-12">
-            {% if tournament.startTime != 0 %}
+            {% if date(tournament.startTime) < date() %}
                 <h3>Šiuo metu vyksta turnyras</h3>
                 <div id="tournament"></div>
             {% elseif not isCompetitor %}
@@ -85,7 +85,7 @@
                             success: function(msg){
                                 if (msg)
                                 {
-                                    $('#tournament-info > div').html('<h3>Sveikinu! Jūs užsiregistravote į turnyrą.</h3>');
+                                    $('#tournament-info').find('> div').html('<h3>Sveikinu! Jūs užsiregistravote į turnyrą.</h3>');
                                 }
                             }
                         });
