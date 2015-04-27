@@ -312,16 +312,19 @@ class TableController extends Controller
         {
             throw $this->createNotFoundException('Ooops, it looks like this table is in another dimension...');
         }
-        $records = $this->get('api_data.service')->getData($table->getApi(), $table->getLastEventId());
 
         $action = ''; //for debug
-        foreach ($records as $record)
+        $records = $this->get('api_data.service')->getData($table->getApi(), $table->getLastEventId());
+        if ($records)
         {
-            $action = $record->type;
-            $this->get('table_actions.service')->handleTableAction($table, $record);
+            foreach ($records as $record)
+            {
+                $action = $record->type;
+                $this->get('table_actions.service')->handleTableAction($table, $record);
+            }
+            $table->setLastEventId(end($records)->id);
+            $em->flush($table);
         }
-        $table->setLastEventId(end($records)->id);
-        $em->flush($table);
 
         $game = $this->get('game_utils.service')->getCurrentGame($id);
         return $this->render('LiuksTableBundle:Table:data.html.twig', ['game' => $game, 'shake' => $table->getLastShake(), 'action' => $action]);

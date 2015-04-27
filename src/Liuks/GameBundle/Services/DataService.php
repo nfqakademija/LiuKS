@@ -15,10 +15,14 @@ class DataService extends ContainerAware
      */
     public function getData($api, $last_id)
     {
-        $url = $api."?rows=10&from-id=".$last_id;
-        //$response = $this->getResponse($url);
-        $response = $this->getTestData($last_id);
-        return $this->parseData($response);
+        if ($api)
+        {
+            $url = $api."?rows=10&from-id=".$last_id;
+            //$response = $this->getResponse($url);
+            $response = $this->getTestData($last_id);
+            return $this->parseData($response);
+        }
+        return null;
     }
 
     /**
@@ -137,7 +141,7 @@ class DataService extends ContainerAware
         $count = 0;
         foreach ($data->records as $record)
         {
-            if ($record->id > $last_id && $count < 10)
+            if ($record->id > $last_id && $count < 1)
             {
                 $records[] = $record;
                 $count++;
@@ -145,7 +149,7 @@ class DataService extends ContainerAware
         }
         if (count($records) > 0)
         {
-            $data->records = [$records];
+            $data->records = $records;
         }
         else
         {
