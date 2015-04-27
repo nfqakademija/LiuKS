@@ -70,6 +70,13 @@ class Tournament
     private $competitors;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="current_round", type="integer")
+     */
+    private $currentRound;
+
+    /**
      * Get id
      *
      * @return integer 
@@ -215,5 +222,28 @@ class Tournament
     public function getCompetitors()
     {
         return $this->competitors;
+    }
+
+    /**
+     * Set currentRound
+     *
+     * @param integer $currentRound
+     * @return Tournament
+     */
+    public function setCurrentRound($currentRound)
+    {
+        $this->currentRound = $currentRound;
+
+        return $this;
+    }
+
+    /**
+     * Get currentRound
+     *
+     * @return integer 
+     */
+    public function getCurrentRound()
+    {
+        return $this->currentRound;
     }
 }
