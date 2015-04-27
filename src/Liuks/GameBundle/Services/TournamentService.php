@@ -2,12 +2,35 @@
 
 namespace Liuks\GameBundle\Services;
 
+use Liuks\GameBundle\Entity\Competitor;
 use Liuks\GameBundle\Entity\Match;
 use Liuks\GameBundle\Entity\Tournament;
+use Liuks\UserBundle\Entity\Team;
+use Liuks\UserBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerAware;
 
 class TournamentService extends ContainerAware
 {
+    /**
+     * @param Tournament $tournament
+     * @param User $user
+     * @return bool
+     */
+    public function isCompetitor($tournament, $user)
+    {
+        $em = $this->container->get('doctrine.orm.default_entity_manager');
+        $competitors = $em->createQuery(
+            'SELECT c FROM LiuksGameBundle:Competitor c
+            JOIN c.team team
+            WHERE c.tournament = :t AND (team.captain = :user OR team.player = :user)'
+        )->setParameter('t', $tournament)->setParameter('user', $user)->getResult();
+        if ($competitors)
+        {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * @param Tournament $tournament
      * @return \stdClass object that contains teams and results arrays.
@@ -26,7 +49,8 @@ class TournamentService extends ContainerAware
                 {
                     if (!isset($teams[$competitor->getMatchup()]))
                     {
-                        $teams[(int)$competitor->getMatchup()] = ['', ''];
+                        $count = count($teams);
+                        $teams = array_merge($teams, array_fill((int)$competitor->getMatchup(), $count == 0 ? 1 : $count, ['', '']));
                     }
 
                     if ($teams[$competitor->getMatchup()][0] == '')
@@ -60,5 +84,28 @@ class TournamentService extends ContainerAware
         $data->results = $results;
 
         return $data;
+    }
+
+    /**
+     * @param Tournament $tournament
+     * @param Team $team
+     * @return Competitor
+     */
+    public function addCompetitor($tournament, $team)
+    {
+        $em = $this->container->get('doctrine.orm.default_entity_manager');
+        $position = floor($tournament->getCompetitors()/2);
+        $competitor = new Competitor();
+        $competitor->setRound(0);
+        $competitor->setMatchup($position);
+        $competitor->setTournament($tournament);
+        $competitor->setTeam($team);
+        $em->persist($competitor);
+        $em->flush($competitor);
+
+        $tournament->setCompetitors($tournament->getCompetitors()+1);
+        $em->flush($tournament);
+
+        return $competitor;
     }
 }
