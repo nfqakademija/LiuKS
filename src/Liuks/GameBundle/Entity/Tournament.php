@@ -63,6 +63,13 @@ class Tournament
     private $table;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="competitors", type="integer")
+     */
+    private $competitors;
+
+    /**
      * Get id
      *
      * @return integer 
@@ -185,5 +192,28 @@ class Tournament
     public function getTable()
     {
         return $this->table;
+    }
+
+    /**
+     * Set competitors
+     *
+     * @param integer $competitors
+     * @return Tournament
+     */
+    public function setCompetitors($competitors)
+    {
+        $this->competitors = $competitors;
+
+        return $this;
+    }
+
+    /**
+     * Get competitors
+     *
+     * @return integer 
+     */
+    public function getCompetitors()
+    {
+        return $this->competitors;
     }
 }
