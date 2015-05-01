@@ -151,6 +151,52 @@ class Match
     }
 
     /**
+     * Set goals based on team
+     *
+     * @param integer $goals
+     * @param integer $team
+     * @return Match
+     */
+    public function setGoals($goals, $team)
+    {
+        switch ($team)
+        {
+            case 0:
+                $this->goals1 = $goals;
+                break;
+            case 1:
+                $this->goals2 = $goals;
+                break;
+            default:
+                //throw error
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get goals based on team
+     *
+     * @param integer $team
+     * @return integer
+     */
+    public function getGoals($team)
+    {
+        switch ($team)
+        {
+            case 0:
+                return $this->goals1;
+                break;
+            case 1:
+                return $this->goals2;
+                break;
+            default:
+                //throw error
+        }
+        return null;
+    }
+
+    /**
      * Set round
      *
      * @param integer $round
@@ -240,6 +286,51 @@ class Match
     public function getEndTime()
     {
         return $this->endTime;
+    }
+
+    /**
+     * Set competitor based on num
+     *
+     * @param Competitor $competitor
+     * @param $num
+     * @return $this
+     */
+    public function setCompetitor(Competitor $competitor = null, $num)
+    {
+        switch ($num)
+        {
+            case 0:
+                $this->competitor1 = $competitor;
+                break;
+            case 1:
+                $this->competitor2 = $competitor;
+                break;
+            default:
+                //throw error
+        }
+        return $this;
+    }
+
+    /**
+     * Get competitor based on num
+     *
+     * @param $num
+     * @return Competitor|null
+     */
+    public function getCompetitor($num)
+    {
+        switch ($num)
+        {
+            case 0:
+                return $this->competitor1;
+                break;
+            case 1:
+                return $this->competitor2;
+                break;
+            default:
+                //throw error
+        }
+        return null;
     }
 
     /**

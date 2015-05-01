@@ -31,6 +31,13 @@ class Competitor
     /**
      * @var integer
      *
+     * @ORM\Column(name="start_pos", type="smallint")
+     */
+    private $startPos;
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="matchup", type="smallint")
      */
     private $matchup;
@@ -155,5 +162,28 @@ class Competitor
     public function getTeam()
     {
         return $this->team;
+    }
+
+    /**
+     * Set startPos
+     *
+     * @param integer $startPos
+     * @return Competitor
+     */
+    public function setStartPos($startPos)
+    {
+        $this->startPos = $startPos;
+
+        return $this;
+    }
+
+    /**
+     * Get startPos
+     *
+     * @return integer 
+     */
+    public function getStartPos()
+    {
+        return $this->startPos;
     }
 }

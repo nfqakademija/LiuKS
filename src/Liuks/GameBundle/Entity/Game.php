@@ -3,6 +3,7 @@
 namespace Liuks\GameBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Liuks\UserBundle\Entity\Team;
 
 /**
  * Game
@@ -352,11 +353,56 @@ class Game
     /**
      * Get team2
      *
-     * @return \Liuks\UserBundle\Entity\Team
+     * @return Team
      */
     public function getTeam2()
     {
         return $this->team2;
+    }
+
+    /**
+     * Set team based on num
+     *
+     * @param Team $team
+     * @param $num
+     * @return $this
+     */
+    public function setTeam(Team $team = null, $num)
+    {
+        switch ($num)
+        {
+            case 0:
+                $this->team1 = $team;
+                break;
+            case 1:
+                $this->team2 = $team;
+                break;
+            default:
+                //throw error
+        }
+        return $this;
+    }
+
+    /**
+     * Get team based on num
+     *
+     * @param $num
+     * @return Team|null
+     */
+    public function getTeam($num)
+    {
+        switch ($num)
+        {
+            case 0:
+                return $this->team1;
+                break;
+            case 1:
+                return $this->team2;
+                break;
+            default:
+                //throw error
+        }
+        return null;
     }
 
     /**
