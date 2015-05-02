@@ -31,52 +31,68 @@ class TournamentService extends ContainerAware
         return false;
     }
 
+    public function updateTournamentResultsFromJson($tournament_id, $json)
+    {
+        $em = $this->container->get('doctrine.orm.default_entity_manager');
+        $tournament = $em->getRepository('LiuksGameBundle:Tournament')->find($tournament_id);
+        $matches = $em->getRepository('LiuksGameBundle:Match')->findBy(['tournament' => $tournament], ['round' => 'ASC', 'matchup' => 'ASC']);
+        $data = json_decode($json)[0];
+        foreach($matches as $match)
+        {
+            $match->setGoals1($data[$match->getRound()][$match->getMatchup()][0]);
+            $match->setGoals2($data[$match->getRound()][$match->getMatchup()][1]);
+            unset($data[$match->getRound()][$match->getMatchup()]);
+        }
+        $newMatches = [];
+        foreach($data as $r => $round)
+        {
+            foreach ($round as $m => $matchup)
+            {
+                $match = new Match();
+                $match->setTournament($tournament);
+                $match->setRound($r);
+                $match->setMatchup($m);
+                $match->setStartTime(time());
+                $match->setEndTime(time()+1);
+                $goals = [0, 0];
+                if (array_key_exists(0, $matchup))
+                {
+                    $goals[0] = $matchup[0];
+                }
+                if (array_key_exists(1, $matchup))
+                {
+                    $goals[1] = $matchup[1];
+                }
+                $match->setGoals1($goals[0]);
+                $match->setGoals2($goals[1]);
+                //TODO: set competitors of the match
+                $em->persist($match);
+                $newMatches[] = $match;
+            }
+        }
+        $em->flush(array_merge($matches, $newMatches));
+        return true;
+    }
+
+    public function updateTournamentTeamsFromJson($tournament_id, $json)
+    {
+        $em = $this->container->get('doctrine.orm.default_entity_manager');
+        //TODO: update teams based on teams json
+        return false;
+    }
+
     /**
      * @param Tournament $tournament
      * @return \stdClass object that contains teams and results arrays.
      */
     public function getTournamentData($tournament)
     {
-        $em = $this->container->get('doctrine.orm.default_entity_manager');
         $teams = [];
         $results = [];
         if ($tournament)
         {
-            $competitors = $em->getRepository('LiuksGameBundle:Competitor')->findBy(['tournament' => $tournament]);
-            if ($competitors)
-            {
-                foreach($competitors as $competitor)
-                {
-                    if (!isset($teams[$competitor->getMatchup()]))
-                    {
-                        $count = count($teams);
-                        $teams = array_merge($teams, array_fill((int)$competitor->getMatchup(), $count == 0 ? 1 : $count, ['', '']));
-                    }
-
-                    if ($teams[$competitor->getMatchup()][0] == '')
-                    {
-                        $teams[$competitor->getMatchup()][0] = $competitor->getTeam()->getName();
-                    }
-                    else
-                    {
-                        $teams[$competitor->getMatchup()][1] = $competitor->getTeam()->getName();
-                    }
-                }
-            }
-
-            $matches = $em->createQuery(
-                'SELECT m FROM LiuksGameBundle:Match m
-                 WHERE m.tournament = :t AND m.endTime != :time
-                 ORDER BY m.round'
-            )->setParameter('t', $tournament)->setParameter('time', 0)->getResult();
-            if ($matches)
-            {
-                foreach($matches as $match)
-                {
-                    /** @var $match Match */
-                    $results[$match->getRound()][$match->getMatchup()] = [$match->getGoals1(), $match->getGoals2()];
-                }
-            }
+            $teams = $this->getTeams($tournament);
+            $results = $this->getResults($tournament);
         }
 
         $data = new \stdClass();
@@ -84,6 +100,62 @@ class TournamentService extends ContainerAware
         $data->results = $results;
 
         return $data;
+    }
+
+    /**
+     * @param Tournament $tournament
+     * @return array
+     */
+    private function getTeams($tournament)
+    {
+        $em = $this->container->get('doctrine.orm.default_entity_manager');
+        $competitors = $em->getRepository('LiuksGameBundle:Competitor')->findBy(['tournament' => $tournament]);
+        $teams = [];
+        if ($competitors)
+        {
+            foreach($competitors as $competitor)
+            {
+                if (!isset($teams[$competitor->getStartPos()]))
+                {
+                    $count = count($teams);
+                    $teams = array_merge($teams, array_fill((int)$competitor->getStartPos(), $count == 0 ? 1 : $count, ['', '']));
+                }
+
+                if ($teams[$competitor->getStartPos()][0] == '')
+                {
+                    $teams[$competitor->getStartPos()][0] = $competitor->getTeam()->getName();
+                }
+                else
+                {
+                    $teams[$competitor->getStartPos()][1] = $competitor->getTeam()->getName();
+                }
+            }
+        }
+        return $teams;
+    }
+
+    /**
+     * @param Tournament $tournament
+     * @return array
+     */
+    private function getResults($tournament)
+    {
+        $results = [];
+        $em = $this->container->get('doctrine.orm.default_entity_manager');
+        $matches = $em->createQuery(
+            'SELECT m FROM LiuksGameBundle:Match m
+                 WHERE m.tournament = :t AND m.endTime != :time
+                 ORDER BY m.round'
+        )->setParameter('t', $tournament)->setParameter('time', 0)->getResult();
+        if ($matches)
+        {
+            foreach($matches as $match)
+            {
+                /** @var Match $match */
+                $results[0][$match->getRound()][$match->getMatchup()] = [$match->getGoals1(), $match->getGoals2()];
+            }
+        }
+        return $results;
     }
 
     /**
@@ -98,6 +170,7 @@ class TournamentService extends ContainerAware
         $competitor = new Competitor();
         $competitor->setRound(0);
         $competitor->setMatchup($position);
+        $competitor->setStartPos($position);
         $competitor->setTournament($tournament);
         $competitor->setTeam($team);
         $em->persist($competitor);
@@ -107,5 +180,51 @@ class TournamentService extends ContainerAware
         $em->flush($tournament);
 
         return $competitor;
+    }
+
+    /**
+     * @param Match $match
+     * @param $winner_side
+     * @param $action_time
+     */
+    public function resolveTournament($match, $winner_side, $action_time)
+    {
+        $em = $this->container->get('doctrine.orm.default_entity_manager');
+
+        $winner = $match->getCompetitor($winner_side);
+        $tournament = $match->getTournament();
+        if ($tournament->getCurrentRound() == -1)
+        {
+            $tournament->setEndTime($action_time);
+        }
+        else
+        {
+            $last_matchup = (int)(($tournament->getCompetitors() - 1) / 2);
+            if ($tournament->getCurrentRound() != 0)
+            {
+                $last_matchup = (int)($last_matchup / ($tournament->getCurrentRound() * 2));
+            }
+            if ($last_matchup == 0)
+            {
+                $tournament->setCurrentRound(-1);
+
+                $looser = $match->getCompetitor(!$winner_side);
+                $looser->setRound($looser->getRound() + 1);
+                $looser->setMatchup(1);
+                $em->flush($looser);
+            }
+            elseif($winner->getMatchup() == $last_matchup)
+            {
+                $tournament->setCurrentRound($tournament->getCurrentRound() + 1);
+            }
+            $winner->setRound($winner->getRound() + 1);
+            $winner->setMatchup(floor($winner->getMatchup()/2));
+            $em->flush($winner);
+        }
+        $em->flush($tournament);
+
+        $users_util = $this->container->get('users_util.service');
+        $users_util->addToTeamRanking($winner->getTeam(), true, $match->getGoals($winner_side));
+        $users_util->addToTeamRanking($match->getCompetitor(!$winner_side)->getTeam(), false, $match->getGoals(!$winner_side));
     }
 }
