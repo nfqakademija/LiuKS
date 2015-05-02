@@ -33,3 +33,7 @@ tournament_add_player:
     path:     /{id}/add-player
     defaults: { _controller: "LiuksGameBundle:Tournament:addPlayer" }
     methods:  [POST, PUT]
+
+tournament_update_from_json:
+    path:     /{id}/data
+    defaults: { _controller: "LiuksGameBundle:Tournament:updateFromJson" }

@@ -141,22 +141,22 @@ class TournamentController extends Controller
     {
         $em = $this->get('doctrine.orm.default_entity_manager');
         $tournament = $em->getRepository('LiuksGameBundle:Tournament')->find($id);
+        $tournament_utils = $this->get('tournament_utils.service');
+        $data = $tournament_utils->getTournamentData($tournament);
         if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
         {
-            $tournament_utils = $this->get('tournament_utils.service');
             $competitors = $em->getRepository('LiuksGameBundle:Competitor')->findBy(['tournament' => $tournament]);
-            $data = $tournament_utils->getTournamentData($tournament);
             $form = $this->createDeleteForm($id)->createView();
             $isCompetitor = $tournament_utils->isCompetitor($tournament, $this->getUser());
         }
         else
         {
-            $competitors = $data = $form = $isCompetitor = null;
+            $competitors = $form = $isCompetitor = null;
         }
         return $this->render('LiuksGameBundle:Tournament:show.html.twig',
             [
                 'tournament' => $tournament,
-                'data' => $data,
+                'data' => json_encode($data),
                 'competitors' => $competitors,
                 'isCompetitor' => $isCompetitor,
                 'delete_form' => $form
@@ -332,5 +332,23 @@ class TournamentController extends Controller
             $this->get('users_util.service')->addTeamMember($team_id, $this->getUser());
         }
         return new Response('success');
+    }
+
+    public function updateFromJsonAction($id)
+    {
+        $response = null;
+        if ($_POST['changed'] == 'results')
+        {
+            $response = $this->get('tournament_utils.service')->updateTournamentResultsFromJson($id, $_POST['json']);
+        }
+        elseif ($_POST['changed'] == 'teams')
+        {
+            $response = $this->get('tournament_utils.service')->updateTournamentTeamsFromJson($id, $_POST['json']);
+        }
+        if ($response)
+        {
+            return new Response('success');
+        }
+        return new Response('failed');
     }
 }
