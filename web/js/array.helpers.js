@@ -29,12 +29,23 @@ Array.prototype.equals = function (array)
 
 Array.prototype.filterEmpty = function ()
 {
-    return this.filter(function(e){
-        if (e instanceof Array)
+    var arr = this;
+    var i = arr.length;
+    while (i--)
+    {
+        if (arr[i] instanceof Array)
         {
-            e = e.filterEmpty();
-            return e.length > 0;
+            arr[i] = arr[i].filterEmpty();
+            if (arr[i].length == 0)
+            {
+                arr.splice(i, 1);
+            }
         }
-        return e === 0 || e != null
-    })
+        else
+        if (arr[i] !== 0 && arr[i] == null)
+        {
+            arr.splice(i, 1);
+        }
+    }
+    return arr;
 };
