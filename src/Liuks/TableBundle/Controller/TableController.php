@@ -139,7 +139,7 @@ class TableController extends Controller
             throw $this->createNotFoundException('Ooops, it looks like this table is in another dimension...');
         }
 
-        $games = $em->getRepository('LiuksGameBundle:Game')->findBy(['table' => $table->getId()]);
+        $games = $em->getRepository('LiuksGameBundle:Game')->findBy(['table' => $table]);
 
         $game = $this->get('game_utils.service')->getCurrentGame($id);
         $deleteForm = $this->createDeleteForm($id);
@@ -325,7 +325,11 @@ class TableController extends Controller
             $table->setLastEventId(end($records)->id);
             $em->flush($table);
         }
-
+//        $tournament = $em->getRepository('LiuksGameBundle:Tournament')->findOneBy(['table' => $table, 'endTime' => 0]);
+//        if ($tournament)
+//        {
+//            $game =
+//        }
         $game = $this->get('game_utils.service')->getCurrentGame($id);
         return $this->render('LiuksTableBundle:Table:data.html.twig', ['game' => $game, 'shake' => $table->getLastShake(), 'action' => $action]);
     }
