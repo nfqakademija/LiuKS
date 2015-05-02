@@ -32,7 +32,7 @@
         <div class="col-md-12">
             {% if table.free %}
                 <h2>Stalas yra laisvas!</h2>
-            {% elseif game %}
+            {% elseif game and not game.tournament is defined %}
                 <h2>Šiuo metu vyksta žaidimas</h2>
                 <h3 class="text-center">{{ game.getGoals(0) }} : {{ game.getGoals(1) }}</h3>
                 <table class="table table-striped text-center">
