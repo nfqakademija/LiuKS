@@ -26,3 +26,15 @@ Array.prototype.equals = function (array)
     }
     return true;
 };
+
+Array.prototype.filterEmpty = function ()
+{
+    return this.filter(function(e){
+        if (e instanceof Array)
+        {
+            e = e.filterEmpty();
+            return e.length > 0;
+        }
+        return e === 0 || e != null
+    })
+};
