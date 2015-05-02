@@ -1,0 +1,33 @@
+<script id="tournament-script">
+    jQuery(document).ready(function($){
+        var data = JSON.parse('{{ data|raw }}');
+        var $tournament = $('#tournament');
+        var $play = $('.play');
+        if (typeof data != "undefined" && data != null && $tournament.length != 0)
+        {
+            $tournament.bracket({
+                init: data
+            });
+        }
+        else
+        if (typeof $play.length != 0)
+        {
+            $play.on('click', function(e)
+            {
+                e.preventDefault();
+                $.ajax({
+                    method: 'POST',
+                    url: $(this).attr('data-url'),
+                    data: {team: $(this).attr('data-team')},
+                    success: function(msg)
+                    {
+                        if (msg)
+                        {
+                            $('#tournament-info').find('> div').html('<h3>Sveikinu! Jūs užsiregistravote į turnyrą.</h3>');
+                        }
+                    }
+                });
+            });
+        }
+    });
+</script>
