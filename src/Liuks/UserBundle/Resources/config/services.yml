@@ -2,7 +2,7 @@ services:
     users_util.service:
         class: Liuks\UserBundle\Services\UserService
         calls:
-            - [ setContainer, [@service_container] ]
+            - [ setEm, [@doctrine.orm.default_entity_manager] ]
 
     oauth_user.provider:
         class: Liuks\UserBundle\Auth\OAuthProvider
