@@ -1,3 +1,7 @@
 .teamContainer .label {
     color: inherit;
 }
+
+.jQBracket .tools .doubleElimination {
+    display: none;
+}
