@@ -46,28 +46,9 @@ class TournamentService extends ContainerAware
         $newMatches = [];
         foreach($data as $r => $round)
         {
-            foreach ($round as $m => $matchup)
+            foreach ($round as $m => $results)
             {
-                $match = new Match();
-                $match->setTournament($tournament);
-                $match->setRound($r);
-                $match->setMatchup($m);
-                $match->setStartTime(time());
-                $match->setEndTime(time()+1);
-                $goals = [0, 0];
-                if (array_key_exists(0, $matchup))
-                {
-                    $goals[0] = $matchup[0];
-                }
-                if (array_key_exists(1, $matchup))
-                {
-                    $goals[1] = $matchup[1];
-                }
-                $match->setGoals1($goals[0]);
-                $match->setGoals2($goals[1]);
-                //TODO: set competitors of the match
-                $em->persist($match);
-                $newMatches[] = $match;
+                $newMatches[] = $this->newMatch($tournament, $r, $m, $results);
             }
         }
         $em->flush(array_merge($matches, $newMatches));
@@ -79,6 +60,84 @@ class TournamentService extends ContainerAware
         $em = $this->container->get('doctrine.orm.default_entity_manager');
         //TODO: update teams based on teams json
         return false;
+    }
+
+    /**
+     * Returns a persisted but not flushed match based on arguments values.
+     *
+     * @param Tournament $tournament
+     * @param integer $round
+     * @param integer $matchup
+     * @param array $results
+     * @return Match
+     */
+    private function newMatch($tournament, $round, $matchup, $results)
+    {
+        $em = $this->container->get('doctrine.orm.default_entity_manager');
+
+        $match = new Match();
+        $match->setTournament($tournament);
+        $match->setRound($round);
+        $match->setMatchup($matchup);
+        $match->setStartTime(time()-60);
+        $match->setEndTime(time());
+        $goals = [0, 0];
+        if (array_key_exists(0, $results))
+        {
+            $goals[0] = $results[0];
+        }
+        if (array_key_exists(1, $results))
+        {
+            $goals[1] = $results[1];
+        }
+        $match->setGoals1($goals[0]);
+        $match->setGoals2($goals[1]);
+
+        $firstPos = pow(2, $round);
+        $lastPos = $matchup * $firstPos + $firstPos - 1;
+        $firstPos *= $matchup;
+        $lastRound = log($tournament->getCompetitors(), 2) - 1;
+        if ($round == $lastRound)
+        {
+            //finals
+            $lastMatchup = floor($tournament->getCompetitors() / 2) - 1;
+            $competitors = $em->createQuery(
+                'SELECT c FROM LiuksGameBundle:Competitor c
+                WHERE c.tournament = :t AND c.round = :r AND c.matchup = :m'
+            )->setParameter('t', $tournament)
+            ->setParameter('r', $round)
+            ->setParameter('m', 0);
+            if ($lastPos > $lastMatchup)
+            {
+                //for third place
+                $competitors = $competitors->setParameter('m', 1);
+            }
+            $competitors = $competitors->getResult();
+        }
+        else
+        {
+            $competitors = $em->createQuery(
+                'SELECT c FROM LiuksGameBundle:Competitor c
+                        WHERE c.tournament = :t AND c.startPos >= :fp AND c.startPos <= :lp AND c.round >= :cr'
+            )->setParameter('t', $tournament)
+                ->setParameter('fp', $firstPos)
+                ->setParameter('lp', $lastPos)
+                ->setParameter('cr', $round)
+                ->getResult();
+        }
+        if ($competitors)
+        {
+            if (array_key_exists(0, $competitors))
+            {
+                $match->setCompetitor1($competitors[0]);
+            }
+            if (array_key_exists(1, $competitors))
+            {
+                $match->setCompetitor2($competitors[1]);
+            }
+        }
+        $em->persist($match);
+        return $match;
     }
 
     /**
