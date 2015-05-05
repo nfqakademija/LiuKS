@@ -5,3 +5,7 @@
 .jQBracket .tools .doubleElimination {
     display: none;
 }
+
+.fancybox-lock .fancybox-overlay {
+    overflow-y: hidden;
+}
