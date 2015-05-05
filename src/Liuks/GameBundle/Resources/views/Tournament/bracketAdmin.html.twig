@@ -1,72 +1,96 @@
 <script id="tournament-script">
-    jQuery(document).ready(function($){
+    "use strict";
+    jQuery(document).ready(function ($)
+    {
         var data = JSON.parse('{{ data|raw }}');
-        var results = $.extend(true, [], data['results']);
-        var teams = $.extend(true, [], data['teams']);
-//        var teams = data['teams'].slice(0);
-//        var t = teams[0].slice(0);
         var $tournament = $('#tournament');
         var $play = $('.play');
         if (typeof data != "undefined" && data != null && $tournament.length != 0)
         {
-            function saveFn(newData, url)
-            {
-                var changed = !results.equals(newData['results'].filterEmpty()) ? 'results' : !teams.equals(newData['teams']) ? 'teams' : 0;
-                if (changed)
-                {
-                    $.ajax({
-                        url: url,
-                        method: 'POST',
-                        data: {json: JSON.stringify(newData[changed]), changed: changed},
-                        success: function(msg)
-                        {
-                            console.log(msg);
-                            $tournament.siblings('p').remove();
-                            if (msg == 'success')
-                            {
-                                results = $.extend(true, [], data['results']);
-                                teams = $.extend(true, [], data['teams']);
-                                $tournament.before('<p class="alert alert-success">Turnyro pakeitimai išsaugoti.</p>');
-                            }
-                            else
-                            {
-                                $tournament.before('<p class="alert alert-danger">Įvyko klaida saugant pakeitimus.</p>');
-                            }
-                        }
-                    });
-                }
-                else
-                {
-                    $tournament.siblings('p').remove();
-                    $tournament.before('<p class="alert alert-warning">Pakeitimų nerasta.</p>');
-                }
-            }
-
+            var results = $.extend(true, [], data['results']);
+            var teams = $.extend(true, [], data['teams']);
             $tournament.bracket({
                 init: data,
                 save: saveFn,
                 userData: $tournament.attr('data-url')
             });
         }
-        else
-        if (typeof $play.length != 0)
+        else if (typeof $play.length != 0)
         {
-            $play.on('click', function(e)
+            $('#create_popup').fancybox({});
+
+            $('body').on('click', '#create_team, .play', function (e)
             {
                 e.preventDefault();
-                $.ajax({
-                    method: 'POST',
-                    url: $(this).attr('data-url'),
-                    data: {team: $(this).attr('data-team')},
-                    success: function(msg)
+                var $this = $(this);
+                var $team_form = $this.siblings('#team_name');
+                var team_name = $team_form.find('input').val();
+                console.log(team_name);
+
+                if (typeof team_name != "undefined")
+                {
+                    if (team_name.length < 2 || team_name.length > 50)
                     {
-                        if (msg)
+                        $team_form.addClass('has-error');
+                        $team_form.find('.help-block').html('Blogas komandos pavadinimo ilgis.').removeClass('hidden');
+                        team_name = 0;
+                    }
+                }
+
+                if (team_name !== 0)
+                {
+                    $.fancybox.close();
+                    $.ajax({
+                        method: 'POST',
+                        url: $this.attr('data-url'),
+                        data: {team: $this.attr('data-team'), team_name: team_name},
+                        success: function (msg)
                         {
-                            $('#tournament-info').find('> div').html('<h3>Sveikinu! Jūs užsiregistravote į turnyrą.</h3>');
+                            if (msg)
+                            {
+                                $('#tournament-info').find('> div').html('<h3>Sveikinu! Jūs užsiregistravote į turnyrą.</h3>');
+                            }
+                            else
+                            {
+                                $('#tournament-info').find('> div').html('<h3>Įvyko klaida registruojantis į turnyrą.</h3>');
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        function saveFn(newData, url)
+        {
+            var changed = !results.equals(newData['results'].filterEmpty()) ? 'results' : !teams.equals(newData['teams']) ? 'teams' : 0;
+            if (changed)
+            {
+                $.ajax({
+                    url: url,
+                    method: 'POST',
+                    data: {json: JSON.stringify(newData[changed]), changed: changed},
+                    success: function (msg)
+                    {
+                        console.log(msg);
+                        $tournament.siblings('p').remove();
+                        if (msg == 'success')
+                        {
+                            results = $.extend(true, [], data['results']);
+                            teams = $.extend(true, [], data['teams']);
+                            $tournament.before('<p class="alert alert-success">Turnyro pakeitimai išsaugoti.</p>');
+                        }
+                        else
+                        {
+                            $tournament.before('<p class="alert alert-danger">Įvyko klaida saugant pakeitimus.</p>');
                         }
                     }
                 });
-            });
+            }
+            else
+            {
+                $tournament.siblings('p').remove();
+                $tournament.before('<p class="alert alert-warning">Pakeitimų nerasta.</p>');
+            }
         }
     });
 </script>

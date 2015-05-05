@@ -324,7 +324,7 @@ class TournamentController extends Controller
         $team_id = $_POST['team'];
         if ($team_id == 'new')
         {
-            $team = $this->get('users_util.service')->createTeam($this->getUser());
+            $team = $this->get('users_util.service')->createTeam($this->getUser(), $_POST['team_name']);
             $this->get('tournament_utils.service')->addCompetitor($tournament, $team);
         }
         else

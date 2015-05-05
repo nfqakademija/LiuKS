@@ -26,17 +26,18 @@ class UserService
 
     /**
      * @param User $captain
+     * @param $team_name
      * @return Team
      * @throws EntityNotFoundException
      */
-    public function createTeam($captain)
+    public function createTeam($captain, $team_name)
     {
         if (!$captain)
         {
             throw new EntityNotFoundException();
         }
         $team = new Team();
-        $team->setName('');
+        $team->setName($team_name);
         $team->setCaptain($captain);
         $team->setTotalGoals(0);
         $team->setGamesWon(0);

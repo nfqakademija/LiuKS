@@ -43,10 +43,10 @@
             {% if date(tournament.startTime) < date() %}
                 <h3>Šiuo metu vyksta turnyras</h3>
                 <div id="tournament" data-url="{{ url('tournament_update_from_json', {'id': tournament.id}) }}"></div>
-            {% elseif not isCompetitor %}
+            {% elseif not isCompetitor and is_granted('IS_AUTHENTICATED_FULLY') %}
                 <h3>Prisijunkite prie turnyro</h3>
                 <div class="list-group">
-                    <a href="#" class="play list-group-item" data-team="new">Nauja komanda</a>
+                    <a href="#new_team" id="create_popup" class="list-group-item">Nauja komanda</a>
                     {% for competitor in competitors %}
                         {% if competitor.team.player == null %}
                             <a href="#" class="play list-group-item"
@@ -57,13 +57,31 @@
                         {% endif %}
                     {% endfor %}
                 </div>
+                <div id="popups" style="display: none;">
+                    <div id="new_team">
+                        <form>
+                            <div class="form-group">
+                                <h4 style="margin: 0">Įveskite komandos pavadinimą</h4>
+                            </div>
+                            <div id="team_name" class="form-group">
+                                <label class="sr-only" for="team_name">Komandos pavadinimas</label>
+                                <span class="help-block hidden">We have a situation here...</span>
+                                <input type="email" class="form-control" placeholder="Pavadinimas">
+                            </div>
+                            <button id="create_team" class="btn btn-success btn-block"
+                                    data-team="new"
+                                    data-url="{{ url('tournament_add_player', {id: tournament.id }) }}">Sukurti
+                            </button>
+                        </form>
+                    </div>
+                </div>
             {% elseif is_granted('IS_AUTHENTICATED_FULLY') %}
                 <h3>Jūs jau dalyvaujate šiame turnyre.</h3>
             {% endif %}
         </div>
     </div>
-
 {% endblock %}
+
 {% block javascripts %}
     {% if is_granted('ROLE_ADMIN') %}
         {{ include('LiuksGameBundle:Tournament:bracketAdmin.html.twig', {'data': data}) }}
