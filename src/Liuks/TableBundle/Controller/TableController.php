@@ -300,6 +300,29 @@ class TableController extends Controller
     }
 
     /**
+     * Finds and displays table entity. Used for default table rendering in homepage.
+     *
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function defaultTableShowAction($id)
+    {
+        $em = $this->get('doctrine.orm.default_entity_manager');
+        $table = $em->getRepository('LiuksTableBundle:Table')->find($id);
+
+        if (!$table)
+        {
+            throw $this->createNotFoundException('Ooops, it looks like this table is in another dimension...');
+        }
+
+        $game = $this->get('game_utils.service')->getCurrentGame($id);
+        return $this->render('LiuksTableBundle:Table:defaultShow.html.twig', array(
+            'table' => $table,
+            'game' => $game
+        ));
+    }
+
+    /**
      * @param int $id Table id
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -325,11 +348,6 @@ class TableController extends Controller
             $table->setLastEventId(end($records)->id);
             $em->flush($table);
         }
-//        $tournament = $em->getRepository('LiuksGameBundle:Tournament')->findOneBy(['table' => $table, 'endTime' => 0]);
-//        if ($tournament)
-//        {
-//            $game =
-//        }
         $game = $this->get('game_utils.service')->getCurrentGame($id);
         return $this->render('LiuksTableBundle:Table:data.html.twig', ['game' => $game, 'shake' => $table->getLastShake(), 'action' => $action]);
     }

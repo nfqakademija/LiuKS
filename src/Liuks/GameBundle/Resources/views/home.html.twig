@@ -16,6 +16,12 @@
     </div>
     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
         <a class="btn btn-primary" href="{{ url("users_locator") }}">Keisti pagrindinį stalą</a>
-        {{ render(controller('LiuksTableBundle:Table:show', { 'id': app.user.defaultTable.id })) }}
+        {{ render(controller('LiuksTableBundle:Table:defaultTableShow', { 'id': app.user.defaultTable.id })) }}
     {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    {% javascripts '@LiuksTableBundle/Resources/public/current_table_tournament.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 {% endblock %}

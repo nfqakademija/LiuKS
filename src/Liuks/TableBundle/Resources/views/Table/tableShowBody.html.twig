@@ -1,0 +1,86 @@
+<div class="row">
+    <div class="col-md-12">
+        <h1>{{ table.address }}, {{ table.city }}<br>
+            <small>
+                <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+                {{ table.availableFrom|date('H:i') }} - {{ table.availableTo|date('H:i') }}
+            </small>
+        </h1>
+    </div>
+</div>
+{% if tools %}
+    {% if table.owner == app.user or is_granted('ROLE_ADMIN') %}
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="list-inline">
+                    <li>
+                        <a href="{{ path('tables') }}">
+                            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('table_edit', { 'id': table.id }) }}">
+                            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                        </a>
+                    </li>
+                    <li>{{ form(delete_form) }}</li>
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+{% endif %}
+{% if table.owner == app.user or is_granted('ROLE_ADMIN') %}
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="list-inline">
+                <li>
+                </li>
+            </ul>
+        </div>
+    </div>
+{% endif %}
+    {% if table.private %}
+        <div class="row">
+            <div class="col-md-12">
+                <p>
+                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                    Prie šio stalo gali žaisti tik {{ table.group.name }} grupės nariai.
+                </p>
+            </div>
+        </div>
+    {% endif %}
+<div id="game-info" class="row">
+    <div class="col-md-12">
+        {% if table.free %}
+            <h2>Stalas yra laisvas!</h2>
+        {% elseif game and not game.tournament is defined %}
+            <h2>Šiuo metu vyksta žaidimas</h2>
+            <h3 class="text-center">{{ game.getGoals(0) }} : {{ game.getGoals(1) }}</h3>
+            <table class="table table-striped text-center">
+                <tr>
+                    <td>
+                        {{ game.getUser(0) is empty ? 'Svečias' : game.user(0).getName() }}
+                    </td>
+                    <td>
+                        {{ game.getUser(1) is empty ? 'Svečias' : game.user(1).getName() }}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        VS
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        {{ game.getUser(2) is empty ? 'Svečias' : game.user(2).getName() }}
+                    </td>
+                    <td>
+                        {{ game.getUser(3) is empty ? 'Svečias' : game.user(3).getName() }}
+                    </td>
+                </tr>
+            </table>
+        {% else %}
+            <div id="tournament" data-url="{{ url('table_tournament', {'table_id': table.id}) }}"></div>
+        {% endif %}
+    </div>
+</div>
