@@ -10,7 +10,11 @@
                 {{ dump(app.user) }}
                 <a class="btn btn-primary" href="{{ url("logout_page") }}">Atsijungti</a>
             {% else %}
-                {% include('LiuksUserBundle::login.html.twig') %}
+                <a href="#login" id="open_login">Login</a>
+
+                <div id="login" style="display: none;">
+                    {% include('LiuksUserBundle::login.html.twig') %}
+                </div>
             {% endif %}
         </div>
     </div>
@@ -21,7 +25,10 @@
 {% endblock %}
 
 {% block javascripts %}
-    {% javascripts '@LiuksTableBundle/Resources/public/current_table_tournament.js' %}
+    {% javascripts
+        '@LiuksTableBundle/Resources/public/current_table_tournament.js',
+        '@LiuksGameBundle/Resources/public/header.js'
+    %}
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}

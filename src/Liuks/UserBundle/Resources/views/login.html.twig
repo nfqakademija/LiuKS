@@ -1,50 +1,54 @@
-{% block body %}
-    <h1>Please Login</h1>
-    <div id="fb-root"></div>
-    <a class="btn btn-primary btn-lg btn-block" href="#" onclick="fb_login();">Connect</a>
+<h2>Prašome prisijungti</h2>
+<div id="fb-root"></div>
+<a class="btn btn-info btn-lg btn-block" href="#" onclick="fb_login();">Prisijungti naudojantis Facebook</a>
 
-    <script>
-        window.fbAsyncInit = function() {
-            FB.init({
-                appId      : '808404612584687',
-                status     : true,
-                xfbml      : true,
-                version    : 'v2.2'
-            });
-        };
+<script>
+    window.fbAsyncInit = function ()
+    {
+        FB.init({
+            appId: '808404612584687',
+            status: true,
+            xfbml: true,
+            version: 'v2.2'
+        });
+    };
 
-        // Load the SDK asynchronously
-        (function(d, s, id){
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) {return;}
-            js = d.createElement(s); js.id = id;
-            js.src = "//connect.facebook.net/en_US/sdk.js";
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
-
-        function fb_login() {
-            FB.getLoginStatus(function(response)
-            {
-                if (response.status === 'connected')
-                {
-                    document.location = "{{ url("hwi_oauth_service_redirect", {service: "facebook"}) }}";
-                }
-                else
-                {
-                    // not_authorized
-                    FB.login(function(response)
-                    {
-                        if (response.authResponse)
-                        {
-                            document.location = "{{ url("hwi_oauth_service_redirect", {service: "facebook"}) }}";
-                        }
-                        else
-                        {
-                            //canceled, do something
-                        }
-                    }, {scope: 'email'});
-                }
-            });
+    // Load the SDK asynchronously
+    (function (d, s, id)
+    {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id))
+        {
+            return;
         }
-    </script>
-{% endblock %}
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+    function fb_login()
+    {
+        FB.getLoginStatus(function (response)
+        {
+            if (response.status === 'connected')
+            {
+                document.location = "{{ url("hwi_oauth_service_redirect", {service: "facebook"}) }}";
+            }
+            else
+            {
+                FB.login(function (response)
+                {
+                    if (response.authResponse)
+                    {
+                        document.location = "{{ url("hwi_oauth_service_redirect", {service: "facebook"}) }}";
+                    }
+                    else
+                    {
+                        //canceled, do something
+                    }
+                }, {scope: 'email'});
+            }
+        });
+    }
+</script>
