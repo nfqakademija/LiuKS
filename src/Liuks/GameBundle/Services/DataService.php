@@ -17,9 +17,9 @@ class DataService extends ContainerAware
     {
         if ($api)
         {
-            $url = $api."?rows=10&from-id=".$last_id;
-            //$response = $this->getResponse($url);
-            $response = $this->getTestData($last_id);
+            $url = $api."?rows=100&from-id=".$last_id;
+            $response = $this->getResponse($url);
+            //$response = $this->getTestData($last_id);
             return $this->parseData($response);
         }
         return null;
