@@ -11,7 +11,7 @@
                 <small>
                     <span class="glyphicon glyphicon-king" aria-hidden="true"></span>
                     {{ tournament.organizer.email }}
-                </small>
+                </small><br>
                 <small>
                     <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
                     {{ tournament.startTime|date('Y-m-d H:i') }}
@@ -42,7 +42,26 @@
         <div class="col-md-12">
             {% if date(tournament.startTime) < date() %}
                 <h3>Šiuo metu vyksta turnyras</h3>
-                <div id="tournament" data-url="{{ url('tournament_update_from_json', {'id': tournament.id}) }}"></div>
+                {% if not game == NULL %}
+                    <div id="match">
+                        <h3 class="text-center">{{ game.getGoals(0) }} : {{ game.getGoals(1) }}</h3>
+                        <table class="table table-striped text-center">
+                            <tr>
+                                <td>{{ game.competitor1.team.name }}</td>
+                            </tr>
+                            <tr>
+                                <td>VS</td>
+                            </tr>
+                            <tr>
+                                <td>{{ game.competitor2.team.name }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                {% endif %}
+                <div id="tournament"
+                     data-tournamentUrl="{{ url('tournament_show', {'id': tournament.id}) }}"
+                     data-url="{{ url('tournament_update_from_json', {'id': tournament.id}) }}"
+                     data-data='{{ data }}'></div>
             {% elseif not isCompetitor and is_granted('IS_AUTHENTICATED_FULLY') %}
                 <h3>Prisijunkite prie turnyro</h3>
                 <div class="list-group">
@@ -84,8 +103,8 @@
 
 {% block javascripts %}
     {% if is_granted('ROLE_ADMIN') %}
-        {{ include('LiuksGameBundle:Tournament:bracketAdmin.html.twig', {'data': data}) }}
+        {{ include('LiuksGameBundle:Tournament:bracketAdmin.html.twig') }}
     {% else %}
-        {{ include('LiuksGameBundle:Tournament:bracket.html.twig', {'data': data}) }}
+        {{ include('LiuksGameBundle:Tournament:bracket.html.twig') }}
     {% endif %}
 {% endblock %}

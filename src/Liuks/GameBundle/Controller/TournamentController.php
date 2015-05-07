@@ -24,110 +24,11 @@ class TournamentController extends Controller
         $em = $this->get('doctrine.orm.default_entity_manager');
         $table = $em->getRepository('LiuksTableBundle:Table')->find($table_id);
         $tournament = $em->getRepository('LiuksGameBundle:Tournament')->findOneBy(['table' => $table, 'endTime' => 0]);
-        if (!$tournament)
-        {
+        if (!$tournament) {
             throw $this->createNotFoundException('Unable to find Tournament entity.');
         }
+
         return $this->showAction($tournament->getId());
-    }
-
-    /**
-     * Lists all Tournament entities.
-     *
-     */
-    public function indexAction()
-    {
-        $em = $this->get('doctrine.orm.default_entity_manager');
-
-        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN'))
-        {
-            $tournaments = $em->getRepository('LiuksGameBundle:Tournament')->findAll();
-        }
-        else if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
-        {
-            $tournaments = $em->createQuery(
-                'SELECT t FROM LiuksGameBundle:Tournament t
-                JOIN t.table table
-                WHERE table.owner = :owner OR table.private = 0')
-                ->setParameter('owner', $this->getUser())
-                ->getResult();
-        }
-        else
-        {
-
-            $tournaments = $em->createQuery(
-                'SELECT t FROM LiuksGameBundle:Tournament t
-                JOIN t.table table
-                WHERE table.private = 0')
-                ->getResult();
-        }
-
-        return $this->render('LiuksGameBundle:Tournament:index.html.twig', array(
-            'tournaments' => $tournaments,
-        ));
-    }
-
-    /**
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
-     */
-    public function createAction(Request $request)
-    {
-        $tournament = new Tournament();
-        $form = $this->createCreateForm($tournament);
-        $form->handleRequest($request);
-
-        if ($form->isValid())
-        {
-            $em = $this->getDoctrine()->getManager();
-            $tournament->setEndTime(0);
-            $tournament->setStartTime(0);
-            $tournament->setOrganizer($this->getUser());
-            $em->persist($tournament);
-            $em->flush($tournament);
-
-            return $this->redirect($this->generateUrl('tournament_show', array('id' => $tournament->getId())));
-        }
-
-        return $this->render('LiuksGameBundle:Tournament:new.html.twig', array(
-            'tournament' => $tournament,
-            'form'   => $form->createView(),
-        ));
-    }
-
-    /**
-     * Creates a form to create a Tournament entity.
-     *
-     * @param Tournament $tournament
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createCreateForm(Tournament $tournament)
-    {
-        $form = $this->createForm(new TournamentType(), $tournament, array(
-            'action' => $this->generateUrl('tournament_create'),
-            'method' => 'POST',
-            'attr'   => ['class' => 'form-horizontal']
-        ))
-            ->add('submit', 'submit', array('label' => 'Sukurti'));
-
-        return $form;
-    }
-
-    /**
-     * Displays a form to create a new Tournament entity.
-     *
-     * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
-     */
-    public function newAction()
-    {
-        $tournament = new Tournament();
-        $form   = $this->createCreateForm($tournament);
-
-        return $this->render('LiuksGameBundle:Tournament:new.html.twig', array(
-            'tournament' => $tournament,
-            'form'   => $form->createView()
-        ));
     }
 
     /**
@@ -143,24 +44,152 @@ class TournamentController extends Controller
         $tournament = $em->getRepository('LiuksGameBundle:Tournament')->find($id);
         $tournament_utils = $this->get('tournament_utils.service');
         $data = $tournament_utils->getTournamentData($tournament);
-        if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
-        {
+        $game = $this->get('game_utils.service')->getCurrentGame($tournament->getTable());
+        if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             $competitors = $em->getRepository('LiuksGameBundle:Competitor')->findBy(['tournament' => $tournament]);
             $form = $this->createDeleteForm($id)->createView();
             $isCompetitor = $tournament_utils->isCompetitor($tournament, $this->getUser());
-        }
-        else
-        {
+        } else {
             $competitors = $form = $isCompetitor = null;
         }
-        return $this->render('LiuksGameBundle:Tournament:show.html.twig',
+
+        return $this->render(
+            'LiuksGameBundle:Tournament:show.html.twig',
             [
                 'tournament' => $tournament,
+                'game' => $game,
                 'data' => json_encode($data),
                 'competitors' => $competitors,
                 'isCompetitor' => $isCompetitor,
                 'delete_form' => $form
-            ]);
+            ]
+        );
+    }
+
+    /**
+     * Creates a form to delete a Tournament entity by id.
+     *
+     * @param mixed $id The entity id
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createDeleteForm($id)
+    {
+        return $this->createFormBuilder()
+            ->setAction($this->generateUrl('tournament_delete', ['id' => $id]))
+            ->setMethod('DELETE')
+            ->add('submit', 'submit', ['label' => 'Ištrinti'])
+            ->getForm();
+    }
+
+    /**
+     * Lists all Tournament entities.
+     *
+     */
+    public function indexAction()
+    {
+        $em = $this->get('doctrine.orm.default_entity_manager');
+
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
+            $tournaments = $em->getRepository('LiuksGameBundle:Tournament')->findAll();
+        } else {
+            if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+                $tournaments = $em->createQuery(
+                    'SELECT t FROM LiuksGameBundle:Tournament t
+                JOIN t.table table
+                WHERE table.owner = :owner OR table.private = 0'
+                )
+                    ->setParameter('owner', $this->getUser())
+                    ->getResult();
+            } else {
+
+                $tournaments = $em->createQuery(
+                    'SELECT t FROM LiuksGameBundle:Tournament t
+                JOIN t.table table
+                WHERE table.private = 0'
+                )
+                    ->getResult();
+            }
+        }
+
+        return $this->render(
+            'LiuksGameBundle:Tournament:index.html.twig',
+            [
+                'tournaments' => $tournaments,
+            ]
+        );
+    }
+
+    /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
+    public function createAction(Request $request)
+    {
+        $tournament = new Tournament();
+        $form = $this->createCreateForm($tournament);
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $tournament->setEndTime(0);
+            $tournament->setStartTime(0);
+            $tournament->setOrganizer($this->getUser());
+            $em->persist($tournament);
+            $em->flush($tournament);
+
+            return $this->redirect($this->generateUrl('tournament_show', ['id' => $tournament->getId()]));
+        }
+
+        return $this->render(
+            'LiuksGameBundle:Tournament:new.html.twig',
+            [
+                'tournament' => $tournament,
+                'form' => $form->createView(),
+            ]
+        );
+    }
+
+    /**
+     * Creates a form to create a Tournament entity.
+     *
+     * @param Tournament $tournament
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createCreateForm(Tournament $tournament)
+    {
+        $form = $this->createForm(
+            new TournamentType(),
+            $tournament,
+            [
+                'action' => $this->generateUrl('tournament_create'),
+                'method' => 'POST',
+                'attr' => ['class' => 'form-horizontal']
+            ]
+        )
+            ->add('submit', 'submit', ['label' => 'Sukurti']);
+
+        return $form;
+    }
+
+    /**
+     * Displays a form to create a new Tournament entity.
+     *
+     * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
+     */
+    public function newAction()
+    {
+        $tournament = new Tournament();
+        $form = $this->createCreateForm($tournament);
+
+        return $this->render(
+            'LiuksGameBundle:Tournament:new.html.twig',
+            [
+                'tournament' => $tournament,
+                'form' => $form->createView()
+            ]
+        );
     }
 
     /**
@@ -175,26 +204,28 @@ class TournamentController extends Controller
 
         $tournament = $em->getRepository('LiuksGameBundle:Tournament')->find($id);
 
-        if (!$tournament)
-        {
+        if (!$tournament) {
             throw $this->createNotFoundException('Unable to find Tournament entity.');
         }
 
         if (false === $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')
             || $this->getUser() != $tournament->getOrganizer()
-            || $this->getUser() != $tournament->getTable()->getOwner())
-        {
+            || $this->getUser() != $tournament->getTable()->getOwner()
+        ) {
             throw $this->createAccessDeniedException('Unable to access this page!');
         }
 
         $form = $this->createEditForm($tournament);
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('LiuksGameBundle:Tournament:edit.html.twig', array(
-            'tournament'      => $tournament,
-            'form'        => $form->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render(
+            'LiuksGameBundle:Tournament:edit.html.twig',
+            [
+                'tournament' => $tournament,
+                'form' => $form->createView(),
+                'delete_form' => $deleteForm->createView(),
+            ]
+        );
     }
 
     /**
@@ -205,12 +236,16 @@ class TournamentController extends Controller
      */
     private function createEditForm(Tournament $tournament)
     {
-        $form = $this->createForm(new TournamentType(), $tournament, array(
-            'action' => $this->generateUrl('tournament_update', array('id' => $tournament->getId())),
-            'method' => 'PUT',
-        ));
+        $form = $this->createForm(
+            new TournamentType(),
+            $tournament,
+            [
+                'action' => $this->generateUrl('tournament_update', ['id' => $tournament->getId()]),
+                'method' => 'PUT',
+            ]
+        );
 
-        $form->add('submit', 'submit', array('label' => 'Atnaujinti'));
+        $form->add('submit', 'submit', ['label' => 'Atnaujinti']);
 
         return $form;
     }
@@ -228,16 +263,15 @@ class TournamentController extends Controller
 
         $tournament = $em->getRepository('LiuksGameBundle:Tournament')->find($id);
 
-        if (!$tournament)
-        {
+        if (!$tournament) {
             throw $this->createNotFoundException('Unable to find Tournament entity.');
         }
 
 
         if (false === $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')
             || $this->getUser() != $tournament->getOrganizer()
-            || $this->getUser() != $tournament->getTable()->getOwner())
-        {
+            || $this->getUser() != $tournament->getTable()->getOwner()
+        ) {
             throw $this->createAccessDeniedException('Unable to access this page!');
         }
 
@@ -245,18 +279,20 @@ class TournamentController extends Controller
         $editForm = $this->createEditForm($tournament);
         $editForm->handleRequest($request);
 
-        if ($editForm->isValid())
-        {
+        if ($editForm->isValid()) {
             $em->flush($tournament);
 
-            return $this->redirect($this->generateUrl('tournament_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('tournament_edit', ['id' => $id]));
         }
 
-        return $this->render('LiuksGameBundle:Tournament:edit.html.twig', array(
-            'tournament'      => $tournament,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render(
+            'LiuksGameBundle:Tournament:edit.html.twig',
+            [
+                'tournament' => $tournament,
+                'edit_form' => $editForm->createView(),
+                'delete_form' => $deleteForm->createView(),
+            ]
+        );
     }
 
     /**
@@ -275,15 +311,14 @@ class TournamentController extends Controller
             $em = $this->get('doctrine.orm.default_entity_manager');
             $tournament = $em->getRepository('LiuksGameBundle:Tournament')->find($id);
 
-            if (!$tournament)
-            {
+            if (!$tournament) {
                 throw $this->createNotFoundException('Unable to find Tournament entity.');
             }
 
             if (false === $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')
                 || $this->getUser() != $tournament->getOrganizer()
-                || $this->getUser() != $tournament->getTable()->getOwner())
-            {
+                || $this->getUser() != $tournament->getTable()->getOwner()
+            ) {
                 throw $this->createAccessDeniedException('Unable to access this page!');
             }
 
@@ -292,23 +327,6 @@ class TournamentController extends Controller
         }
 
         return $this->redirect($this->generateUrl('tournaments'));
-    }
-
-    /**
-     * Creates a form to delete a Tournament entity by id.
-     *
-     * @param mixed $id The entity id
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm($id)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('tournament_delete', array('id' => $id)))
-            ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Ištrinti'))
-            ->getForm()
-            ;
     }
 
     /**
@@ -322,33 +340,32 @@ class TournamentController extends Controller
         $em = $this->get('doctrine.orm.default_entity_manager');
         $tournament = $em->getRepository('LiuksGameBundle:Tournament')->find($id);
         $team_id = $_POST['team'];
-        if ($team_id == 'new')
-        {
+        if ($team_id == 'new') {
             $team = $this->get('users_util.service')->createTeam($this->getUser(), $_POST['team_name']);
             $this->get('tournament_utils.service')->addCompetitor($tournament, $team);
-        }
-        else
-        {
+        } else {
             $this->get('users_util.service')->addTeamMember($team_id, $this->getUser());
         }
+
         return new Response('success');
     }
 
+    /**
+     * @param $id
+     * @return Response
+     */
     public function updateFromJsonAction($id)
     {
         $response = null;
-        if ($_POST['changed'] == 'results')
-        {
+        if ($_POST['changed'] == 'results') {
             $response = $this->get('tournament_utils.service')->updateTournamentResultsFromJson($id, $_POST['json']);
-        }
-        elseif ($_POST['changed'] == 'teams')
-        {
+        } elseif ($_POST['changed'] == 'teams') {
             $response = $this->get('tournament_utils.service')->updateTournamentTeamsFromJson($id, $_POST['json']);
         }
-        if ($response)
-        {
+        if ($response) {
             return new Response('success');
         }
+
         return new Response('failed');
     }
 }
