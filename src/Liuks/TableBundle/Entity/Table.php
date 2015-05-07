@@ -97,6 +97,13 @@ class Table
     /**
      * @var integer
      *
+     * @ORM\Column(name="last_data_update", type="integer")
+     */
+    private $lastDataUpdate;
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="last_shake", type="integer")
      */
     private $lastShake;
@@ -455,5 +462,28 @@ class Table
     public function getGroup()
     {
         return $this->group;
+    }
+
+    /**
+     * Set lastDataUpdate
+     *
+     * @param integer $lastDataUpdate
+     * @return Table
+     */
+    public function setLastDataUpdate($lastDataUpdate)
+    {
+        $this->lastDataUpdate = $lastDataUpdate;
+
+        return $this;
+    }
+
+    /**
+     * Get lastDataUpdate
+     *
+     * @return integer 
+     */
+    public function getLastDataUpdate()
+    {
+        return $this->lastDataUpdate;
     }
 }
