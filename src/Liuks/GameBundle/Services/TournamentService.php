@@ -5,6 +5,7 @@ namespace Liuks\GameBundle\Services;
 use Liuks\GameBundle\Entity\Competitor;
 use Liuks\GameBundle\Entity\Match;
 use Liuks\GameBundle\Entity\Tournament;
+use Liuks\GameBundle\Events\GameStatusEvent;
 use Liuks\UserBundle\Entity\Team;
 use Liuks\UserBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerAware;
@@ -68,37 +69,39 @@ class TournamentService extends ContainerAware
         $em = $this->container->get('doctrine.orm.default_entity_manager');
 
         $winner = $match->getCompetitor($winner_side);
+        $looser = $match->getCompetitor(!$winner_side);
         $tournament = $match->getTournament();
+
+        $last_round = (int)(($tournament->getCompetitors() - 1) / 2);
+        if ($last_round == $tournament->getCurrentRound() + 1) {
+            //next round is the last, loosers should fight for 3rd place
+            $looser->setRound($looser->getRound() + 1);
+            $looser->setMatchup(1);
+        } else {
+            $looser->setRound($looser->getRound() - 1);
+        }
+
         if ($tournament->getCurrentRound() == -1) {
             $tournament->setEndTime($action_time);
-        } else {
-            $last_matchup = (int)(($tournament->getCompetitors() - 1) / 2);
-            if ($tournament->getCurrentRound() != 0) {
-                $last_matchup = (int)($last_matchup / ($tournament->getCurrentRound() * 2));
-            }
-            if ($last_matchup == 0) {
-                $tournament->setCurrentRound(-1);
 
-                $looser = $match->getCompetitor(!$winner_side);
-                $looser->setRound($looser->getRound() + 1);
-                $looser->setMatchup(1);
-                $em->flush($looser);
-            } elseif ($winner->getMatchup() == $last_matchup) {
+            $gameEvent = new GameStatusEvent();
+            $gameEvent->setTable($tournament->getTable());
+            $this->container->get('event_dispatcher')->dispatch($gameEvent::GAMEOVER, $gameEvent);
+        } else {
+            if ($winner->getMatchup() == 0 && $winner->getRound() == $last_round) {
+                $winner->setRound($winner->getRound() + 1);
+                $tournament->setCurrentRound(-1);   //next round will be for third place and the last in tournament
+            } else {
                 $tournament->setCurrentRound($tournament->getCurrentRound() + 1);
             }
-            $winner->setRound($winner->getRound() + 1);
-            $winner->setMatchup(floor($winner->getMatchup() / 2));
-            $em->flush($winner);
         }
-        $em->flush($tournament);
+        $winner->setRound($winner->getRound() + 1);
+        $winner->setMatchup(floor($winner->getMatchup() / 2));
+        $em->flush([$tournament, $winner, $looser]);
 
         $users_util = $this->container->get('users_util.service');
         $users_util->addToTeamRanking($winner->getTeam(), true, $match->getGoals($winner_side));
-        $users_util->addToTeamRanking(
-            $match->getCompetitor(!$winner_side)->getTeam(),
-            false,
-            $match->getGoals(!$winner_side)
-        );
+        $users_util->addToTeamRanking($looser->getTeam(), false, $match->getGoals(!$winner_side));
     }
 
     /**
