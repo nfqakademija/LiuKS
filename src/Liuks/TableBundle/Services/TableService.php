@@ -2,10 +2,28 @@
 
 namespace Liuks\TableBundle\Services;
 
+use Liuks\TableBundle\Entity\Table;
 use Symfony\Component\DependencyInjection\ContainerAware;
 
 class TableService extends ContainerAware
 {
+    /**
+     * @param Table $table
+     * @return Table
+     */
+    public function updateTableData($table)
+    {
+        $table->setLastDataUpdate(time());
+        $records = $this->container->get('api_data.service')->getData($table->getApi(), $table->getLastEventId());
+        if ($records) {
+            foreach ($records as $record) {
+                $this->handleTableAction($table, $record);
+            }
+            $table->setLastEventId(end($records)->id);
+        }
+        return $table;
+    }
+
     /**
      * @param \Liuks\TableBundle\Entity\Table $table
      * @param $record

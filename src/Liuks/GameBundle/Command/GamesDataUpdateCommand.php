@@ -19,7 +19,7 @@ class GamesDataUpdateCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('<comment>Running Cron Tasks...</comment>');
+        $output->writeln('<comment>Updating games data...</comment>');
         $this->output = $output;
 
         $container = $this->getContainer();
@@ -27,23 +27,10 @@ class GamesDataUpdateCommand extends ContainerAwareCommand
         $tables = $em->getRepository('LiuksTableBundle:Table')->findAll();
 
         foreach ($tables as $table) {
-            $lastrun = $table->getLastDataUpdate();
-            $nextrun = $lastrun + 60;
-
-            if (time() >= $nextrun) {
-                $output->writeln(sprintf('Running Cron Task on table <info>%d</info>', $table->getId()));
-
-                $table->setLastDataUpdate(time());
+            if (time() >= $table->getLastDataUpdate() + 60) {
+                $output->writeln(sprintf('Updating table <info>%d</info> data', $table->getId()));
                 try {
-                    $records = $container->get('api_data.service')->getData($table->getApi(), $table->getLastEventId());
-                    if ($records) {
-                        foreach ($records as $record) {
-                            $action = $record->type;
-                            $container->get('table_actions.service')->handleTableAction($table, $record);
-                            $output->writeln('Success! Action completed: <info>'.$action.'</info>');
-                        }
-                        $table->setLastEventId(end($records)->id);
-                    }
+                    $this->getContainer()->get('table_actions.service')->updateTableData($table);
                 } catch (\Exception $e) {
                     $output->writeln('<error>' . $e->getMessage() . '</error>');
                 }
