@@ -29,27 +29,19 @@
         </div>
     {% endif %}
 {% endif %}
-{% if table.owner == app.user or is_granted('ROLE_ADMIN') %}
+{% if table.private %}
     <div class="row">
         <div class="col-md-12">
-            <ul class="list-inline">
-                <li>
-                </li>
-            </ul>
+            <p>
+                <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                Prie šio stalo gali žaisti tik {{ table.group.name }} grupės nariai.
+            </p>
         </div>
     </div>
 {% endif %}
-    {% if table.private %}
-        <div class="row">
-            <div class="col-md-12">
-                <p>
-                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                    Prie šio stalo gali žaisti tik {{ table.group.name }} grupės nariai.
-                </p>
-            </div>
-        </div>
-    {% endif %}
-<div id="game-info" class="row">
+<div id="game-info" class="row"
+     data-url="{{ url('table_show', {id: table.id}) }}"
+     data-dataUrl="{{ url('table_status', {id: table.id}) }}">
     <div class="col-md-12">
         {% if table.free %}
             <h2>Stalas yra laisvas!</h2>
@@ -79,8 +71,9 @@
                     </td>
                 </tr>
             </table>
-        {% else %}
-            <div id="tournament" data-url="{{ url('table_tournament', {'table_id': table.id}) }}"></div>
         {% endif %}
     </div>
 </div>
+{% if hasTournament %}
+    <div id="tournament" data-url="{{ url('table_tournament', {'table_id': table.id}) }}"></div>
+{% endif %}

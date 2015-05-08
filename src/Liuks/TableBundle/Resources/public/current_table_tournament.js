@@ -1,19 +1,43 @@
-jQuery(document).ready(function($)
-{
-    var $tournament = $('#tournament');
-    if ($tournament.length > 0)
+$(document).ready(
+    function ()
     {
-        $.ajax({
-            method: "get",
-            url: $tournament.attr('data-url'),
-            success: function(msg)
+        var $gameInfo = $('#game-info');
+        var $tournament = $('#tournament');
+        var gameUrl = $gameInfo.attr('data-url');
+        setInterval(
+            function ()
             {
-                var $resp = $(msg);
-                var tournament_info = $resp.find('#tournament-info');
-                var script = $.grep($resp, function(e){ return e.id == 'tournament-script'; });
-                $('#game-info').replaceWith(tournament_info);
-                $('body').append(script);
-            }
-        });
+                if ($tournament.length == 0) {
+                    $.ajax(
+                        {
+                            url: $gameInfo.attr('data-dataUrl')
+                        }
+                    );
+                }
+                $gameInfo.load(gameUrl + " #game-info>div");
+            }, 10000
+        );
+
+        if ($tournament.length > 0) {
+            $.ajax(
+                {
+                    method: "get",
+                    url: $tournament.attr('data-url'),
+                    success: function (msg)
+                    {
+                        var $resp = $(msg);
+                        var tournament_info = $resp.find('#tournament-info');
+                        var script = $.grep(
+                            $resp, function (e)
+                            {
+                                return e.id == 'tournament-script';
+                            }
+                        );
+                        $tournament.replaceWith(tournament_info);
+                        $('body').append(script);
+                    }
+                }
+            );
+        }
     }
-});
+);
