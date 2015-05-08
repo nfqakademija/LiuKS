@@ -38,9 +38,11 @@
         </div>
     {% endif %}
 
-    <div id="tournament-info" class="row">
+    <div id="tournament-info" class="row"
+         data-url="{{ url('tournament_show', {'id': tournament.id}) }}"
+         data-dataurl="{{ url('table_status', {'id': tournament.table.id}) }}">
         <div class="col-md-12">
-            {% if date(tournament.startTime) < date() %}
+            {% if date(tournament.startTime) <= date() and tournament.endTime == 0 %}
                 <h3>Šiuo metu vyksta turnyras</h3>
                 {% if not game == NULL %}
                     <div id="match">
@@ -59,9 +61,9 @@
                     </div>
                 {% endif %}
                 <div id="tournament"
-                     data-tournamentUrl="{{ url('tournament_show', {'id': tournament.id}) }}"
                      data-url="{{ url('tournament_update_from_json', {'id': tournament.id}) }}"
-                     data-data='{{ data }}'></div>
+                     data-data='{{ data }}'>
+                </div>
             {% elseif not isCompetitor and is_granted('IS_AUTHENTICATED_FULLY') %}
                 <h3>Prisijunkite prie turnyro</h3>
                 <div class="list-group">
