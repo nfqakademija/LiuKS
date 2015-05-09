@@ -105,6 +105,16 @@ class Match
     }
 
     /**
+     * Get goals1
+     *
+     * @return integer
+     */
+    public function getGoals1()
+    {
+        return $this->goals1;
+    }
+
+    /**
      * Set goals1
      *
      * @param integer $goals1
@@ -118,13 +128,13 @@ class Match
     }
 
     /**
-     * Get goals1
+     * Get goals2
      *
      * @return integer
      */
-    public function getGoals1()
+    public function getGoals2()
     {
-        return $this->goals1;
+        return $this->goals2;
     }
 
     /**
@@ -141,16 +151,6 @@ class Match
     }
 
     /**
-     * Get goals2
-     *
-     * @return integer
-     */
-    public function getGoals2()
-    {
-        return $this->goals2;
-    }
-
-    /**
      * Set goals based on team
      *
      * @param integer $goals
@@ -159,8 +159,7 @@ class Match
      */
     public function setGoals($goals, $team)
     {
-        switch ($team)
-        {
+        switch ($team) {
             case 0:
                 $this->goals1 = $goals;
                 break;
@@ -182,8 +181,7 @@ class Match
      */
     public function getGoals($team)
     {
-        switch ($team)
-        {
+        switch ($team) {
             case 0:
                 return $this->goals1;
                 break;
@@ -193,7 +191,18 @@ class Match
             default:
                 //throw error
         }
+
         return null;
+    }
+
+    /**
+     * Get round
+     *
+     * @return integer
+     */
+    public function getRound()
+    {
+        return $this->round;
     }
 
     /**
@@ -210,13 +219,13 @@ class Match
     }
 
     /**
-     * Get round
+     * Get matchup
      *
      * @return integer
      */
-    public function getRound()
+    public function getMatchup()
     {
-        return $this->round;
+        return $this->matchup;
     }
 
     /**
@@ -233,13 +242,13 @@ class Match
     }
 
     /**
-     * Get matchup
+     * Get startTime
      *
      * @return integer
      */
-    public function getMatchup()
+    public function getStartTime()
     {
-        return $this->matchup;
+        return $this->startTime;
     }
 
     /**
@@ -256,13 +265,13 @@ class Match
     }
 
     /**
-     * Get startTime
+     * Get endTime
      *
      * @return integer
      */
-    public function getStartTime()
+    public function getEndTime()
     {
-        return $this->startTime;
+        return $this->endTime;
     }
 
     /**
@@ -279,16 +288,6 @@ class Match
     }
 
     /**
-     * Get endTime
-     *
-     * @return integer
-     */
-    public function getEndTime()
-    {
-        return $this->endTime;
-    }
-
-    /**
      * Set competitor based on num
      *
      * @param Competitor $competitor
@@ -297,8 +296,7 @@ class Match
      */
     public function setCompetitor(Competitor $competitor = null, $num)
     {
-        switch ($num)
-        {
+        switch ($num) {
             case 0:
                 $this->competitor1 = $competitor;
                 break;
@@ -308,6 +306,7 @@ class Match
             default:
                 //throw error
         }
+
         return $this;
     }
 
@@ -319,8 +318,7 @@ class Match
      */
     public function getCompetitor($num)
     {
-        switch ($num)
-        {
+        switch ($num) {
             case 0:
                 return $this->competitor1;
                 break;
@@ -330,7 +328,18 @@ class Match
             default:
                 //throw error
         }
+
         return null;
+    }
+
+    /**
+     * Get competitor1
+     *
+     * @return \Liuks\GameBundle\Entity\Competitor
+     */
+    public function getCompetitor1()
+    {
+        return $this->competitor1;
     }
 
     /**
@@ -347,13 +356,13 @@ class Match
     }
 
     /**
-     * Get competitor1
+     * Get competitor2
      *
      * @return \Liuks\GameBundle\Entity\Competitor
      */
-    public function getCompetitor1()
+    public function getCompetitor2()
     {
-        return $this->competitor1;
+        return $this->competitor2;
     }
 
     /**
@@ -370,13 +379,13 @@ class Match
     }
 
     /**
-     * Get competitor2
+     * Get tournament
      *
-     * @return \Liuks\GameBundle\Entity\Competitor
+     * @return \Liuks\GameBundle\Entity\Tournament
      */
-    public function getCompetitor2()
+    public function getTournament()
     {
-        return $this->competitor2;
+        return $this->tournament;
     }
 
     /**
@@ -390,15 +399,5 @@ class Match
         $this->tournament = $tournament;
 
         return $this;
-    }
-
-    /**
-     * Get tournament
-     *
-     * @return \Liuks\GameBundle\Entity\Tournament
-     */
-    public function getTournament()
-    {
-        return $this->tournament;
     }
 }

@@ -129,14 +129,13 @@ class Game
      */
     public function setGoals($goals, $team)
     {
-        switch ($team)
-        {
+        switch ($team) {
             case 0:
                 $this->goals1 = $goals;
-            break;
+                break;
             case 1:
                 $this->goals2 = $goals;
-            break;
+                break;
             default:
                 //throw error
         }
@@ -152,8 +151,7 @@ class Game
      */
     public function getGoals($team)
     {
-        switch ($team)
-        {
+        switch ($team) {
             case 0:
                 return $this->goals1;
                 break;
@@ -163,7 +161,18 @@ class Game
             default:
                 //throw error
         }
+
         return null;
+    }
+
+    /**
+     * Get startTime
+     *
+     * @return integer
+     */
+    public function getStartTime()
+    {
+        return $this->startTime;
     }
 
     /**
@@ -180,13 +189,13 @@ class Game
     }
 
     /**
-     * Get startTime
+     * Get endTime
      *
-     * @return integer 
+     * @return integer
      */
-    public function getStartTime()
+    public function getEndTime()
     {
-        return $this->startTime;
+        return $this->endTime;
     }
 
     /**
@@ -203,23 +212,23 @@ class Game
     }
 
     /**
-     * Get endTime
-     *
-     * @return integer 
-     */
-    public function getEndTime()
-    {
-        return $this->endTime;
-    }
-
-    /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Get user3
+     *
+     * @return \Liuks\UserBundle\Entity\User
+     */
+    public function getUser3()
+    {
+        return $this->user3;
     }
 
     /**
@@ -236,13 +245,13 @@ class Game
     }
 
     /**
-     * Get user3
+     * Get user4
      *
      * @return \Liuks\UserBundle\Entity\User
      */
-    public function getUser3()
+    public function getUser4()
     {
-        return $this->user3;
+        return $this->user4;
     }
 
     /**
@@ -259,13 +268,13 @@ class Game
     }
 
     /**
-     * Get user4
+     * Get user2
      *
      * @return \Liuks\UserBundle\Entity\User
      */
-    public function getUser4()
+    public function getUser2()
     {
-        return $this->user4;
+        return $this->user2;
     }
 
     /**
@@ -282,13 +291,13 @@ class Game
     }
 
     /**
-     * Get user2
+     * Get user1
      *
      * @return \Liuks\UserBundle\Entity\User
      */
-    public function getUser2()
+    public function getUser1()
     {
-        return $this->user2;
+        return $this->user1;
     }
 
     /**
@@ -305,13 +314,13 @@ class Game
     }
 
     /**
-     * Get user1
+     * Get team1
      *
-     * @return \Liuks\UserBundle\Entity\User
+     * @return \Liuks\UserBundle\Entity\Team
      */
-    public function getUser1()
+    public function getTeam1()
     {
-        return $this->user1;
+        return $this->team1;
     }
 
     /**
@@ -328,13 +337,13 @@ class Game
     }
 
     /**
-     * Get team1
+     * Get team2
      *
-     * @return \Liuks\UserBundle\Entity\Team
+     * @return Team
      */
-    public function getTeam1()
+    public function getTeam2()
     {
-        return $this->team1;
+        return $this->team2;
     }
 
     /**
@@ -351,16 +360,6 @@ class Game
     }
 
     /**
-     * Get team2
-     *
-     * @return Team
-     */
-    public function getTeam2()
-    {
-        return $this->team2;
-    }
-
-    /**
      * Set team based on num
      *
      * @param Team $team
@@ -369,8 +368,7 @@ class Game
      */
     public function setTeam(Team $team = null, $num)
     {
-        switch ($num)
-        {
+        switch ($num) {
             case 0:
                 $this->team1 = $team;
                 break;
@@ -380,6 +378,7 @@ class Game
             default:
                 //throw error
         }
+
         return $this;
     }
 
@@ -391,8 +390,7 @@ class Game
      */
     public function getTeam($num)
     {
-        switch ($num)
-        {
+        switch ($num) {
             case 0:
                 return $this->team1;
                 break;
@@ -402,7 +400,18 @@ class Game
             default:
                 //throw error
         }
+
         return null;
+    }
+
+    /**
+     * Get table
+     *
+     * @return \Liuks\TableBundle\Entity\Table
+     */
+    public function getTable()
+    {
+        return $this->table;
     }
 
     /**
@@ -419,16 +428,6 @@ class Game
     }
 
     /**
-     * Get table
-     *
-     * @return \Liuks\TableBundle\Entity\Table
-     */
-    public function getTable()
-    {
-        return $this->table;
-    }
-
-    /**
      * Set user based on given position
      *
      * @param \Liuks\UserBundle\Entity\User $user
@@ -438,8 +437,7 @@ class Game
     public function setUser(\Liuks\UserBundle\Entity\User $user, $position)
     {
 
-        switch ($position)
-        {
+        switch ($position) {
             case 0:
                 $this->user1 = $user;
                 break;
@@ -467,8 +465,7 @@ class Game
      */
     public function getUser($position)
     {
-        switch ($position)
-        {
+        switch ($position) {
             case 0:
                 return $this->user1;
             case 1:
@@ -480,7 +477,18 @@ class Game
             default:
                 //throw error
         }
+
         return null;
+    }
+
+    /**
+     * Get goals1
+     *
+     * @return integer
+     */
+    public function getGoals1()
+    {
+        return $this->goals1;
     }
 
     /**
@@ -497,13 +505,13 @@ class Game
     }
 
     /**
-     * Get goals1
+     * Get goals2
      *
-     * @return integer 
+     * @return integer
      */
-    public function getGoals1()
+    public function getGoals2()
     {
-        return $this->goals1;
+        return $this->goals2;
     }
 
     /**
@@ -517,15 +525,5 @@ class Game
         $this->goals2 = $goals2;
 
         return $this;
-    }
-
-    /**
-     * Get goals2
-     *
-     * @return integer 
-     */
-    public function getGoals2()
-    {
-        return $this->goals2;
     }
 }

@@ -79,11 +79,21 @@ class Tournament
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 
     /**
@@ -100,13 +110,13 @@ class Tournament
     }
 
     /**
-     * Get name
+     * Get startTime
      *
-     * @return string 
+     * @return integer
      */
-    public function getName()
+    public function getStartTime()
     {
-        return $this->name;
+        return $this->startTime;
     }
 
     /**
@@ -123,13 +133,13 @@ class Tournament
     }
 
     /**
-     * Get startTime
+     * Get endTime
      *
-     * @return integer 
+     * @return integer
      */
-    public function getStartTime()
+    public function getEndTime()
     {
-        return $this->startTime;
+        return $this->endTime;
     }
 
     /**
@@ -146,13 +156,13 @@ class Tournament
     }
 
     /**
-     * Get endTime
+     * Get organizer
      *
-     * @return integer 
+     * @return \Liuks\UserBundle\Entity\User
      */
-    public function getEndTime()
+    public function getOrganizer()
     {
-        return $this->endTime;
+        return $this->organizer;
     }
 
     /**
@@ -169,13 +179,13 @@ class Tournament
     }
 
     /**
-     * Get organizer
+     * Get table
      *
-     * @return \Liuks\UserBundle\Entity\User 
+     * @return \Liuks\TableBundle\Entity\Table
      */
-    public function getOrganizer()
+    public function getTable()
     {
-        return $this->organizer;
+        return $this->table;
     }
 
     /**
@@ -192,13 +202,13 @@ class Tournament
     }
 
     /**
-     * Get table
+     * Get competitors
      *
-     * @return \Liuks\TableBundle\Entity\Table 
+     * @return integer
      */
-    public function getTable()
+    public function getCompetitors()
     {
-        return $this->table;
+        return $this->competitors;
     }
 
     /**
@@ -215,13 +225,13 @@ class Tournament
     }
 
     /**
-     * Get competitors
+     * Get currentRound
      *
-     * @return integer 
+     * @return integer
      */
-    public function getCompetitors()
+    public function getCurrentRound()
     {
-        return $this->competitors;
+        return $this->currentRound;
     }
 
     /**
@@ -235,15 +245,5 @@ class Tournament
         $this->currentRound = $currentRound;
 
         return $this;
-    }
-
-    /**
-     * Get currentRound
-     *
-     * @return integer 
-     */
-    public function getCurrentRound()
-    {
-        return $this->currentRound;
     }
 }

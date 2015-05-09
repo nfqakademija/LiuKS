@@ -8,14 +8,14 @@
             <h1>Turnyrai</h1>
             <table class="table table-striped">
                 <thead>
-                    <tr>
-                        <th>Pavadinimas</th>
-                        <th>Organizatorius</th>
-                        <th>Stalas</th>
-                        <th>Pradžia</th>
-                        <th>Pabaiga</th>
-                        <th>Veiksmai</th>
-                    </tr>
+                <tr>
+                    <th>Pavadinimas</th>
+                    <th>Organizatorius</th>
+                    <th>Stalas</th>
+                    <th>Pradžia</th>
+                    <th>Pabaiga</th>
+                    <th>Veiksmai</th>
+                </tr>
                 </thead>
                 <tbody>
                 {% for tournament in tournaments %}
@@ -29,11 +29,13 @@
                             <ul class="list-inline">
                                 {% if tournament.table.owner == app.user or is_granted('ROLE_ADMIN') %}
                                     <li>
-                                        <a href="{{ path('tournament_edit', { 'id': tournament.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                                        <a href="{{ path('tournament_edit', { 'id': tournament.id }) }}"><span
+                                                    class="glyphicon glyphicon-pencil"></span></a>
                                     </li>
                                 {% endif %}
                                 <li>
-                                    <a href="{{ path('tournament_show', { 'id': tournament.id }) }}"><span class="glyphicon glyphicon-chevron-right"></span></a>
+                                    <a href="{{ path('tournament_show', { 'id': tournament.id }) }}"><span
+                                                class="glyphicon glyphicon-chevron-right"></span></a>
                                 </li>
                             </ul>
                         </td>

@@ -32,7 +32,7 @@ class GamesDataUpdateCommand extends ContainerAwareCommand
                 try {
                     $this->getContainer()->get('table_actions.service')->updateTableData($table);
                 } catch (\Exception $e) {
-                    $output->writeln('<error>' . $e->getMessage() . '</error>');
+                    $output->writeln('<error>'.$e->getMessage().'</error>');
                 }
             } else {
                 $output->writeln('Skipping Table <info>'.$table->getId().'</info>');

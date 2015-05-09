@@ -17,18 +17,19 @@ class UsersType extends AbstractType
         $builder
             ->add('name')
             ->add('surname')
-            ->add('email')
-        ;
+            ->add('email');
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'Liuks\UserBundle\Entity\User'
-        ));
+        $resolver->setDefaults(
+            [
+                'data_class' => 'Liuks\UserBundle\Entity\User'
+            ]
+        );
     }
 
     /**

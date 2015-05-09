@@ -1,4 +1,6 @@
-jQuery(document).ready(function($)
-{
-    $('#open_login').fancybox({});
-});
+jQuery(document).ready(
+    function ($)
+    {
+        $('#open_login').fancybox({});
+    }
+);

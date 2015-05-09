@@ -5,20 +5,21 @@
 <script>
     window.fbAsyncInit = function ()
     {
-        FB.init({
-            appId: '808404612584687',
-            status: true,
-            xfbml: true,
-            version: 'v2.2'
-        });
+        FB.init(
+                {
+                    appId: '808404612584687',
+                    status: true,
+                    xfbml: true,
+                    version: 'v2.2'
+                }
+        );
     };
 
     // Load the SDK asynchronously
     (function (d, s, id)
     {
         var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id))
-        {
+        if (d.getElementById(id)) {
             return;
         }
         js = d.createElement(s);
@@ -29,26 +30,26 @@
 
     function fb_login()
     {
-        FB.getLoginStatus(function (response)
-        {
-            if (response.status === 'connected')
-            {
-                document.location = "{{ url("hwi_oauth_service_redirect", {service: "facebook"}) }}";
-            }
-            else
-            {
-                FB.login(function (response)
+        FB.getLoginStatus(
+                function (response)
                 {
-                    if (response.authResponse)
-                    {
+                    if (response.status === 'connected') {
                         document.location = "{{ url("hwi_oauth_service_redirect", {service: "facebook"}) }}";
                     }
-                    else
-                    {
-                        //canceled, do something
+                    else {
+                        FB.login(
+                                function (response)
+                                {
+                                    if (response.authResponse) {
+                                        document.location = "{{ url("hwi_oauth_service_redirect", {service: "facebook"}) }}";
+                                    }
+                                    else {
+                                        //canceled, do something
+                                    }
+                                }, {scope: 'email'}
+                        );
                     }
-                }, {scope: 'email'});
-            }
-        });
+                }
+        );
     }
 </script>

@@ -11,11 +11,13 @@
                 <small>
                     <span class="glyphicon glyphicon-king" aria-hidden="true"></span>
                     {{ tournament.organizer.email }}
-                </small><br>
+                </small>
+                <br>
                 <small>
                     <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
                     {{ tournament.startTime|date('Y-m-d H:i') }}
-                </small><br>
+                </small>
+                <br>
                 <small>
                     <a href="{{ path('table_show', {'id': tournament.table.id}) }}">
                         <span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span>
@@ -30,8 +32,10 @@
         <div class="row">
             <div class="col-md-12">
                 <ul class="list-inline">
-                    <li><a href="{{ path('tournaments') }}"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></a></li>
-                    <li><a href="{{ path('tournament_edit', { 'id': tournament.id }) }}"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></li>
+                    <li><a href="{{ path('tournaments') }}"><span class="glyphicon glyphicon-chevron-left"
+                                                                  aria-hidden="true"></span></a></li>
+                    <li><a href="{{ path('tournament_edit', { 'id': tournament.id }) }}"><span
+                                    class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></li>
                     <li>{{ form(delete_form) }}</li>
                 </ul>
             </div>

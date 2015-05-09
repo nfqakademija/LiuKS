@@ -19,7 +19,8 @@
                 {% for game in games %}
                     <tr>
                         <td>
-                            {{ game.startTime|date('H:i') }} - {{ game.endTime == 0 ? 'TBD' : game.endTime|date('H:i') }}
+                            {{ game.startTime|date('H:i') }}
+                            - {{ game.endTime == 0 ? 'TBD' : game.endTime|date('H:i') }}
                         </td>
                         <td>
                             {{ game.user(0) is empty ? 'Svečias' : game.user(0).getName() }}

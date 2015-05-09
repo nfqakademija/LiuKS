@@ -8,18 +8,18 @@
             <h1>Stalai</h1>
             <table class="table table-striped">
                 <thead>
-                    <tr>
-                        <th>Adresas</th>
-                        <th>Miestas</th>
-                        <th>Prieinamumas</th>
-                        <th>Savininkas</th>
-                        {% if is_granted('ROLE_ADMIN') %}
-                            <th>API</th>
-                            <th>Privatus?</th>
-                            <th>Išjungtas?</th>
-                        {% endif %}
-                        <th>Veiksmai</th>
-                    </tr>
+                <tr>
+                    <th>Adresas</th>
+                    <th>Miestas</th>
+                    <th>Prieinamumas</th>
+                    <th>Savininkas</th>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <th>API</th>
+                        <th>Privatus?</th>
+                        <th>Išjungtas?</th>
+                    {% endif %}
+                    <th>Veiksmai</th>
+                </tr>
                 </thead>
                 <tbody>
                 {% for table in tables %}
@@ -33,18 +33,20 @@
                             <td>{{ table.private == 1 ? 'Taip' : 'Ne' }}</td>
                             <td>{{ table.disabled == 1 ? 'Taip' : 'Ne' }}</td>
                         {% endif %}
-                            <td>
-                                <ul class="list-inline">
-                                    {% if table.owner == app.user or is_granted('ROLE_ADMIN') %}
-                                        <li>
-                                            <a href="{{ path('table_edit', { 'id': table.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
-                                        </li>
-                                    {% endif %}
+                        <td>
+                            <ul class="list-inline">
+                                {% if table.owner == app.user or is_granted('ROLE_ADMIN') %}
                                     <li>
-                                        <a href="{{ path('table_show', { 'id': table.id }) }}"><span class="glyphicon glyphicon-chevron-right"></span></a>
+                                        <a href="{{ path('table_edit', { 'id': table.id }) }}"><span
+                                                    class="glyphicon glyphicon-pencil"></span></a>
                                     </li>
-                                </ul>
-                            </td>
+                                {% endif %}
+                                <li>
+                                    <a href="{{ path('table_show', { 'id': table.id }) }}"><span
+                                                class="glyphicon glyphicon-chevron-right"></span></a>
+                                </li>
+                            </ul>
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>

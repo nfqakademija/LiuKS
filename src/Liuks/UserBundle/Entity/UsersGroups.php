@@ -42,15 +42,24 @@ class UsersGroups
     private $group;
 
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \Liuks\UserBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 
     /**
@@ -67,13 +76,13 @@ class UsersGroups
     }
 
     /**
-     * Get user
+     * Get group
      *
-     * @return \Liuks\UserBundle\Entity\User
+     * @return \Liuks\UserBundle\Entity\Group
      */
-    public function getUser()
+    public function getGroup()
     {
-        return $this->user;
+        return $this->group;
     }
 
     /**
@@ -87,15 +96,5 @@ class UsersGroups
         $this->group = $group;
 
         return $this;
-    }
-
-    /**
-     * Get group
-     *
-     * @return \Liuks\UserBundle\Entity\Group
-     */
-    public function getGroup()
-    {
-        return $this->group;
     }
 }

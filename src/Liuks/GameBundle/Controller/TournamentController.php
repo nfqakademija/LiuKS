@@ -2,9 +2,9 @@
 
 namespace Liuks\GameBundle\Controller;
 
-use Liuks\TableBundle\Entity\Table;
 use Liuks\GameBundle\Entity\Tournament;
 use Liuks\GameBundle\Form\TournamentType;
+use Liuks\TableBundle\Entity\Table;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -102,7 +102,6 @@ class TournamentController extends Controller
                     ->setParameter('owner', $this->getUser())
                     ->getResult();
             } else {
-
                 $tournaments = $em->createQuery(
                     'SELECT t FROM LiuksGameBundle:Tournament t
                 JOIN t.table table

@@ -6,13 +6,14 @@
     <h1>Turnyro kūrimas</h1>
 
     {{ form_start(form) }}
-        {{ form_errors(form) }}
+    {{ form_errors(form) }}
 
-        {{ form_row(form.name) }}
-        {{ form_row(form.table) }}
+    {{ form_row(form.name) }}
+    {{ form_row(form.table) }}
     {{ form_end(form) }}
 
     <ul class="list-inline">
-        <li><a href="{{ path('tournaments') }}"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>Atgal</a></li>
+        <li><a href="{{ path('tournaments') }}"><span class="glyphicon glyphicon-chevron-left"
+                                                      aria-hidden="true"></span>Atgal</a></li>
     </ul>
 {% endblock %}

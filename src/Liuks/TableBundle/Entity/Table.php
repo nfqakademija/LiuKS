@@ -135,11 +135,21 @@ class Table
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Get address
+     *
+     * @return string
+     */
+    public function getAddress()
+    {
+        return $this->address;
     }
 
     /**
@@ -156,13 +166,13 @@ class Table
     }
 
     /**
-     * Get address
+     * Get lat
      *
-     * @return string 
+     * @return float
      */
-    public function getAddress()
+    public function getLat()
     {
-        return $this->address;
+        return $this->lat;
     }
 
     /**
@@ -179,13 +189,13 @@ class Table
     }
 
     /**
-     * Get lat
+     * Get long
      *
      * @return float
      */
-    public function getLat()
+    public function getLong()
     {
-        return $this->lat;
+        return $this->long;
     }
 
     /**
@@ -202,13 +212,13 @@ class Table
     }
 
     /**
-     * Get long
+     * Get city
      *
-     * @return float
+     * @return string
      */
-    public function getLong()
+    public function getCity()
     {
-        return $this->long;
+        return $this->city;
     }
 
     /**
@@ -225,13 +235,13 @@ class Table
     }
 
     /**
-     * Get city
+     * Get availableFrom
      *
-     * @return string 
+     * @return \DateTime
      */
-    public function getCity()
+    public function getAvailableFrom()
     {
-        return $this->city;
+        return $this->availableFrom;
     }
 
     /**
@@ -248,13 +258,13 @@ class Table
     }
 
     /**
-     * Get availableFrom
+     * Get availableTo
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
-    public function getAvailableFrom()
+    public function getAvailableTo()
     {
-        return $this->availableFrom;
+        return $this->availableTo;
     }
 
     /**
@@ -271,13 +281,13 @@ class Table
     }
 
     /**
-     * Get availableTo
+     * Get api
      *
-     * @return \DateTime 
+     * @return string
      */
-    public function getAvailableTo()
+    public function getApi()
     {
-        return $this->availableTo;
+        return $this->api;
     }
 
     /**
@@ -294,13 +304,13 @@ class Table
     }
 
     /**
-     * Get api
+     * Get private
      *
-     * @return string 
+     * @return boolean
      */
-    public function getApi()
+    public function getPrivate()
     {
-        return $this->api;
+        return $this->private;
     }
 
     /**
@@ -317,13 +327,13 @@ class Table
     }
 
     /**
-     * Get private
+     * Get lastEventId
      *
-     * @return boolean 
+     * @return integer
      */
-    public function getPrivate()
+    public function getLastEventId()
     {
-        return $this->private;
+        return $this->lastEventId;
     }
 
     /**
@@ -340,13 +350,13 @@ class Table
     }
 
     /**
-     * Get lastEventId
+     * Get lastShake
      *
-     * @return integer 
+     * @return integer
      */
-    public function getLastEventId()
+    public function getLastShake()
     {
-        return $this->lastEventId;
+        return $this->lastShake;
     }
 
     /**
@@ -363,13 +373,13 @@ class Table
     }
 
     /**
-     * Get lastShake
+     * Get free
      *
-     * @return integer 
+     * @return boolean
      */
-    public function getLastShake()
+    public function getFree()
     {
-        return $this->lastShake;
+        return $this->free;
     }
 
     /**
@@ -386,13 +396,13 @@ class Table
     }
 
     /**
-     * Get free
+     * Get disabled
      *
-     * @return boolean 
+     * @return boolean
      */
-    public function getFree()
+    public function getDisabled()
     {
-        return $this->free;
+        return $this->disabled;
     }
 
     /**
@@ -409,13 +419,13 @@ class Table
     }
 
     /**
-     * Get disabled
+     * Get owner
      *
-     * @return boolean 
+     * @return \Liuks\UserBundle\Entity\User
      */
-    public function getDisabled()
+    public function getOwner()
     {
-        return $this->disabled;
+        return $this->owner;
     }
 
     /**
@@ -432,13 +442,13 @@ class Table
     }
 
     /**
-     * Get owner
+     * Get group
      *
-     * @return \Liuks\UserBundle\Entity\User 
+     * @return \Liuks\UserBundle\Entity\Group
      */
-    public function getOwner()
+    public function getGroup()
     {
-        return $this->owner;
+        return $this->group;
     }
 
     /**
@@ -455,13 +465,13 @@ class Table
     }
 
     /**
-     * Get group
+     * Get lastDataUpdate
      *
-     * @return \Liuks\UserBundle\Entity\Group 
+     * @return integer
      */
-    public function getGroup()
+    public function getLastDataUpdate()
     {
-        return $this->group;
+        return $this->lastDataUpdate;
     }
 
     /**
@@ -475,15 +485,5 @@ class Table
         $this->lastDataUpdate = $lastDataUpdate;
 
         return $this;
-    }
-
-    /**
-     * Get lastDataUpdate
-     *
-     * @return integer 
-     */
-    public function getLastDataUpdate()
-    {
-        return $this->lastDataUpdate;
     }
 }

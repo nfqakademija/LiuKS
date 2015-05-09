@@ -55,7 +55,15 @@ class Reservation
      */
     private $table;
 
-
+    /**
+     * Get startTime
+     *
+     * @return integer
+     */
+    public function getStartTime()
+    {
+        return $this->startTime;
+    }
 
     /**
      * Set startTime
@@ -71,13 +79,13 @@ class Reservation
     }
 
     /**
-     * Get startTime
+     * Get endTime
      *
-     * @return integer 
+     * @return integer
      */
-    public function getStartTime()
+    public function getEndTime()
     {
-        return $this->startTime;
+        return $this->endTime;
     }
 
     /**
@@ -94,23 +102,23 @@ class Reservation
     }
 
     /**
-     * Get endTime
-     *
-     * @return integer 
-     */
-    public function getEndTime()
-    {
-        return $this->endTime;
-    }
-
-    /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \Liuks\UserBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 
     /**
@@ -127,13 +135,13 @@ class Reservation
     }
 
     /**
-     * Get user
+     * Get table
      *
-     * @return \Liuks\UserBundle\Entity\User
+     * @return \Liuks\TableBundle\Entity\Table
      */
-    public function getUser()
+    public function getTable()
     {
-        return $this->user;
+        return $this->table;
     }
 
     /**
@@ -147,15 +155,5 @@ class Reservation
         $this->table = $table;
 
         return $this;
-    }
-
-    /**
-     * Get table
-     *
-     * @return \Liuks\TableBundle\Entity\Table
-     */
-    public function getTable()
-    {
-        return $this->table;
     }
 }

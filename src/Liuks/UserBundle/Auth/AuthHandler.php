@@ -36,10 +36,10 @@ class AuthHandler implements AuthenticationSuccessHandlerInterface, Authenticati
      */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token)
     {
-        if (in_array(new Role('ROLE_NEW_USER'), $token->getRoles()))
-        {
+        if (in_array(new Role('ROLE_NEW_USER'), $token->getRoles())) {
             return new RedirectResponse($this->router->generate('users_locator'));
         }
+
         return new RedirectResponse($this->router->generate('home_page'));
     }
 
@@ -52,6 +52,7 @@ class AuthHandler implements AuthenticationSuccessHandlerInterface, Authenticati
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
         $request->getSession()->set(SecurityContextInterface::AUTHENTICATION_ERROR, $exception);
-        return new RedirectResponse( $this->router->generate('login_page'));
+
+        return new RedirectResponse($this->router->generate('login_page'));
     }
 }

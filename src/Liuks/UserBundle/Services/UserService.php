@@ -32,8 +32,7 @@ class UserService
      */
     public function createTeam($captain, $team_name)
     {
-        if (!$captain)
-        {
+        if (!$captain) {
             throw new EntityNotFoundException();
         }
         $team = new Team();
@@ -44,6 +43,7 @@ class UserService
         $team->setGamesPlayed(0);
         $this->em->persist($team);
         $this->em->flush($team);
+
         return $team;
     }
 
@@ -55,12 +55,13 @@ class UserService
     public function addTeamMember($team_id, $user)
     {
         $team = $this->em->getRepository('LiuksUserBundle:Team')->find($team_id);
-        if (!$team->getPlayer())
-        {
+        if (!$team->getPlayer()) {
             $team->setPlayer($user);
             $this->em->flush($team);
+
             return $team;
         }
+
         return null;
     }
 
@@ -70,11 +71,10 @@ class UserService
      */
     public function resolveGameUsers($game, $winner_side)
     {
-        $uid = $winner_side*2;
-        for ($i = 0; $i < 4; $i++)
-        {
+        $uid = $winner_side * 2;
+        for ($i = 0; $i < 4; $i++) {
             $user = $game->getUser($i);
-            $this->addToPlayerRanking($user, $uid == $i || $uid+1 == $i);
+            $this->addToPlayerRanking($user, $uid == $i || $uid + 1 == $i);
         }
         $this->addToTeamRanking($game->getTeam($winner_side), true, $game->getGoals($winner_side));
         $this->addToTeamRanking($game->getTeam(!$winner_side), false, $game->getGoals(!$winner_side));
@@ -87,10 +87,8 @@ class UserService
      */
     public function addToTeamRanking($team, $won, $goals)
     {
-        if ($team)
-        {
-            if ($won)
-            {
+        if ($team) {
+            if ($won) {
                 $team->setGamesWon($team->getGamesWon() + 1);
             }
             $team->setGamesPlayed($team->getGamesPlayed() + 1);
@@ -108,10 +106,8 @@ class UserService
      */
     public function addToPlayerRanking($player, $won)
     {
-        if ($player)
-        {
-            if ($won)
-            {
+        if ($player) {
+            if ($won) {
                 $player->setGamesWon($player->getGamesWon() + 1);
             }
             $player->setGamesPlayed($player->getGamesPlayed() + 1);

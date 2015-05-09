@@ -178,6 +178,7 @@ class TournamentService extends ContainerAware
     {
         $em = $this->container->get('doctrine.orm.default_entity_manager');
         $em->getRepository('LiuksGameBundle:Tournament')->find($tournament_id);
+
         //TODO: update teams based on teams json
         return false;
     }

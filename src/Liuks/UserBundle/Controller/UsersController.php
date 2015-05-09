@@ -2,14 +2,11 @@
 
 namespace Liuks\UserBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 use Liuks\UserBundle\Entity\User;
 use Liuks\UserBundle\Form\UsersType;
-use Symfony\Component\HttpFoundation\Response;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Users controller.
@@ -27,9 +24,12 @@ class UsersController extends Controller
 
         $users = $em->getRepository('LiuksUserBundle:User')->findAll();
 
-        return $this->render('LiuksUserBundle:Users:index.html.twig', array(
-            'users' => $users,
-        ));
+        return $this->render(
+            'LiuksUserBundle:Users:index.html.twig',
+            [
+                'users' => $users,
+            ]
+        );
     }
 
     /**
@@ -52,10 +52,13 @@ class UsersController extends Controller
 
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('LiuksUserBundle:Users:show.html.twig', array(
-            'user'      => $user,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render(
+            'LiuksUserBundle:Users:show.html.twig',
+            [
+                'user' => $user,
+                'delete_form' => $deleteForm->createView(),
+            ]
+        );
     }
 
     /**
@@ -72,40 +75,47 @@ class UsersController extends Controller
 
         $user = $em->getRepository('LiuksUserBundle:User')->find($id);
 
-        if (!$user)
-        {
+        if (!$user) {
             throw $this->createNotFoundException('Unable to find User.');
         }
 
         $editForm = $this->createEditForm($user);
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('LiuksUserBundle:Users:edit.html.twig', array(
-            'entity'      => $user,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render(
+            'LiuksUserBundle:Users:edit.html.twig',
+            [
+                'entity' => $user,
+                'edit_form' => $editForm->createView(),
+                'delete_form' => $deleteForm->createView(),
+            ]
+        );
     }
 
     /**
-    * Creates a form to edit a Users entity.
-    * @Security("has_role('ROLE_ADMIN')")
-    *
-    * @param User $entity The entity
-    *
-    * @return \Symfony\Component\Form\Form The form
-    */
+     * Creates a form to edit a Users entity.
+     * @Security("has_role('ROLE_ADMIN')")
+     *
+     * @param User $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
     private function createEditForm(User $entity)
     {
-        $form = $this->createForm(new UsersType(), $entity, array(
-            'action' => $this->generateUrl('users_update', array('id' => $entity->getId())),
-            'method' => 'PUT',
-        ));
+        $form = $this->createForm(
+            new UsersType(),
+            $entity,
+            [
+                'action' => $this->generateUrl('users_update', ['id' => $entity->getId()]),
+                'method' => 'PUT',
+            ]
+        );
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', ['label' => 'Update']);
 
         return $form;
     }
+
     /**
      * Edits an existing Users entity.
      *
@@ -129,15 +139,19 @@ class UsersController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('users_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('users_edit', ['id' => $id]));
         }
 
-        return $this->render('LiuksUserBundle:Users:edit.html.twig', array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render(
+            'LiuksUserBundle:Users:edit.html.twig',
+            [
+                'entity' => $entity,
+                'edit_form' => $editForm->createView(),
+                'delete_form' => $deleteForm->createView(),
+            ]
+        );
     }
+
     /**
      * Deletes a Users entity.
      *
@@ -176,11 +190,10 @@ class UsersController extends Controller
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('users_delete', array('id' => $id)))
+            ->setAction($this->generateUrl('users_delete', ['id' => $id]))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-        ;
+            ->add('submit', 'submit', ['label' => 'Delete'])
+            ->getForm();
     }
 
     /**
@@ -190,10 +203,10 @@ class UsersController extends Controller
      */
     public function locatorAction()
     {
-        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
-        {
+        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             throw $this->createAccessDeniedException('Unable to access this page!');
         }
+
         return $this->render('LiuksUserBundle:Users:locate.html.twig');
     }
 
@@ -205,22 +218,23 @@ class UsersController extends Controller
         $tables = $this->container->get('table_actions.service')->findClosestTables($lat, $long);
 
         $form = $this->createFormBuilder()
-            ->setAction($this->generateUrl('users_set_default_table', array('id' => $tables[0]->getId())))
+            ->setAction($this->generateUrl('users_set_default_table', ['id' => $tables[0]->getId()]))
             ->setMethod('PUT')
-            ->add('submit', 'submit', array('label' => 'Pasirinkti'))
+            ->add('submit', 'submit', ['label' => 'Pasirinkti'])
             ->getForm()->createView();
 
-        return $this->render('LiuksUserBundle:Users:closestTable.html.twig',
+        return $this->render(
+            'LiuksUserBundle:Users:closestTable.html.twig',
             [
                 'tables' => $tables,
                 'setTableForm' => $form
-            ]);
+            ]
+        );
     }
 
     public function setDefaultTableAction(Request $request, $id)
     {
-        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
-        {
+        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             throw $this->createAccessDeniedException('Unable to access this page!');
         }
         $em = $this->container->get('doctrine.orm.default_entity_manager');

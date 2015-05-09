@@ -21,6 +21,7 @@ class TableService extends ContainerAware
             }
             $table->setLastEventId(end($records)->id);
         }
+
         return $table;
     }
 

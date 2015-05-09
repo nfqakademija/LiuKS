@@ -72,11 +72,21 @@ class Team
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 
     /**
@@ -93,13 +103,13 @@ class Team
     }
 
     /**
-     * Get name
+     * Get gamesWon
      *
-     * @return string 
+     * @return integer
      */
-    public function getName()
+    public function getGamesWon()
     {
-        return $this->name;
+        return $this->gamesWon;
     }
 
     /**
@@ -116,13 +126,13 @@ class Team
     }
 
     /**
-     * Get gamesWon
+     * Get gamesPlayed
      *
-     * @return integer 
+     * @return integer
      */
-    public function getGamesWon()
+    public function getGamesPlayed()
     {
-        return $this->gamesWon;
+        return $this->gamesPlayed;
     }
 
     /**
@@ -139,13 +149,13 @@ class Team
     }
 
     /**
-     * Get gamesPlayed
+     * Get totalGoals
      *
-     * @return integer 
+     * @return integer
      */
-    public function getGamesPlayed()
+    public function getTotalGoals()
     {
-        return $this->gamesPlayed;
+        return $this->totalGoals;
     }
 
     /**
@@ -162,13 +172,13 @@ class Team
     }
 
     /**
-     * Get totalGoals
+     * Get player
      *
-     * @return integer 
+     * @return \Liuks\UserBundle\Entity\User
      */
-    public function getTotalGoals()
+    public function getPlayer()
     {
-        return $this->totalGoals;
+        return $this->player;
     }
 
     /**
@@ -185,13 +195,13 @@ class Team
     }
 
     /**
-     * Get player
+     * Get captain
      *
-     * @return \Liuks\UserBundle\Entity\User 
+     * @return \Liuks\UserBundle\Entity\User
      */
-    public function getPlayer()
+    public function getCaptain()
     {
-        return $this->player;
+        return $this->captain;
     }
 
     /**
@@ -205,15 +215,5 @@ class Team
         $this->captain = $captain;
 
         return $this;
-    }
-
-    /**
-     * Get captain
-     *
-     * @return \Liuks\UserBundle\Entity\User 
-     */
-    public function getCaptain()
-    {
-        return $this->captain;
     }
 }

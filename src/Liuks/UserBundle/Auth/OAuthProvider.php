@@ -6,7 +6,6 @@ use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
 use Liuks\UserBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
@@ -30,6 +29,7 @@ class OAuthProvider implements UserProviderInterface, OAuthAwareUserProviderInte
     {
         $em = $this->container->get('doctrine.orm.default_entity_manager');
         $user = $em->getRepository('LiuksUserBundle:User')->findOneBy(['facebookId' => $username]);
+
         return $user;
     }
 
@@ -38,8 +38,7 @@ class OAuthProvider implements UserProviderInterface, OAuthAwareUserProviderInte
         $fb_id = $response->getUsername();
         $user = $this->loadUserByUsername($fb_id);
 
-        if (!$user)
-        {
+        if (!$user) {
             $em = $this->container->get('doctrine.orm.default_entity_manager');
             $user = new User();
             $user->setFacebookId($fb_id);

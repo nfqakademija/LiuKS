@@ -107,11 +107,13 @@ class User implements UserInterface
     /** @see \Serializable::serialize() */
     public function serialize()
     {
-        return serialize(array(
-            $this->id,
-            $this->facebookId,
-            $this->email
-        ));
+        return serialize(
+            [
+                $this->id,
+                $this->facebookId,
+                $this->email
+            ]
+        );
     }
 
     /**
@@ -143,13 +145,36 @@ class User implements UserInterface
     }
 
     /**
+     * Set password
+     *
+     * @param string $password
+     * @return User
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Get facebookId
+     *
+     * @return string
+     */
+    public function getFacebookId()
+    {
+        return $this->facebookId;
     }
 
     /**
@@ -166,13 +191,13 @@ class User implements UserInterface
     }
 
     /**
-     * Get facebookId
+     * Get roles
      *
-     * @return string 
+     * @return string
      */
-    public function getFacebookId()
+    public function getRoles()
     {
-        return $this->facebookId;
+        return explode(', ', $this->roles);
     }
 
     /**
@@ -189,13 +214,13 @@ class User implements UserInterface
     }
 
     /**
-     * Get roles
+     * Get name
      *
-     * @return string 
+     * @return string
      */
-    public function getRoles()
+    public function getName()
     {
-        return explode(', ', $this->roles);
+        return $this->name;
     }
 
     /**
@@ -212,13 +237,13 @@ class User implements UserInterface
     }
 
     /**
-     * Get name
+     * Get surname
      *
-     * @return string 
+     * @return string
      */
-    public function getName()
+    public function getSurname()
     {
-        return $this->name;
+        return $this->surname;
     }
 
     /**
@@ -235,13 +260,13 @@ class User implements UserInterface
     }
 
     /**
-     * Get surname
+     * Get email
      *
-     * @return string 
+     * @return string
      */
-    public function getSurname()
+    public function getEmail()
     {
-        return $this->surname;
+        return $this->email;
     }
 
     /**
@@ -258,26 +283,13 @@ class User implements UserInterface
     }
 
     /**
-     * Get email
+     * Get picture
      *
-     * @return string 
+     * @return string
      */
-    public function getEmail()
+    public function getPicture()
     {
-        return $this->email;
-    }
-
-    /**
-     * Set password
-     *
-     * @param string $password
-     * @return User
-     */
-    public function setPassword($password)
-    {
-        $this->password = $password;
-
-        return $this;
+        return $this->picture;
     }
 
     /**
@@ -294,13 +306,13 @@ class User implements UserInterface
     }
 
     /**
-     * Get picture
+     * Get gamesPlayed
      *
-     * @return string 
+     * @return integer
      */
-    public function getPicture()
+    public function getGamesPlayed()
     {
-        return $this->picture;
+        return $this->gamesPlayed;
     }
 
     /**
@@ -317,13 +329,13 @@ class User implements UserInterface
     }
 
     /**
-     * Get gamesPlayed
+     * Get gamesWon
      *
-     * @return integer 
+     * @return integer
      */
-    public function getGamesPlayed()
+    public function getGamesWon()
     {
-        return $this->gamesPlayed;
+        return $this->gamesWon;
     }
 
     /**
@@ -340,13 +352,13 @@ class User implements UserInterface
     }
 
     /**
-     * Get gamesWon
+     * Get defaultTable
      *
-     * @return integer 
+     * @return \Liuks\TableBundle\Entity\Table
      */
-    public function getGamesWon()
+    public function getDefaultTable()
     {
-        return $this->gamesWon;
+        return $this->defaultTable;
     }
 
     /**
@@ -360,15 +372,5 @@ class User implements UserInterface
         $this->defaultTable = $defaultTable;
 
         return $this;
-    }
-
-    /**
-     * Get defaultTable
-     *
-     * @return \Liuks\TableBundle\Entity\Table 
-     */
-    public function getDefaultTable()
-    {
-        return $this->defaultTable;
     }
 }

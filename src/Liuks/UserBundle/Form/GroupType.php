@@ -15,8 +15,7 @@ class GroupType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name')
-        ;
+            ->add('name');
     }
 
     /**
@@ -24,9 +23,11 @@ class GroupType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'Liuks\UserBundle\Entity\Group'
-        ));
+        $resolver->setDefaults(
+            [
+                'data_class' => 'Liuks\UserBundle\Entity\Group'
+            ]
+        );
     }
 
     /**

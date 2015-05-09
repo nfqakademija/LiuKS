@@ -73,6 +73,16 @@ class Competitor
     }
 
     /**
+     * Get round
+     *
+     * @return integer
+     */
+    public function getRound()
+    {
+        return $this->round;
+    }
+
+    /**
      * Set round
      *
      * @param integer $round
@@ -86,13 +96,13 @@ class Competitor
     }
 
     /**
-     * Get round
+     * Get matchup
      *
      * @return integer
      */
-    public function getRound()
+    public function getMatchup()
     {
-        return $this->round;
+        return $this->matchup;
     }
 
     /**
@@ -109,13 +119,13 @@ class Competitor
     }
 
     /**
-     * Get matchup
+     * Get tournament
      *
-     * @return integer
+     * @return \Liuks\GameBundle\Entity\Tournament
      */
-    public function getMatchup()
+    public function getTournament()
     {
-        return $this->matchup;
+        return $this->tournament;
     }
 
     /**
@@ -132,13 +142,13 @@ class Competitor
     }
 
     /**
-     * Get tournament
+     * Get team
      *
-     * @return \Liuks\GameBundle\Entity\Tournament 
+     * @return \Liuks\UserBundle\Entity\Team
      */
-    public function getTournament()
+    public function getTeam()
     {
-        return $this->tournament;
+        return $this->team;
     }
 
     /**
@@ -155,13 +165,13 @@ class Competitor
     }
 
     /**
-     * Get team
+     * Get startPos
      *
-     * @return \Liuks\UserBundle\Entity\Team 
+     * @return integer
      */
-    public function getTeam()
+    public function getStartPos()
     {
-        return $this->team;
+        return $this->startPos;
     }
 
     /**
@@ -175,15 +185,5 @@ class Competitor
         $this->startPos = $startPos;
 
         return $this;
-    }
-
-    /**
-     * Get startPos
-     *
-     * @return integer 
-     */
-    public function getStartPos()
-    {
-        return $this->startPos;
     }
 }

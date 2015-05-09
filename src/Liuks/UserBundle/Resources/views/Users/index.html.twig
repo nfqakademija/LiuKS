@@ -24,7 +24,8 @@
                 <tbody>
                 {% for user in users %}
                     <tr>
-                        <td><a href="{{ path('users_show', { 'id': user.id }) }}"><img src="{{ user.picture }}"/></a></td>
+                        <td><a href="{{ path('users_show', { 'id': user.id }) }}"><img src="{{ user.picture }}"/></a>
+                        </td>
                         <td>{{ user.name }} {{ user.surname }}</td>
                         <td>{{ user.email }}</td>
                         <td>{{ user.gamesPlayed }}</td>
@@ -35,10 +36,12 @@
                             <td>
                                 <ul class="list-inline">
                                     <li>
-                                        <a href="{{ path('users_edit', { 'id': user.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                                        <a href="{{ path('users_edit', { 'id': user.id }) }}"><span
+                                                    class="glyphicon glyphicon-pencil"></span></a>
                                     </li>
                                     <li>
-                                        <a href="{{ path('users_show', { 'id': user.id }) }}"><span class="glyphicon glyphicon-chevron-right"></span></a>
+                                        <a href="{{ path('users_show', { 'id': user.id }) }}"><span
+                                                    class="glyphicon glyphicon-chevron-right"></span></a>
                                     </li>
                                 </ul>
                             </td>

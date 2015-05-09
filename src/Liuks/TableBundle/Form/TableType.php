@@ -25,18 +25,19 @@ class TableType extends AbstractType
             ->add('api')
             ->add('disabled', null, ['required' => false, 'attr' => ['checked' => 'checked']])
             ->add('private', null, ['attr' => ['onclick' => 'groupToggle()'], 'required' => false])
-            ->add('group', new GroupType(), ['required' => false])
-        ;
+            ->add('group', new GroupType(), ['required' => false]);
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'Liuks\TableBundle\Entity\Table'
-        ));
+        $resolver->setDefaults(
+            [
+                'data_class' => 'Liuks\TableBundle\Entity\Table'
+            ]
+        );
     }
 
     /**

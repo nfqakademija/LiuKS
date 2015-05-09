@@ -2,13 +2,12 @@
 
 namespace Liuks\TableBundle\Controller;
 
-use Liuks\TableBundle\Events\TableCreationEvent;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 use Liuks\TableBundle\Entity\Table;
+use Liuks\TableBundle\Events\TableCreationEvent;
 use Liuks\TableBundle\Form\TableType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

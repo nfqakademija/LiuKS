@@ -17,31 +17,36 @@ class TournamentType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('table', 'entity', array(
-                'class' => 'Liuks\TableBundle\Entity\Table',
-                'property' => 'address',
-                'empty_value' => 'Pasirinkite stalą',
-                //TODO: CREATE TableRepository and query only available tables
-//                'query_builder' => function(Table $table) {
-//                    if ($table->getDisabled() == false && $table->getPrivate() == false)
-//                    {
-//                        return $table;
-//                    }
-//                    return $table;
-//                }
-            ))
-            //TODO: add more options for tournament organizer
+            ->add(
+                'table',
+                'entity',
+                [
+                    'class' => 'Liuks\TableBundle\Entity\Table',
+                    'property' => 'address',
+                    'empty_value' => 'Pasirinkite stalą',
+                    //TODO: CREATE TableRepository and query only available tables
+                    //                'query_builder' => function(Table $table) {
+                    //                    if ($table->getDisabled() == false && $table->getPrivate() == false)
+                    //                    {
+                    //                        return $table;
+                    //                    }
+                    //                    return $table;
+                    //                }
+                ]
+            )//TODO: add more options for tournament organizer
         ;
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'Liuks\GameBundle\Entity\Tournament'
-        ));
+        $resolver->setDefaults(
+            [
+                'data_class' => 'Liuks\GameBundle\Entity\Tournament'
+            ]
+        );
     }
 
     /**

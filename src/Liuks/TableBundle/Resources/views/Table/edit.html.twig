@@ -23,26 +23,25 @@
     {{ form_end(form) }}
 
     <ul class="list-inline">
-        <li><a href="{{ path('tables') }}"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></a></li>
+        <li><a href="{{ path('tables') }}"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></a>
+        </li>
         <li>{{ form(delete_form) }}</li>
     </ul>
 {% endblock %}
 
 {% block javascripts %}
     <script>
-        (function()
+        (function ()
         {
             groupToggle();
         })();
 
         function groupToggle()
         {
-            if(document.getElementById('liuks_tablebundle_table_private').checked)
-            {
+            if (document.getElementById('liuks_tablebundle_table_private').checked) {
                 document.getElementById('liuks_tablebundle_table_group').parentElement.setAttribute('class', '');
             }
-            else
-            {
+            else {
                 document.getElementById('liuks_tablebundle_table_group').parentElement.setAttribute('class', 'hidden');
             }
         }
