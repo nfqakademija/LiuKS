@@ -1,6 +1,12 @@
-jQuery(document).ready(
-    function ($)
+$(document).ready(
+    function ()
     {
-        $('#open_login').fancybox({});
+        var $login = $('#open_login').fancybox({});
+        if (window.location.hash == '#login')
+        {
+            $login.trigger('click');
+        }
+
+        $('#delete-btn').fancybox({});
     }
 );
