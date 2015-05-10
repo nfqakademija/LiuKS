@@ -1,0 +1,36 @@
+{% extends '::base.html.twig' %}
+
+{% block title -%}Komandos "{{ team.name }}" redagavimas |{% endblock %}
+
+{% block body -%}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="btn-group" role="group">
+                <a class="btn btn-primary" href="{{ path('teams') }}">
+                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                </a>
+                <a class="btn btn-danger" href="#delete_popup" id="delete-btn">
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                </a>
+            </div>
+            <div id="delete_popup" style="display: none;">
+                <p>Ar tikrai norite ištrinti šią komandą?</p>
+
+                <div class="text-center">
+                    {{ form_start(delete_form) }}
+                    {{ form_row(delete_form.submit) }}
+                    {{ form_end(delete_form) }}
+                </div>
+            </div>
+
+            <h1 class="text-center">Komandos "{{ team.name }}" redagavimas</h1>
+
+            {{ form_start(edit_form) }}
+            {{ form_errors(edit_form) }}
+
+            {{ form_row(edit_form.name) }}
+            {{ form_row(edit_form.player.email) }}
+            {{ form_end(edit_form) }}
+        </div>
+    </div>
+{% endblock %}

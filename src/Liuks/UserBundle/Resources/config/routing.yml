@@ -4,3 +4,7 @@ logout_page:
 liuks_user_users:
     resource: "@LiuksUserBundle/Resources/config/routing/users.yml"
     prefix:   /users
+
+liuks_user_teams:
+    resource: "@LiuksUserBundle/Resources/config/routing/teams.yml"
+    prefix:   /teams

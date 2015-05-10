@@ -1,0 +1,30 @@
+teams:
+    path:     /
+    defaults: { _controller: "LiuksUserBundle:Team:index" }
+
+teams_show:
+    path:     /{id}/show
+    defaults: { _controller: "LiuksUserBundle:Team:show" }
+
+teams_new:
+    path:     /new
+    defaults: { _controller: "LiuksUserBundle:Team:new" }
+
+teams_create:
+    path:     /create
+    defaults: { _controller: "LiuksUserBundle:Team:create" }
+    methods:  POST
+
+teams_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "LiuksUserBundle:Team:edit" }
+
+teams_update:
+    path:     /{id}/update
+    defaults: { _controller: "LiuksUserBundle:Team:update" }
+    methods:  [POST, PUT]
+
+teams_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "LiuksUserBundle:Team:delete" }
+    methods:  [POST, DELETE]

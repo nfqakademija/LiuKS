@@ -1,0 +1,23 @@
+{% extends '::base.html.twig' %}
+
+{% block title -%}Komandos sukūrimas |{% endblock %}
+
+{% block body -%}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="btn-group" role="group">
+                <a class="btn btn-primary" href="{{ path('teams') }}">
+                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                </a>
+            </div>
+            <h1 class="text-center">Komandos sukūrimas</h1>
+
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+
+            {{ form_row(form.name) }}
+            {{ form_row(form.player.email) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

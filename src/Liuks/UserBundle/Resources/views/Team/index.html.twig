@@ -1,0 +1,55 @@
+{% extends '::base.html.twig' %}
+
+{% block title -%}Komandų reitingai |{% endblock %}
+
+{% block body -%}
+    <div class="row">
+        <div class="col-md-12">
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                <div class="btn-group" role="group" aria-label="...">
+                    <a class="btn btn-success btn-lg btn-block" href="{{ path('teams_new') }}">
+                        Sukurk savo komandą!
+                    </a>
+                </div>
+            {% endif %}
+            <h1>Komandų reitingai</h1>
+        </div>
+    </div>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Pavadinimas</th>
+            <th>Žaista</th>
+            <th>Laimėta</th>
+            <th>Pralaimėta</th>
+            <th>Įvarčiai</th>
+            {% if is_granted('ROLE_ADMIN') %}
+                <th>Veiksmai</th>
+            {% endif %}
+        </tr>
+        </thead>
+        <tbody>
+        {% for team in teams %}
+            <tr>
+                <td>{{ team.name }}</td>
+                <td>{{ team.gamesPlayed }}</td>
+                <td>{{ team.gamesWon }}</td>
+                <td>{{ team.gamesPlayed - team.gamesWon }}</td>
+                <td>{{ team.totalGoals }}</td>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <td>
+                        <div class="btn-group" role="group">
+                            <a class="btn btn-warning" href="{{ path('teams_edit', { 'id': team.id }) }}">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </a>
+                            <a class="btn btn-primary" href="{{ path('teams_show', { 'id': team.id }) }}">
+                                <span class="glyphicon glyphicon-chevron-right"></span>
+                            </a>
+                        </div>
+                    </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
