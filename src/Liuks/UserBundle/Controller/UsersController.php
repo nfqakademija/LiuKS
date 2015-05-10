@@ -20,9 +20,10 @@ class UsersController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->container->get('doctrine.orm.default_entity_manager');
 
-        $users = $em->getRepository('LiuksUserBundle:User')->findAll();
+        $users = $em->getRepository('LiuksUserBundle:User')
+            ->findBy([], ['gamesWon' => 'DESC', 'gamesPlayed' => 'DESC']);
 
         return $this->render(
             'LiuksUserBundle:Users:index.html.twig',
@@ -35,19 +36,24 @@ class UsersController extends Controller
     /**
      * Finds and displays a sigle user based on id
      *
-     * @Security("has_role('ROLE_ADMIN')")
+     * @Security("has_role('ROLE_USER')")
      *
      * @param $id
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function showAction($id)
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->container->get('doctrine.orm.default_entity_manager');
 
         $user = $em->getRepository('LiuksUserBundle:User')->find($id);
 
         if (!$user) {
             throw $this->createNotFoundException('This User Does Not Exists.');
+        }
+        if (false === $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')
+            && $this->getUser() != $user
+        ) {
+            throw $this->createAccessDeniedException('Unable to access this page!');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -62,21 +68,43 @@ class UsersController extends Controller
     }
 
     /**
+     * Creates a form to delete a Users entity by id.
+     *
+     * @param mixed $id The entity id
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createDeleteForm($id)
+    {
+        return $this->createFormBuilder()
+            ->setAction($this->generateUrl('users_delete', ['id' => $id]))
+            ->setMethod('DELETE')
+            ->add('submit', 'submit', ['label' => 'Delete', 'attr' => ['class' => 'btn btn-danger']])
+            ->getForm();
+    }
+
+    /**
      * Displays a form to edit an existing Users.
      *
-     * @Security("has_role('ROLE_ADMIN')")
+     * @Security("has_role('ROLE_USER')")
      *
      * @param $id
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function editAction($id)
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->container->get('doctrine.orm.default_entity_manager');
 
         $user = $em->getRepository('LiuksUserBundle:User')->find($id);
 
         if (!$user) {
             throw $this->createNotFoundException('Unable to find User.');
+        }
+
+        if (false === $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')
+            && $this->getUser() != $user
+        ) {
+            throw $this->createAccessDeniedException('Unable to access this page!');
         }
 
         $editForm = $this->createEditForm($user);
@@ -85,7 +113,7 @@ class UsersController extends Controller
         return $this->render(
             'LiuksUserBundle:Users:edit.html.twig',
             [
-                'entity' => $user,
+                'user' => $user,
                 'edit_form' => $editForm->createView(),
                 'delete_form' => $deleteForm->createView(),
             ]
@@ -94,24 +122,22 @@ class UsersController extends Controller
 
     /**
      * Creates a form to edit a Users entity.
-     * @Security("has_role('ROLE_ADMIN')")
      *
-     * @param User $entity The entity
-     *
+     * @param User $user The entity
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createEditForm(User $entity)
+    private function createEditForm(User $user)
     {
         $form = $this->createForm(
             new UsersType(),
-            $entity,
+            $user,
             [
-                'action' => $this->generateUrl('users_update', ['id' => $entity->getId()]),
+                'action' => $this->generateUrl('users_update', ['id' => $user->getId()]),
                 'method' => 'PUT',
             ]
         );
 
-        $form->add('submit', 'submit', ['label' => 'Update']);
+        $form->add('submit', 'submit', ['label' => 'Atnaujinti', 'attr' => ['class' => 'btn btn-success']]);
 
         return $form;
     }
@@ -119,21 +145,30 @@ class UsersController extends Controller
     /**
      * Edits an existing Users entity.
      *
-     * @Security("has_role('ROLE_ADMIN')")
+     * @Security("has_role('ROLE_USER')")
      *
+     * @param Request $request
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function updateAction(Request $request, $id)
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->container->get('doctrine.orm.default_entity_manager');
 
-        $entity = $em->getRepository('LiuksUserBundle:User')->find($id);
+        $user = $em->getRepository('LiuksUserBundle:User')->find($id);
 
-        if (!$entity) {
+        if (!$user) {
             throw $this->createNotFoundException('Unable to find User entity.');
         }
 
+        if (false === $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')
+            && $this->getUser() != $user
+        ) {
+            throw $this->createAccessDeniedException('Unable to access this page!');
+        }
+
         $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createEditForm($entity);
+        $editForm = $this->createEditForm($user);
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
@@ -145,7 +180,7 @@ class UsersController extends Controller
         return $this->render(
             'LiuksUserBundle:Users:edit.html.twig',
             [
-                'entity' => $entity,
+                'user' => $user,
                 'edit_form' => $editForm->createView(),
                 'delete_form' => $deleteForm->createView(),
             ]
@@ -157,6 +192,9 @@ class UsersController extends Controller
      *
      * @Security("has_role('ROLE_ADMIN')")
      *
+     * @param Request $request
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteAction(Request $request, $id)
     {
@@ -164,14 +202,20 @@ class UsersController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('LiuksUserBundle:User')->find($id);
+            $em = $this->container->get('doctrine.orm.default_entity_manager');
+            $user = $em->getRepository('LiuksUserBundle:User')->find($id);
 
-            if (!$entity) {
+            if (!$user) {
                 throw $this->createNotFoundException('Unable to find User entity.');
             }
 
-            $em->remove($entity);
+            if (false === $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')
+                && $this->getUser() != $user
+            ) {
+                throw $this->createAccessDeniedException('Unable to access this page!');
+            }
+
+            $em->remove($user);
             $em->flush();
         }
 
@@ -179,37 +223,23 @@ class UsersController extends Controller
     }
 
     /**
-     * Creates a form to delete a Users entity by id.
-     *
-     * @Security("has_role('ROLE_ADMIN')")
-     *
-     * @param mixed $id The entity id
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm($id)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('users_delete', ['id' => $id]))
-            ->setMethod('DELETE')
-            ->add('submit', 'submit', ['label' => 'Delete'])
-            ->getForm();
-    }
-
-    /**
      * Creates a view where user can chose his default table.
+     *
+     * @Security("has_role('ROLE_USER')")
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function locatorAction()
     {
-        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
-            throw $this->createAccessDeniedException('Unable to access this page!');
-        }
-
         return $this->render('LiuksUserBundle:Users:locate.html.twig');
     }
 
+    /**
+     *
+     * @Security("has_role('ROLE_USER')")
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function closestTableAction()
     {
         $request = $this->container->get('request');
@@ -232,11 +262,14 @@ class UsersController extends Controller
         );
     }
 
-    public function setDefaultTableAction(Request $request, $id)
+    /**
+     * @Security("has_role('ROLE_USER')")
+     *
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function setDefaultTableAction($id)
     {
-        if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
-            throw $this->createAccessDeniedException('Unable to access this page!');
-        }
         $em = $this->container->get('doctrine.orm.default_entity_manager');
         $table = $em->getRepository('LiuksTableBundle:Table')->find($id);
         $user = $this->getUser();
