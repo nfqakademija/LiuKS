@@ -1,22 +1,19 @@
 {% extends '::base.html.twig' %}
 
-{% block title -%}Naudotojai |{% endblock %}
+{% block title -%}Individualūs reitingai |{% endblock %}
 
 {% block body -%}
     <div class="row">
         <div class="col-md-12">
-            <h1>Naudotojai</h1>
+            <h1>Individualūs reitingai</h1>
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th>Foto</th>
-                    <th>Pilnas vardas</th>
-                    <th>El. paštas</th>
+                    <th>Vardas</th>
                     <th>Žaista</th>
                     <th>Laimėta</th>
+                    <th>Pralaimėta</th>
                     {% if is_granted('ROLE_ADMIN') %}
-                        <th>Facebook ID</th>
-                        <th>Rolės</th>
                         <th>Veiksmai</th>
                     {% endif %}
                 </tr>
@@ -24,26 +21,20 @@
                 <tbody>
                 {% for user in users %}
                     <tr>
-                        <td><a href="{{ path('users_show', { 'id': user.id }) }}"><img src="{{ user.picture }}"/></a>
-                        </td>
                         <td>{{ user.name }} {{ user.surname }}</td>
-                        <td>{{ user.email }}</td>
                         <td>{{ user.gamesPlayed }}</td>
                         <td>{{ user.gamesWon }}</td>
+                        <td>{{ user.gamesPlayed - user.gamesWon }}</td>
                         {% if is_granted('ROLE_ADMIN') %}
-                            <td>{{ user.facebookId }}</td>
-                            <td>{{ user.roles|join(', ') }}</td>
                             <td>
-                                <ul class="list-inline">
-                                    <li>
-                                        <a href="{{ path('users_edit', { 'id': user.id }) }}"><span
-                                                    class="glyphicon glyphicon-pencil"></span></a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ path('users_show', { 'id': user.id }) }}"><span
-                                                    class="glyphicon glyphicon-chevron-right"></span></a>
-                                    </li>
-                                </ul>
+                                <div class="btn-group" role="group">
+                                    <a class="btn btn-warning" href="{{ path('users_edit', { 'id': user.id }) }}">
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                    </a>
+                                    <a class="btn btn-primary" href="{{ path('users_show', { 'id': user.id }) }}">
+                                        <span class="glyphicon glyphicon-chevron-right"></span>
+                                    </a>
+                                </div>
                             </td>
                         {% endif %}
                     </tr>
