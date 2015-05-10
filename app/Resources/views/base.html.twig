@@ -55,7 +55,7 @@
                             {{ app.user.name }} {{ app.user.surname }} <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" role="menu">
-                            <li><a href="{{ url('users_edit', {id: app.user.id}) }}">Profilis</a></li>
+                            <li><a href="{{ url('users_show', {id: app.user.id}) }}">Profilis</a></li>
                             <li><a href="{{ url('users_locator') }}">Pagrindinis stalas</a></li>
                             <li class="divider"></li>
                             <li><a href="{{ url('logout_page') }}">Atsijungti</a></li>
