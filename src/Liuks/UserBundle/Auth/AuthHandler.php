@@ -2,7 +2,6 @@
 
 namespace Liuks\UserBundle\Auth;
 
-
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,7 +39,7 @@ class AuthHandler implements AuthenticationSuccessHandlerInterface, Authenticati
             return new RedirectResponse($this->router->generate('users_locator'));
         }
 
-        return new RedirectResponse($this->router->generate('home_page'));
+        return new RedirectResponse($request->headers->get('referer'));
     }
 
     /**
@@ -53,6 +52,6 @@ class AuthHandler implements AuthenticationSuccessHandlerInterface, Authenticati
     {
         $request->getSession()->set(SecurityContextInterface::AUTHENTICATION_ERROR, $exception);
 
-        return new RedirectResponse($this->router->generate('login_page'));
+        return new RedirectResponse($this->router->generate('home_page').'#login');
     }
 }
