@@ -1,33 +1,16 @@
 {% extends '::base.html.twig' %}
 
 {% block body %}
-    <div class="row">
-        <div class="col-md-9">
-            <h1>Sveiki atvykę</h1>
-        </div>
-        <div class="col-md-3">
-            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                {{ dump(app.user) }}
-                <a class="btn btn-primary" href="{{ url("logout_page") }}">Atsijungti</a>
-            {% else %}
-                <a href="#login" id="open_login">Login</a>
-
-                <div id="login" style="display: none;">
-                    {% include('LiuksUserBundle::login.html.twig') %}
-                </div>
-            {% endif %}
-        </div>
-    </div>
     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-        <a class="btn btn-primary" href="{{ url("users_locator") }}">Keisti pagrindinį stalą</a>
         {{ render(controller('LiuksTableBundle:Table:defaultTableShow', { 'id': app.user.defaultTable.id })) }}
+    {% else %}
+        {{ render(controller('LiuksTableBundle:Table:defaultTableShow', { 'id': 1 })) }}
     {% endif %}
 {% endblock %}
 
 {% block javascripts %}
     {% javascripts
-    '@LiuksTableBundle/Resources/public/current_table_tournament.js'
-    '@LiuksGameBundle/Resources/public/header.js' %}
+    '@LiuksTableBundle/Resources/public/current_table_tournament.js' %}
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}

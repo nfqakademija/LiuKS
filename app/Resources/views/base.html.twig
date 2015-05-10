@@ -1,29 +1,87 @@
 <!DOCTYPE html>
 <html lang="lt">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>{% block title %}{% endblock %} LiuKS Kicker</title>
+    <title>{% block title %}{% endblock %} LiuKS Kicker</title>
 
-        {% block stylesheets %}{% endblock %}
-        <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/flat-ui.min.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/jquery.bracket.min.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/jquery.fancybox.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-    </head>
-    <body>
-        <div class="container">
-            {% block body %}{% endblock %}
+    {% block stylesheets %}{% endblock %}
+    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/flat-ui.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/jquery.bracket.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/jquery.fancybox.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
+</head>
+<body>
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{{ url('home_page') }}">LiuKS</a>
         </div>
-        <script src="{{ asset('js/jquery-1.11.2.js') }}"></script>
-        <script src="{{ asset('js/bootstrap.min.js') }}"></script>
-        <script src="{{ asset('js/jquery.bracket.min.js') }}"></script>
-        <script src="{{ asset('js/jquery.fancybox.js') }}"></script>
-        <script src="{{ asset('js/array.helpers.js') }}"></script>
-        {% block javascripts %}{% endblock %}
-    </body>
+        <div class="collapse navbar-collapse" id="navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li {% if app.request.get('_route') == 'home_page' %} class="active"{% endif %}>
+                    <a href="{{ url('home_page') }}">Pradžia <span class="sr-only">(current)</span></a>
+                </li>
+                <li {% if app.request.get('_route') == 'tables' %} class="active"{% endif %}>
+                    <a href="{{ url('tables') }}">Stalai</a>
+                </li>
+                <li {% if app.request.get('_route') == 'tournaments' %} class="active"{% endif %}>
+                    <a href="{{ url('tournaments') }}">Turnyrai</a>
+                </li>
+                <li class="dropdown {% if app.request.get('_route') == 'users' or app.request.get('_route') == 'teams' %} active{% endif %}">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                        Reitingai <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="{{ url('users') }}">Individualūs</a></li>
+                        <li><a href="{{ url('teams') }}">Komandiniai</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                            {{ app.user.name }} {{ app.user.surname }} <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="{{ url('users_edit', {id: app.user.id}) }}">Profilis</a></li>
+                            <li><a href="{{ url('users_locator') }}">Pagrindinis stalas</a></li>
+                            <li class="divider"></li>
+                            <li><a href="{{ url('logout_page') }}">Atsijungti</a></li>
+                        </ul>
+                    </li>
+                {% else %}
+                    <li><a href="#login" id="open_login">Prisijungti</a></li>
+                    <div id="login" style="display: none;">
+                        {% include('LiuksUserBundle::login.html.twig') %}
+                    </div>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    {% block body %}{% endblock %}
+</div>
+<script src="{{ asset('js/jquery-1.11.2.js') }}"></script>
+<script src="{{ asset('js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('js/jquery.bracket.min.js') }}"></script>
+<script src="{{ asset('js/jquery.fancybox.js') }}"></script>
+<script src="{{ asset('js/array.helpers.js') }}"></script>
+{% javascripts '@LiuksGameBundle/Resources/public/header.js' %}
+<script src="{{ asset_url }}"></script>
+{% endjavascripts %}
+{% block javascripts %}{% endblock %}
+</body>
 </html>
