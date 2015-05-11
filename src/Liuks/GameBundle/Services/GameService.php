@@ -106,7 +106,7 @@ class GameService extends ContainerAware
                 if ($competitors[0]->getMatchup() == $competitors[1]->getMatchup()) {
                     $game = new Match();
                     $game->setTournament($tournament);
-                    $game->setRound($tournament->getCurrentRound());
+                    $game->setRound($round);
                     $game->setMatchup($competitors[0]->getMatchup());
                     $game->setCompetitor1($competitors[0]);
                     $game->setCompetitor2($competitors[1]);
