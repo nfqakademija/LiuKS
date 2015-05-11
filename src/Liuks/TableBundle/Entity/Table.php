@@ -24,6 +24,13 @@ class Table
     /**
      * @var string
      *
+     * @ORM\Column(name="name", type="string", length=50)
+     */
+    private $name;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="address", type="string", length=255)
      */
     private $address;
@@ -485,5 +492,28 @@ class Table
         $this->lastDataUpdate = $lastDataUpdate;
 
         return $this;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return Table
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }
