@@ -4,42 +4,45 @@
 
 {% block body -%}
     {{ include('LiuksTableBundle:Table:tableShowBody.html.twig', {tools: true}) }}
-    <div class="row">
-        <div class="col-md-12">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th>Laikas</th>
-                    <th>Komanda A</th>
-                    <th>Komanda B</th>
-                    <th>Rezultatas</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for game in games %}
-                    <tr>
-                        <td>
-                            {{ game.startTime|date('H:i') }}
-                            - {{ game.endTime == 0 ? 'TBD' : game.endTime|date('H:i') }}
-                        </td>
-                        <td>
+    <ul class="list-group row">
+        {% for game in games %}
+            <li class="list-group-item col-xs-12 col-sm-4 {{ loop.index % 2 == 0 ? 'bg-success' : '' }}">
+                <div class="row">
+                    <div class="col-xs-12 col-md-12 text-center">
+                        {{ game.startTime|date('H:i') }}
+                        - {{ game.endTime == 0 ? 'TBD' : game.endTime|date('H:i') }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 text-left">
+                        <h6>
                             {{ game.user(0) is empty ? 'Svečias' : game.user(0).getName() }}
                             ir {{ game.user(1) is empty ? 'Svečias' : game.user(1).getName() }}
-                        </td>
-                        <td>
+                        </h6>
+                    </div>
+                    <div class="col-xs-12 text-center">
+                        <div class="media">
+                            <div class="media-left media-middle">
+                                <h5>{{ game.goals(0) }}</h5>
+                            </div>
+                            <div class="media-body">
+                                <h4>VS</h4>
+                            </div>
+                            <div class="media-right media-middle">
+                                <h5>{{ game.goals(1) }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 text-right">
+                        <h6>
                             {{ game.user(2) is empty ? 'Svečias' : game.user(2).getName() }}
                             ir {{ game.user(3) is empty ? 'Svečias' : game.user(3).getName() }}
-                        </td>
-                        <td> {{ game.goals(0) }} : {{ game.goals(1) }} </td>
-                    </tr>
-                {% endfor %}
-                <tr>
-                    <td colspan="4"><a href="#">Rezervuoti</a></td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+                        </h6>
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
 {% endblock %}
 
 {% block javascripts %}

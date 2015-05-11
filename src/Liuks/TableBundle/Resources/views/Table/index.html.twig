@@ -5,57 +5,36 @@
 {% block body -%}
     <div class="row">
         <div class="col-md-12">
-            <h1>Stalai</h1>
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th>Adresas</th>
-                    <th>Miestas</th>
-                    <th>Prieinamumas</th>
-                    <th>Savininkas</th>
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <th>API</th>
-                        <th>Privatus?</th>
-                        <th>Išjungtas?</th>
-                    {% endif %}
-                    <th>Veiksmai</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for table in tables %}
-                    <tr>
-                        <td>{{ table.address }}</td>
-                        <td>{{ table.city }}</td>
-                        <td>{{ table.availableFrom|date('H:i') }} - {{ table.availableTo|date('H:i') }}</td>
-                        <td>{{ table.owner.email }}</td>
-                        {% if is_granted('ROLE_ADMIN') %}
-                            <td>{{ table.api }}</td>
-                            <td>{{ table.private == 1 ? 'Taip' : 'Ne' }}</td>
-                            <td>{{ table.disabled == 1 ? 'Taip' : 'Ne' }}</td>
-                        {% endif %}
-                        <td>
-                            <ul class="list-inline">
-                                {% if table.owner == app.user or is_granted('ROLE_ADMIN') %}
-                                    <li>
-                                        <a href="{{ path('table_edit', { 'id': table.id }) }}"><span
-                                                    class="glyphicon glyphicon-pencil"></span></a>
-                                    </li>
-                                {% endif %}
-                                <li>
-                                    <a href="{{ path('table_show', { 'id': table.id }) }}"><span
-                                                class="glyphicon glyphicon-chevron-right"></span></a>
-                                </li>
-                            </ul>
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                <a class="btn btn-success" href="{{ path('table_new') }}">
-                    Turi Stalą? Registruok!
-                </a>
+                <div class="btn-group" role="group" aria-label="...">
+                    <a class="btn btn-success btn-lg btn-block" href="{{ path('table_new') }}">
+                        Turi Stalą? Registruok!
+                    </a>
+                </div>
             {% endif %}
+            <h1>Stalai</h1>
         </div>
+    </div>
+    <div class="list-group row">
+        {% for table in tables %}
+            <a href="{{ url('table_show', {id: table.id}) }}" class="list-group-item col-xs-12 col-sm-6">
+                <div>
+                    <h6>{{ table.name }}</h6>
+                    <ul class="list-unstyled">
+                        <li></li>
+                        <li>{{ table.address }}, {{ table.city }}</li>
+                        <li>{{ table.availableFrom|date('H:i') }} - {{ table.availableTo|date('H:i') }}</li>
+                        <li>{{ table.owner.email }}</li>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li>
+                                {{ table.private == 1 ? '<span class="glyphicon glyphicon-user"></span>' : '' }}
+                                {{ table.disabled == 1 ? '<span class="glyphicon glyphicon-off"></span>' : '' }}
+                                {{ table.free == 1 ? '<span class="glyphicon glyphicon-play text-success"></span>' : '<span class="glyphicon glyphicon-stop text-danger"></span>' }}
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </a>
+        {% endfor %}
     </div>
 {% endblock %}

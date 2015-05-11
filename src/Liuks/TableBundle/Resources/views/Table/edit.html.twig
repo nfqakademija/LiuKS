@@ -3,46 +3,59 @@
 {% block title -%}Stalo redagavimas |{% endblock %}
 
 {% block body -%}
-    <h1>Stalo redagavimas</h1>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="btn-group" role="group">
+                <a class="btn btn-primary" href="{{ path('tables') }}">
+                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                </a>
+                <a class="btn btn-danger" href="#delete_popup" id="delete-btn">
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                </a>
+            </div>
+            <div id="delete_popup" style="display: none;">
+                <p>Ar tikrai norite ištrinti šį stalą?</p>
 
-    {{ form_start(form) }}
-    {{ form_errors(form) }}
+                <div class="text-center">
+                    {{ form_start(delete_form) }}
+                    {{ form_row(delete_form.submit) }}
+                    {{ form_end(delete_form) }}
+                </div>
+            </div>
+            <h1 class="text-center">Stalo redagavimas</h1>
 
-    {{ form_row(form.address) }}
-    {{ form_row(form.city) }}
-    {{ form_row(form.lat) }}
-    {{ form_row(form.long) }}
-    {{ form_row(form.availableFrom) }}
-    {{ form_row(form.availableTo) }}
-    {{ form_row(form.api) }}
-    {% if is_granted('ROLE_ADMIN') %}
-        {{ form_row(form.disabled) }}
-    {% endif %}
-    {{ form_row(form.private) }}
-    {{ form_row(form.group) }}
-    {{ form_end(form) }}
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
 
-    <ul class="list-inline">
-        <li><a href="{{ path('tables') }}"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></a>
-        </li>
-        <li>{{ form(delete_form) }}</li>
-    </ul>
+            {{ form_row(form.address) }}
+            {{ form_row(form.city) }}
+            {{ form_row(form.lat) }}
+            {{ form_row(form.long) }}
+            {{ form_row(form.availableFrom) }}
+            {{ form_row(form.availableTo) }}
+            {{ form_row(form.api) }}
+            {% if is_granted('ROLE_ADMIN') %}
+                {{ form_row(form.disabled) }}
+            {% endif %}
+            {{ form_row(form.private) }}
+            {{ form_row(form.group.name) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
 {% endblock %}
 
 {% block javascripts %}
     <script>
-        (function ()
-        {
-            groupToggle();
-        })();
+        var groupName = document.getElementById('liuks_tablebundle_table_group_name').parentElement;
+        groupName.classList.add('hidden');
 
         function groupToggle()
         {
             if (document.getElementById('liuks_tablebundle_table_private').checked) {
-                document.getElementById('liuks_tablebundle_table_group').parentElement.setAttribute('class', '');
+                groupName.classList.remove('hidden');
             }
             else {
-                document.getElementById('liuks_tablebundle_table_group').parentElement.setAttribute('class', 'hidden');
+                groupName.classList.add('hidden');
             }
         }
     </script>
