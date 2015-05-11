@@ -13,3 +13,9 @@
 .label-primary {
     background-color: #1ABC9C;
 }
+
+.form-inline select.form-control {
+    display: inline-block;
+    width: auto;
+    vertical-align: middle;
+}
