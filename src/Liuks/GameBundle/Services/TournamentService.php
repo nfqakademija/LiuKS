@@ -189,7 +189,7 @@ class TournamentService extends ContainerAware
      */
     public function getTournamentData($tournament)
     {
-        $teams = [];
+        $teams = [['', '']];
         $results = [];
         if ($tournament) {
             $teams = $this->getTeams($tournament);
@@ -211,7 +211,7 @@ class TournamentService extends ContainerAware
     {
         $em = $this->container->get('doctrine.orm.default_entity_manager');
         $competitors = $em->getRepository('LiuksGameBundle:Competitor')->findBy(['tournament' => $tournament]);
-        $teams = [];
+        $teams = [['', '']];
         if ($competitors) {
             foreach ($competitors as $competitor) {
                 if (!isset($teams[$competitor->getStartPos()])) {
