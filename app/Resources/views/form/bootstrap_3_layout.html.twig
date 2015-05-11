@@ -169,6 +169,7 @@
         {% endif %}
         <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
             {{- widget|raw -}}
+            <span class="icons"><span class="icon-unchecked"></span><span class="icon-checked"></span></span>
             {{- label is not sameas(false) ? label|trans({}, translation_domain) -}}
         </label>
     {% endif %}
