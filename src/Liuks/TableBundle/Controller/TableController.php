@@ -105,7 +105,7 @@ class TableController extends Controller
                 'attr' => ['class' => 'form-horizontal']
             ]
         )
-            ->add('submit', 'submit', ['label' => 'Sukurti']);
+            ->add('submit', 'submit', ['label' => 'Sukurti', 'attr' => ['class' => 'btn btn-success']]);
 
         return $form;
     }
@@ -146,7 +146,7 @@ class TableController extends Controller
             throw $this->createNotFoundException('Ooops, it looks like this table is in another dimension...');
         }
 
-        $games = $em->getRepository('LiuksGameBundle:Game')->findBy(['table' => $table]);
+        $games = $em->getRepository('LiuksGameBundle:Game')->findBy(['table' => $table], ['endTime' => 'DESC'], 20);
 
         $game = $this->get('game_utils.service')->getCurrentGame($id);
         $hasTournament = $this->get('table_actions.service')->hasTournamentRegistered($id);
@@ -176,7 +176,7 @@ class TableController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('table_delete', ['id' => $id]))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', ['label' => 'Ištrinti'])
+            ->add('submit', 'submit', ['label' => 'Ištrinti', 'attr' => ['class' => 'btn btn-danger']])
             ->getForm();
     }
 
@@ -232,7 +232,7 @@ class TableController extends Controller
             ]
         );
 
-        $form->add('submit', 'submit', ['label' => 'Atnaujinti']);
+        $form->add('submit', 'submit', ['label' => 'Atnaujinti', 'attr' => ['class' => 'btn btn-success']]);
 
         return $form;
     }
