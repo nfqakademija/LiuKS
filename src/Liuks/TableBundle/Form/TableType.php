@@ -16,16 +16,32 @@ class TableType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('address')
-            ->add('city')
-            ->add('lat')
-            ->add('long')
-            ->add('availableFrom')
-            ->add('availableTo')
-            ->add('api')
-            ->add('disabled', null, ['required' => false, 'attr' => ['checked' => 'checked']])
-            ->add('private', null, ['attr' => ['onclick' => 'groupToggle()'], 'required' => false])
-            ->add('group', new GroupType(), ['required' => false]);
+            ->add('address', 'text', ['label' => 'Adresas'])
+            ->add('city', 'text', ['label' => 'Miestas'])
+            ->add('lat', 'number', ['label' => 'Platuma'])
+            ->add('long', 'number', ['label' => 'Ilguma'])
+            ->add('availableFrom', 'time', ['label' => 'Dirba Nuo'])
+            ->add('availableTo', 'time', ['label' => 'Dirba iki'])
+            ->add('api', 'url', ['label' => 'API'])
+            ->add(
+                'disabled',
+                'checkbox',
+                [
+                    'label' => 'Išjungtas',
+                    'required' => false,
+                    'attr' => ['class' => 'custom-checkbox', 'checked' => 'checked']
+                ]
+            )
+            ->add(
+                'private',
+                'checkbox',
+                [
+                    'label' => 'Privatus?',
+                    'attr' => ['class' => 'custom-checkbox', 'onclick' => 'groupToggle()'],
+                    'required' => false
+                ]
+            )
+            ->add('group', new GroupType(), ['label' => 'Grupė', 'required' => false]);
     }
 
     /**
