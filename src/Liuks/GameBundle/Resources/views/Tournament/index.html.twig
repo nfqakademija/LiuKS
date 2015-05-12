@@ -5,49 +5,54 @@
 {% block body -%}
     <div class="row">
         <div class="col-md-12">
-            <h1>Turnyrai</h1>
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th>Pavadinimas</th>
-                    <th>Organizatorius</th>
-                    <th>Stalas</th>
-                    <th>Pradžia</th>
-                    <th>Pabaiga</th>
-                    <th>Veiksmai</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for tournament in tournaments %}
-                    <tr>
-                        <td>{{ tournament.name }}</td>
-                        <td>{{ tournament.organizer.name }}</td>
-                        <td>{{ tournament.table.address }}</td>
-                        <td>{{ tournament.startTime|date('Y-m-d H:i') }}</td>
-                        <td>{{ tournament.endTime == 0 ? '-' : tournament.endTime|date('H:i') }}</td>
-                        <td>
-                            <ul class="list-inline">
-                                {% if tournament.table.owner == app.user or is_granted('ROLE_ADMIN') %}
-                                    <li>
-                                        <a href="{{ path('tournament_edit', { 'id': tournament.id }) }}"><span
-                                                    class="glyphicon glyphicon-pencil"></span></a>
-                                    </li>
-                                {% endif %}
-                                <li>
-                                    <a href="{{ path('tournament_show', { 'id': tournament.id }) }}"><span
-                                                class="glyphicon glyphicon-chevron-right"></span></a>
-                                </li>
-                            </ul>
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                <a class="btn btn-success" href="{{ path('tournament_new') }}">
-                    Naujas Turnyras
-                </a>
+                <div class="btn-group" role="group">
+                    <a class="btn btn-success btn-lg btn-block" href="{{ path('tournament_new') }}">
+                        Sukurk naują turnyrą!
+                    </a>
+                </div>
             {% endif %}
+            <h1>Turnyrai</h1>
         </div>
+    </div>
+    <div class="list-group row">
+        {% for tournament in tournaments %}
+            <a href="{{ url('tournament_show', {id: tournament.id}) }}" class="list-group-item col-xs-12">
+                <div>
+                    <h6>
+                        {{ tournament.name }}
+                        <small>{{ tournament.table.address }}, {{ tournament.table.city }}</small>
+                    </h6>
+                    <ul class="list-unstyled">
+                        {% if tournament.endTime == 0 %}
+                            <li>
+                                Turnyras prasidės už
+                                {% set diff = date().diff(date(tournament.startTime)) %}
+                                {% if diff.days > 1 %}
+                                    {{ diff.days }} dienų
+                                {% else %}
+                                    {{ diff.h }} val.
+                                {% endif %}
+                            </li>
+                        {% endif %}
+                        <li>
+                            <span class="glyphicon glyphicon-time"></span>
+                            {{ tournament.startTime|date('Y-m-d H:i') }}
+                            {% if tournament.endTime != 0 %}
+                                - {{ tournament.endTime|date('Y-m-d H:i') }}
+                            {% endif %}
+                        </li>
+                        <li>
+                            <span class="glyphicon glyphicon-envelope"></span>
+                            {{ tournament.organizer.email }}
+                        </li>
+                        <li>
+                            <span class="glyphicon glyphicon-user"></span>
+                            {{ tournament.competitors }}
+                        </li>
+                    </ul>
+                </div>
+            </a>
+        {% endfor %}
     </div>
 {% endblock %}

@@ -3,17 +3,22 @@
 {% block title -%}Turnyro kūrimas |{% endblock %}
 
 {% block body -%}
-    <h1>Turnyro kūrimas</h1>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="btn-group" role="group">
+                <a class="btn btn-primary" href="{{ path('tournaments') }}">
+                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                </a>
+            </div>
+            <h1 class="text-center">Turnyro kūrimas</h1>
 
-    {{ form_start(form) }}
-    {{ form_errors(form) }}
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
 
-    {{ form_row(form.name) }}
-    {{ form_row(form.table) }}
-    {{ form_end(form) }}
-
-    <ul class="list-inline">
-        <li><a href="{{ path('tournaments') }}"><span class="glyphicon glyphicon-chevron-left"
-                                                      aria-hidden="true"></span>Atgal</a></li>
-    </ul>
+            {{ form_row(form.name) }}
+            {{ form_row(form.startTime) }}
+            {{ form_row(form.table) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
 {% endblock %}

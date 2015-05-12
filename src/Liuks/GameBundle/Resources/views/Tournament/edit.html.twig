@@ -3,17 +3,33 @@
 {% block title -%}Turnyro redagavimas |{% endblock %}
 
 {% block body -%}
-    <h1>Turnyro redagavimas</h1>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="btn-group" role="group">
+                <a class="btn btn-primary" href="{{ path('tournaments') }}">
+                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                </a>
+                <a class="btn btn-danger" href="#delete_popup" id="delete-btn">
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                </a>
+            </div>
+            <div id="delete_popup" style="display: none;">
+                <p>Ar tikrai norite ištrinti šį turnyrą?</p>
 
-    {{ form_start(form) }}
-    {{ form_errors(form) }}
-    {{ form_row(form.name) }}
-    {{ form_row(form.table) }}
-    {{ form_end(form) }}
+                <div class="text-center">
+                    {{ form_start(delete_form) }}
+                    {{ form_row(delete_form.submit) }}
+                    {{ form_end(delete_form) }}
+                </div>
+            </div>
+            <h1>Turnyro redagavimas</h1>
 
-    <ul class="list-inline">
-        <li><a href="{{ path('tournaments') }}"><span class="glyphicon glyphicon-chevron-left"
-                                                      aria-hidden="true"></span></a></li>
-        <li>{{ form(delete_form) }}</li>
-    </ul>
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+            {{ form_row(form.name) }}
+            {{ form_row(form.startTime) }}
+            {{ form_row(form.table) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
 {% endblock %}
