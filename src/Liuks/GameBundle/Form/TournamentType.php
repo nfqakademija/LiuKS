@@ -3,6 +3,7 @@
 namespace Liuks\GameBundle\Form;
 
 use Liuks\TableBundle\Entity\Table;
+use Liuks\TableBundle\Form\Transformers\TimeTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -16,11 +17,16 @@ class TournamentType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name')
+            ->add('name', 'text', ['label' => 'Pavadinimas'])
+            ->add(
+                $builder->create('startTime', 'datetime', ['label' => 'Pradžios laikas'])
+                    ->addModelTransformer(new TimeTransformer('Y-m-d H:i'))
+            )
             ->add(
                 'table',
                 'entity',
                 [
+                    'label' => 'Stalas',
                     'class' => 'Liuks\TableBundle\Entity\Table',
                     'property' => 'address',
                     'empty_value' => 'Pasirinkite stalą',
