@@ -25,3 +25,29 @@ h4 small, h5 small, h6 small {
     color: #95A5A6;
     display: block;
 }
+
+div.jQBracket .tools span {
+    line-height: 18px;
+}
+
+div.jQBracket .team.win div.score {
+    color: #27AE60;
+}
+
+div.jQBracket .team.lose div.score {
+    color: #C0392B;
+}
+
+div.jQBracket .highlightWinner .bubble {
+    background-color: #F1C40F;
+}
+
+div.jQBracket .highlightLoser .bubble {
+    background-color: #BDC3C7;
+}
+
+div.jQBracket .team div.label {
+    white-space: normal;
+    height: 30px;
+    width: 80px;
+}
