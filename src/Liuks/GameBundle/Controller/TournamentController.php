@@ -78,7 +78,7 @@ class TournamentController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('tournament_delete', ['id' => $id]))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', ['label' => 'Ištrinti'])
+            ->add('submit', 'submit', ['label' => 'Ištrinti', 'attr' => ['class' => 'btn btn-danger']])
             ->getForm();
     }
 
@@ -91,13 +91,17 @@ class TournamentController extends Controller
         $em = $this->get('doctrine.orm.default_entity_manager');
 
         if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
-            $tournaments = $em->getRepository('LiuksGameBundle:Tournament')->findAll();
+            $tournaments = $em->getRepository('LiuksGameBundle:Tournament')->findBy(
+                [],
+                ['endTime' => 'ASC', 'startTime' => 'ASC']
+            );
         } else {
             if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
                 $tournaments = $em->createQuery(
                     'SELECT t FROM LiuksGameBundle:Tournament t
                 JOIN t.table table
-                WHERE table.owner = :owner OR table.private = 0'
+                WHERE table.owner = :owner OR table.private = 0
+                ORDER BY t.endTime ASC, t.startTime ASC'
                 )
                     ->setParameter('owner', $this->getUser())
                     ->getResult();
@@ -105,7 +109,8 @@ class TournamentController extends Controller
                 $tournaments = $em->createQuery(
                     'SELECT t FROM LiuksGameBundle:Tournament t
                 JOIN t.table table
-                WHERE table.private = 0'
+                WHERE table.private = 0
+                ORDER BY t.endTime ASC, t.startTime ASC'
                 )
                     ->getResult();
             }
@@ -130,9 +135,10 @@ class TournamentController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->get('doctrine.orm.default_entity_manager');
+            $tournament->setCompetitors(0);
+            $tournament->setCurrentRound(0);
             $tournament->setEndTime(0);
-            $tournament->setStartTime(0);
             $tournament->setOrganizer($this->getUser());
             $em->persist($tournament);
             $em->flush($tournament);
@@ -167,7 +173,7 @@ class TournamentController extends Controller
                 'attr' => ['class' => 'form-horizontal']
             ]
         )
-            ->add('submit', 'submit', ['label' => 'Sukurti']);
+            ->add('submit', 'submit', ['label' => 'Sukurti', 'attr' => ['class' => 'btn btn-success']]);
 
         return $form;
     }
@@ -244,7 +250,7 @@ class TournamentController extends Controller
             ]
         );
 
-        $form->add('submit', 'submit', ['label' => 'Atnaujinti']);
+        $form->add('submit', 'submit', ['label' => 'Atnaujinti', 'attr' => ['class' => 'btn btn-success']]);
 
         return $form;
     }
@@ -281,7 +287,7 @@ class TournamentController extends Controller
         if ($editForm->isValid()) {
             $em->flush($tournament);
 
-            return $this->redirect($this->generateUrl('tournament_edit', ['id' => $id]));
+            return $this->redirect($this->generateUrl('tournament_show', ['id' => $id]));
         }
 
         return $this->render(
