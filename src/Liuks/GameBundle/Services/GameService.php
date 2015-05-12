@@ -189,12 +189,14 @@ class GameService extends ContainerAware
     {
         $em = $this->container->get('doctrine.orm.default_entity_manager');
         $game = $em->getRepository('LiuksGameBundle:Game')->findOneBy(['table' => $table, 'endTime' => 0]);
-        $gameLength = $time - $game->getStartTime();
-        if ($gameLength > 1200) {
-            $em->remove($game);
-        } elseif ($gameLength > 600 && $game->getGoals1() < 5 && $game->getGoals2() < 5) {
-            $em->remove($game);
+        if ($game) {
+            $gameLength = $time - $game->getStartTime();
+            if ($gameLength > 1200) {
+                $em->remove($game);
+            } elseif ($gameLength > 600 && $game->getGoals1() < 5 && $game->getGoals2() < 5) {
+                $em->remove($game);
+            }
+            $em->flush($game);
         }
-        $em->flush($game);
     }
 }
