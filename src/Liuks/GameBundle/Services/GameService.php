@@ -5,6 +5,7 @@ namespace Liuks\GameBundle\Services;
 use Liuks\GameBundle\Entity\Game;
 use Liuks\GameBundle\Entity\Match;
 use Liuks\GameBundle\Events\GameStatusEvent;
+use Liuks\TableBundle\Entity\Table;
 use Symfony\Component\DependencyInjection\ContainerAware;
 
 class GameService extends ContainerAware
@@ -176,5 +177,24 @@ class GameService extends ContainerAware
         }
 
         return $game;
+    }
+
+    /**
+     * Remove games that are taking longer than 20 minutes
+     *
+     * @param Table $table
+     * @param $time
+     */
+    public function removeTimedOutGames($table, $time)
+    {
+        $em = $this->container->get('doctrine.orm.default_entity_manager');
+        $game = $em->getRepository('LiuksGameBundle:Game')->findOneBy(['table' => $table, 'endTime' => 0]);
+        $gameLength = $time - $game->getStartTime();
+        if ($gameLength > 1200) {
+            $em->remove($game);
+        } elseif ($gameLength > 600 && $game->getGoals1() < 5 && $game->getGoals2() < 5) {
+            $em->remove($game);
+        }
+        $em->flush($game);
     }
 }
