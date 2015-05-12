@@ -20,6 +20,8 @@ class TableService extends ContainerAware
                 $this->handleTableAction($table, $record);
             }
             $table->setLastEventId(end($records)->id);
+        } else {
+            $this->container->get('game_utils.service')->removeTimedOutGames($table, time());
         }
 
         return $table;
@@ -38,6 +40,8 @@ class TableService extends ContainerAware
             case "TableShake":
                 if ($table->getFree() && ($table->getLastShake() == 0 || $action_time - $table->getLastShake() >= 60)) {
                     $table->setLastShake($action_time);
+                } elseif (!$table->getFree()) {
+                    $this->container->get('game_utils.service')->removeTimedOutGames($table, $action_time);
                 }
                 break;
             case "AutoGoal":
