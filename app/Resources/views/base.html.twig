@@ -74,14 +74,15 @@
         </nav>
     </header>
     {% block body %}{% endblock %}
-<script src="{{ asset('js/jquery-1.11.2.js') }}"></script>
-<script src="{{ asset('js/bootstrap.min.js') }}"></script>
-<script src="{{ asset('js/jquery.bracket.min.js') }}"></script>
-<script src="{{ asset('js/jquery.fancybox.js') }}"></script>
-<script src="{{ asset('js/array.helpers.js') }}"></script>
-{% javascripts '@LiuksGameBundle/Resources/public/header.js' %}
-<script src="{{ asset_url }}"></script>
-{% endjavascripts %}
+    {% javascripts
+    'js/jquery-1.11.2.js'
+    'js/bootstrap.min.js'
+    'js/jquery.bracket.min.js'
+    'js/jquery.fancybox.js'
+    'js/array.helpers.js'
+    '@LiuksGameBundle/Resources/public/header.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 {% block javascripts %}{% endblock %}
 </body>
 </html>
