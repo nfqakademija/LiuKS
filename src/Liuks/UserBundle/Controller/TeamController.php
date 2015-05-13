@@ -254,20 +254,22 @@ class TeamController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
-            $player = $em->getRepository('LiuksUserBundle:User')->
-            findOneBy(['email' => $team->getPlayer()->getEmail()]);
-
+            $player = null;
+            if ($team->getPlayer()) {
+                $player = $em->getRepository('LiuksUserBundle:User')->
+                findOneBy(['email' => $team->getPlayer()->getEmail()]);
+            }
             $team->setPlayer($player);
             $em->flush($team);
 
-            return $this->redirect($this->generateUrl('teams_edit', ['id' => $id]));
+            return $this->redirect($this->generateUrl('teams_show', ['id' => $id]));
         }
 
         return $this->render(
             'LiuksUserBundle:Team:edit.html.twig',
             [
                 'team' => $team,
-                'edit_form' => $editForm->createView(),
+                'form' => $editForm->createView(),
                 'delete_form' => $deleteForm->createView(),
             ]
         );
