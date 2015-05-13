@@ -105,7 +105,7 @@ class TournamentController extends Controller
         if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
             $tournaments = $em->getRepository('LiuksGameBundle:Tournament')->findBy(
                 [],
-                ['endTime' => 'ASC', 'startTime' => 'ASC']
+                ['startTime' => 'DESC']
             );
         } else {
             if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
@@ -113,7 +113,7 @@ class TournamentController extends Controller
                     'SELECT t FROM LiuksGameBundle:Tournament t
                 JOIN t.table table
                 WHERE table.owner = :owner OR table.private = 0
-                ORDER BY t.endTime ASC, t.startTime ASC'
+                ORDER BY t.startTime DESC'
                 )
                     ->setParameter('owner', $this->getUser())
                     ->getResult();
@@ -122,7 +122,7 @@ class TournamentController extends Controller
                     'SELECT t FROM LiuksGameBundle:Tournament t
                 JOIN t.table table
                 WHERE table.private = 0
-                ORDER BY t.endTime ASC, t.startTime ASC'
+                ORDER BY t.startTime DESC'
                 )
                     ->getResult();
             }
@@ -185,7 +185,11 @@ class TournamentController extends Controller
                 'attr' => ['class' => 'form-horizontal']
             ]
         )
-            ->add('submit', 'submit', ['label' => 'Sukurti', 'attr' => ['class' => 'btn btn-success']]);
+            ->add(
+                'submit',
+                'submit',
+                ['label' => 'Sukurti', 'attr' => ['class' => 'btn btn-success btn-lg btn-block']]
+            );
 
         return $form;
     }
