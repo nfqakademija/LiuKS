@@ -3,23 +3,46 @@
 {% block title -%} Turnyras {{ tournament.name }} |{% endblock %}
 
 {% block body -%}
+    <main>
+        <div class="jumbotron panel-heading">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <strong>
+                            <a href="{{ path('table_show', {'id': tournament.table.id}) }}">
+                                "{{ tournament.table.name }}"
+                                {{ tournament.table.address }}, {{ tournament.table.city }}
+                            </a>
+                        </strong>
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="btn-group" role="group" aria-label="...">
-                <a class="btn btn-primary" href="{{ path('tournaments') }}">
-                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                </a>
-                {% if is_granted('IS_AUTHENTICATED_FULLY') and (is_granted('ROLE_ADMIN') or app.user == tournament.organizer) %}
-                    <a class="btn btn-warning" href="{{ path('tournament_edit', {id: tournament.id}) }}">
-                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                        <h3> "{{ tournament.name }}" </h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div id="actions" class="row text-center">
+                {% set canEdit = (is_granted('IS_AUTHENTICATED_FULLY') and (is_granted('ROLE_ADMIN') or app.user == tournament.organizer)) %}
+                <div class="{{ canEdit ? 'col-xs-4' : 'col-xs-12 col-md-offset-4 col-md-4' }} ">
+                    <a class="btn btn-primary btn-block" href="{{ path('tournaments') }}">
+                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
                     </a>
-                    <a class="btn btn-danger" href="#delete_popup" id="delete-btn">
-                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                    </a>
+                </div>
+                {% if canEdit %}
+                    <div class="col-xs-4">
+                        <a class="btn btn-warning btn-block" href="{{ path('tournament_edit', {id: tournament.id}) }}">
+                            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                        </a>
+                    </div>
+                    <div class="col-xs-4">
+                        <a class="btn btn-danger btn-block" href="#delete_popup" id="delete-btn">
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        </a>
+                    </div>
                 {% endif %}
             </div>
-            {% if is_granted('IS_AUTHENTICATED_FULLY') and (is_granted('ROLE_ADMIN') or app.user == tournament.organizer) %}
+            {% if canEdit %}
                 <div id="delete_popup" style="display: none;">
                     <p>Ar tikrai norite ištrinti šį turnyrą?</p>
 
@@ -30,114 +53,176 @@
                     </div>
                 </div>
             {% endif %}
-            <h1>
-                {{ tournament.name }}
-                <small>
-                    <a href="{{ path('table_show', {'id': tournament.table.id}) }}">
-                        <span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span>
-                        "{{ tournament.table.name }}"
-                        {{ tournament.table.address }}, {{ tournament.table.city }}
-                    </a>
-                </small>
-            </h1>
-            <p>
-                <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
-                {{ tournament.organizer.email }}
-            </p>
         </div>
-    </div>
-    <div id="tournament-info" class="row"
-         data-url="{{ url('tournament_show', {'id': tournament.id}) }}"
-         data-dataurl="{{ url('table_status', {'id': tournament.table.id}) }}">
-        <div class="col-md-12">
-            <h5>
-                {% if date(tournament.startTime) > date() and tournament.endTime == 0 %}
-                    <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
-                    Turnyras prasidės už
-                    {% set diff = date().diff(date(tournament.startTime)) %}
-                    {% if diff.days > 1 %}
-                        {{ diff.days }} dienų
-                    {% elseif diff.h > 1 %}
-                        {{ diff.h }} val.
-                    {% else %}
-                        {{ diff.i }} min.
-                    {% endif %}
-                {% elseif date(tournament.startTime) < date() and tournament.endTime == 0 %}
-                    Šiuo metu vyksta turnyras
-                {% else %}
-                    <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
-                    {{ tournament.startTime|date('Y-m-d H:i') }} - {{ tournament.endTime|date('Y-m-d H:i') }}
-                {% endif %}
-            </h5>
-            {% if (date(tournament.startTime) <= date() and tournament.endTime == 0)
-            or (is_granted('ROLE_ADMIN') or app.user == tournament.organizer) %}
-                {% if not game == NULL %}
-                    <div id="match">
-                        <h3 class="text-center">{{ game.getGoals(0) }} : {{ game.getGoals(1) }}</h3>
-                        <table class="table table-striped text-center">
-                            <tr>
-                                <td>{{ game.competitor1.team.name }}</td>
-                            </tr>
-                            <tr>
-                                <td>VS</td>
-                            </tr>
-                            <tr>
-                                <td>{{ game.competitor2.team.name }}</td>
-                            </tr>
-                        </table>
-                    </div>
-                {% endif %}
-                <div id="tournament"
-                     data-url="{{ url('tournament_update_from_json', {'id': tournament.id}) }}"
-                     data-data='{{ data }}'>
-                </div>
-            {% elseif not isCompetitor %}
-                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                    <h3>Prisijunkite prie turnyro</h3>
-                    <div class="list-group">
-                        <a href="#new_team" id="create_popup" class="list-group-item">Nauja komanda</a>
-                        {% for competitor in competitors %}
-                            {% if competitor.team.player == null %}
-                                <a href="#" class="play list-group-item"
-                                   data-url="{{ url('tournament_add_player', {id: tournament.id }) }}"
-                                   data-team="{{ competitor.team.id }}">
-                                    {{ competitor.team.captain.name }} {{ competitor.team.captain.surname }} komanda
-                                </a>
+        <div id="tournament-info" class="container"
+             data-url="{{ url('tournament_show', {'id': tournament.id}) }}"
+             data-dataurl="{{ url('table_status', {'id': tournament.table.id}) }}">
+            <div class="row">
+                <div class="col-md-12">
+                    <h4 class="text-center">
+                        {% if date(tournament.startTime) > date() and tournament.endTime == 0 %}
+                            Turnyras prasidės už <br>
+                            <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+                            {% set diff = date().diff(date(tournament.startTime)) %}
+                            {% if diff.d > 0 %}
+                                {{ diff.d }} d.
                             {% endif %}
-                        {% endfor %}
-                    </div>
-                    <div id="popups" style="display: none;">
-                        <div id="new_team">
-                            <form>
-                                <div class="form-group">
-                                    <h4 style="margin: 0">Įveskite komandos pavadinimą</h4>
+                            {% if diff.h > 0 %}
+                                {{ diff.h }} val.
+                            {% endif %}
+                            {{ diff.i }} min.
+                        {% elseif date(tournament.startTime) < date() and tournament.endTime == 0 %}
+                            Šiuo metu vyksta turnyras
+                        {% else %}
+                            {{ tournament.startTime|date('Y-m-d H:i') }}<br>
+                            <span class="glyphicon glyphicon-time" aria-hidden="true"></span><br>
+                            {{ tournament.endTime|date('Y-m-d H:i') }}
+                        {% endif %}
+                    </h4>
+                    {% if tournament.endTime != 0 %}
+                        <h5 class="text-center">Turnyras jau pasibaigė</h5>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    {% if (date(tournament.startTime) <= date() and tournament.endTime == 0)
+                    or (is_granted('ROLE_ADMIN') or app.user == tournament.organizer)
+                    or tournament.endTime != 0 %}
+                        {% if not game == NULL %}
+                            <div id="match" class="row">
+                                <div class="col-xs-12 col-sm-4 text-left">
+                                    <h6>{{ game.competitor1.team.name }}</h6>
                                 </div>
-                                <div id="team_name" class="form-group">
-                                    <label class="sr-only" for="team_name">Komandos pavadinimas</label>
-                                    <span class="help-block hidden">We have a situation here...</span>
-                                    <input type="email" class="form-control" placeholder="Pavadinimas">
+                                <div class="col-xs-12 col-sm-4 text-center">
+                                    <div class="row">
+                                        <div class="col-xs-4"><span class="score">{{ game.goals(0) }}</span></div>
+                                        <div class="col-xs-4"><h4>VS</h4></div>
+                                        <div class="col-xs-4"><span class="score">{{ game.goals(1) }}</span></div>
+                                    </div>
                                 </div>
-                                <button id="create_team" class="btn btn-success btn-block"
-                                        data-team="new"
-                                        data-url="{{ url('tournament_add_player', {id: tournament.id }) }}">Sukurti
-                                </button>
-                            </form>
+                                <div class="col-xs-12 col-sm-4 text-right">
+                                    <h6>{{ game.competitor2.team.name }}</h6>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div id="tournament"
+                             data-url="{{ url('tournament_update_from_json', {'id': tournament.id}) }}"
+                             data-data='{{ data }}'>
                         </div>
-                    </div>
-                {% else %}
-                    <p>Jeigu norite dalyvauti turnyre prašome prisijungti.</p>
-                {% endif %}
-            {% elseif is_granted('IS_AUTHENTICATED_FULLY') %}
-                <h3>Jūs jau dalyvaujate šiame turnyre.</h3>
-            {% endif %}
+                    {% elseif not isCompetitor %}
+                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                            <h3 class="text-center">Prisijunkite prie turnyro</h3>
+                            <div class="list-group row" id="join_tournament">
+                                <a href="#new_team" title="Nauja komanda" id="new_team_popup"
+                                   class="list-group-item {{ teams ? 'col-xs-6' : 'col-xs-12' }}">
+                                    <span class="glyphicon glyphicon-plus center-block" aria-hidden="true"></span>
+
+                                    <p>Nauja komanda</p>
+                                </a>
+                                {% if teams %}
+                                    <a href="#existing_team" title="Jūsų komanda" id="existing_team_popup"
+                                       class="list-group-item col-xs-6">
+                                        <span class="glyphicon glyphicon-user center-block" aria-hidden="true"></span>
+
+                                        <p>Jūsų komanda</p>
+                                    </a>
+                                {% endif %}
+                                {% for competitor in competitors %}
+                                    <a href="#" class="play list-group-item col-xs-6 center-block"
+                                       data-url="{{ url('tournament_add_player', {id: tournament.id }) }}"
+                                       data-team="{{ competitor.team.id }}">
+                                        Prisijungti prie
+                                        {{ competitor.team.captain.name }} {{ competitor.team.captain.surname }}
+                                        komanda
+                                    </a>
+                                {% endfor %}
+                            </div>
+                            <div id="popups" style="display: none;">
+                                <div id="new_team">
+                                    <form>
+                                        <div class="form-group">
+                                            <h4 class="text-center">Įveskite komandos pavadinimą</h4>
+                                        </div>
+                                        <div id="team_name_form" class="form-group">
+                                            <label class="sr-only" for="team_name">Komandos pavadinimas</label>
+                                            <span class="help-block hidden">Blogas komandos pavadinimas</span>
+                                            <input type="text" class="form-control" placeholder="Pavadinimas">
+                                        </div>
+                                        <button id="create_team" class="btn btn-success btn-block"
+                                                data-team="new"
+                                                data-url="{{ url('tournament_add_player', {id: tournament.id }) }}">
+                                            Sukurti
+                                        </button>
+                                    </form>
+                                </div>
+                                <div id="existing_team">
+                                    <form>
+                                        <div class="form-group">
+                                            <h4 class="text-center">Pasirinkite komandą</h4>
+                                        </div>
+                                        <div id="team_select_form" class="form-group">
+                                            <label class="sr-only" for="teams_select">Komandos pavadinimas</label>
+                                            <span class="help-block hidden">Blogas komandos pavadinimas</span>
+                                            <select id="teams_select" name="teams_select" required="required"
+                                                    class="form-control">
+                                                <option value="" selected="selected">Pasirinkite Komandą</option>
+                                                {% for team in teams %}
+                                                    <option value="{{ team.id }}">{{ team.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <button id="add_team" class="btn btn-success btn-block"
+                                                data-team="existing"
+                                                data-url="{{ url('tournament_add_player', {id: tournament.id }) }}">
+                                            Sukurti
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        {% else %}
+                            <p class="text-center">Jeigu norite dalyvauti turnyre prašome prisijungti.</p>
+                        {% endif %}
+                    {% elseif is_granted('IS_AUTHENTICATED_FULLY') %}
+                        <h3 class="text-center">Jūs jau dalyvaujate šiame turnyre.</h3>
+                    {% endif %}
+                </div>
+            </div>
         </div>
-    </div>
+    </main>
+
+    <footer class="panel-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6">
+                    <p>Susisiekite su organizatoriumi:</p>
+
+                    <p>
+                        <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+                        {{ tournament.organizer.email }}
+                    </p>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <p>Dalyvių skaičius:</p>
+
+                    <p>
+                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                        {{ tournament.competitors }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
 {% endblock %}
 
 {% block javascripts %}
     {% if is_granted('ROLE_ADMIN') or app.user == tournament.organizer %}
-        {{ include('LiuksGameBundle:Tournament:bracketAdmin.html.twig') }}
+        {% javascripts '@LiuksGameBundle/Resources/public/bracketAdmin.js' %}
+        <script id="tournament-script" src="{{ asset_url }}"></script>
+        {% endjavascripts %}
     {% else %}
-        {{ include('LiuksGameBundle:Tournament:bracket.html.twig') }}
+        {% javascripts '@LiuksGameBundle/Resources/public/bracket.js' %}
+        <script id="tournament-script" src="{{ asset_url }}"></script>
+        {% endjavascripts %}
     {% endif %}
 {% endblock %}
