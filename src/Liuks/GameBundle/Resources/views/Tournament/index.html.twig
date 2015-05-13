@@ -3,56 +3,67 @@
 {% block title -%}Turnyrai |{% endblock %}
 
 {% block body -%}
-    <div class="row">
-        <div class="col-md-12">
+    <main>
+        <div class="jumbotron panel-heading">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <h1>Turnyrai</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                <div class="btn-group" role="group">
-                    <a class="btn btn-success btn-lg btn-block" href="{{ path('tournament_new') }}">
-                        Sukurk naują turnyrą!
-                    </a>
+                <div id="actions" class="row text-center">
+                    <div class="col-xs-12 col-md-offset-3 col-md-6">
+                        <a class="btn btn-success btn-block btn-lg" href="{{ path('tournament_new') }}">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                            Sukurk naują turnyrą!
+                        </a>
+                    </div>
                 </div>
             {% endif %}
-            <h1>Turnyrai</h1>
+            <div id="tournaments-list" class="list-group row page-content">
+                {% for tournament in tournaments %}
+                    <a href="{{ url('tournament_show', {id: tournament.id}) }}"
+                       class="list-group-item col-xs-12 col-md-6">
+                        <div>
+                            <h6>
+                                {{ tournament.name }}
+                                <small>{{ tournament.table.address }}, {{ tournament.table.city }}</small>
+                            </h6>
+                            <ul class="list-unstyled">
+                                <li>
+                                    <span class="glyphicon glyphicon-time"></span>
+                                    {% if tournament.endTime != 0 %}
+                                        {{ tournament.startTime|date('Y-m-d H:i') }}
+                                        - {{ tournament.endTime|date('Y-m-d H:i') }}
+                                    {% else %}
+                                        {% set diff = date().diff(date(tournament.startTime)) %}
+                                        {% if diff.d > 0 %}
+                                            {{ diff.d }} d.
+                                        {% endif %}
+                                        {% if diff.h > 0 %}
+                                            {{ diff.h }} val.
+                                        {% endif %}
+                                        {{ diff.i }} min.
+                                        ({{ tournament.startTime|date('Y-m-d H:i') }})
+                                    {% endif %}
+                                </li>
+                                <li>
+                                    <span class="glyphicon glyphicon-envelope"></span>
+                                    {{ tournament.organizer.email }}
+                                </li>
+                                <li>
+                                    <span class="glyphicon glyphicon-user"></span>
+                                    {{ tournament.competitors }}
+                                </li>
+                            </ul>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
         </div>
-    </div>
-    <div class="list-group row">
-        {% for tournament in tournaments %}
-            <a href="{{ url('tournament_show', {id: tournament.id}) }}" class="list-group-item col-xs-12">
-                <div>
-                    <h6>
-                        {{ tournament.name }}
-                        <small>{{ tournament.table.address }}, {{ tournament.table.city }}</small>
-                    </h6>
-                    <ul class="list-unstyled">
-                        {% if tournament.endTime == 0 %}
-                            <li>
-                                Turnyras prasidės už
-                                {% set diff = date().diff(date(tournament.startTime)) %}
-                                {% if diff.days > 1 %}
-                                    {{ diff.days }} dienų
-                                {% else %}
-                                    {{ diff.h }} val.
-                                {% endif %}
-                            </li>
-                        {% endif %}
-                        <li>
-                            <span class="glyphicon glyphicon-time"></span>
-                            {{ tournament.startTime|date('Y-m-d H:i') }}
-                            {% if tournament.endTime != 0 %}
-                                - {{ tournament.endTime|date('Y-m-d H:i') }}
-                            {% endif %}
-                        </li>
-                        <li>
-                            <span class="glyphicon glyphicon-envelope"></span>
-                            {{ tournament.organizer.email }}
-                        </li>
-                        <li>
-                            <span class="glyphicon glyphicon-user"></span>
-                            {{ tournament.competitors }}
-                        </li>
-                    </ul>
-                </div>
-            </a>
-        {% endfor %}
-    </div>
+    </main>
 {% endblock %}

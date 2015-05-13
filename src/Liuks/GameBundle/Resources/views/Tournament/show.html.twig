@@ -90,7 +90,7 @@
                     or (is_granted('ROLE_ADMIN') or app.user == tournament.organizer)
                     or tournament.endTime != 0 %}
                         {% if not game == NULL %}
-                            <div id="match" class="row">
+                            <div id="match" class="row page-content">
                                 <div class="col-xs-12 col-sm-4 text-left">
                                     <h6>{{ game.competitor1.team.name }}</h6>
                                 </div>
@@ -113,7 +113,7 @@
                     {% elseif not isCompetitor %}
                         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                             <h3 class="text-center">Prisijunkite prie turnyro</h3>
-                            <div class="list-group row" id="join_tournament">
+                            <div class="list-group row page-content" id="join_tournament">
                                 <a href="#new_team" title="Nauja komanda" id="new_team_popup"
                                    class="list-group-item {{ teams ? 'col-xs-6' : 'col-xs-12' }}">
                                     <span class="glyphicon glyphicon-plus center-block" aria-hidden="true"></span>
