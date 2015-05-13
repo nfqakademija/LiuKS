@@ -278,7 +278,7 @@ class TableController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('table_edit', ['id' => $id]));
+            return $this->redirect($this->generateUrl('table_show', ['id' => $id]));
         }
 
         return $this->render(
