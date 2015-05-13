@@ -102,10 +102,13 @@ class TableController extends Controller
             [
                 'action' => $this->generateUrl('table_create'),
                 'method' => 'POST',
-                'attr' => ['class' => 'form-horizontal']
             ]
         )
-            ->add('submit', 'submit', ['label' => 'Sukurti', 'attr' => ['class' => 'btn btn-success']]);
+            ->add(
+                'submit',
+                'submit',
+                ['label' => 'Sukurti', 'attr' => ['class' => 'btn btn-success btn-lg btn-block']]
+            );
 
         return $form;
     }
@@ -146,9 +149,13 @@ class TableController extends Controller
             throw $this->createNotFoundException('Ooops, it looks like this table is in another dimension...');
         }
 
-        $games = $em->getRepository('LiuksGameBundle:Game')->findBy(['table' => $table], ['endTime' => 'DESC'], 20);
+        $games = $em->getRepository('LiuksGameBundle:Game')->findBy(['table' => $table], ['startTime' => 'DESC'], 20);
 
-        $game = $this->get('game_utils.service')->getCurrentGame($id);
+        $game = null;
+        if (array_key_exists(0, $games) && $games[0]->getEndTime() == 0) {
+            $game = $games[0];
+            array_splice($games, 0, 1);
+        }
         $hasTournament = $this->get('table_actions.service')->hasTournamentRegistered($id);
         $deleteForm = $this->createDeleteForm($id);
 
@@ -156,8 +163,8 @@ class TableController extends Controller
             'LiuksTableBundle:Table:show.html.twig',
             [
                 'table' => $table,
-                'game' => $game,
                 'games' => $games,
+                'game' => $game,
                 'hasTournament' => $hasTournament,
                 'delete_form' => $deleteForm->createView(),
             ]
@@ -167,7 +174,7 @@ class TableController extends Controller
     /**
      * Creates a form to delete a Table entity by id.
      *
-     * @param mixed $id The entity id
+     * @param mixed $id The table id
      *
      * @return \Symfony\Component\Form\Form The form
      */
@@ -176,7 +183,7 @@ class TableController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('table_delete', ['id' => $id]))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', ['label' => 'Ištrinti', 'attr' => ['class' => 'btn btn-danger']])
+            ->add('submit', 'submit', ['label' => 'Ištrinti', 'attr' => ['class' => 'btn btn-danger btn-block']])
             ->getForm();
     }
 
@@ -197,7 +204,7 @@ class TableController extends Controller
         }
 
         if (false === $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')
-            || $this->getUser() != $table->getOwner()
+            && $this->getUser() != $table->getOwner()
         ) {
             throw $this->createAccessDeniedException('Unable to access this page!');
         }
@@ -208,7 +215,7 @@ class TableController extends Controller
         return $this->render(
             'LiuksTableBundle:Table:edit.html.twig',
             [
-                'entity' => $table,
+                'table' => $table,
                 'form' => $form->createView(),
                 'delete_form' => $deleteForm->createView(),
             ]
@@ -218,21 +225,25 @@ class TableController extends Controller
     /**
      * Creates a form to edit a Table entity.
      *
-     * @param Table $entity The entity
+     * @param Table $table The entity
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createEditForm(Table $entity)
+    private function createEditForm(Table $table)
     {
         $form = $this->createForm(
             new TableType(),
-            $entity,
+            $table,
             [
-                'action' => $this->generateUrl('table_update', ['id' => $entity->getId()]),
+                'action' => $this->generateUrl('table_update', ['id' => $table->getId()]),
                 'method' => 'PUT',
             ]
         );
 
-        $form->add('submit', 'submit', ['label' => 'Atnaujinti', 'attr' => ['class' => 'btn btn-success']]);
+        $form->add(
+            'submit',
+            'submit',
+            ['label' => 'Atnaujinti', 'attr' => ['class' => 'btn btn-success btn-lg btn-block']]
+        );
 
         return $form;
     }
@@ -255,7 +266,7 @@ class TableController extends Controller
         }
 
         if (false === $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')
-            || $this->getUser() != $table->getOwner()
+            && $this->getUser() != $table->getOwner()
         ) {
             throw $this->createAccessDeniedException('Unable to access this page!');
         }
@@ -273,7 +284,7 @@ class TableController extends Controller
         return $this->render(
             'LiuksTableBundle:Table:edit.html.twig',
             [
-                'entity' => $table,
+                'table' => $table,
                 'edit_form' => $editForm->createView(),
                 'delete_form' => $deleteForm->createView(),
             ]
@@ -301,7 +312,7 @@ class TableController extends Controller
             }
 
             if (false === $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')
-                || $this->getUser() != $table->getOwner()
+                && $this->getUser() != $table->getOwner()
             ) {
                 throw $this->createAccessDeniedException('Unable to access this page!');
             }
