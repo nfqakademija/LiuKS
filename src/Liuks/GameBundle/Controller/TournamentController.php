@@ -230,8 +230,8 @@ class TournamentController extends Controller
         }
 
         if (false === $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')
-            || $this->getUser() != $tournament->getOrganizer()
-            || $this->getUser() != $tournament->getTable()->getOwner()
+            && $this->getUser() != $tournament->getOrganizer()
+            && $this->getUser() != $tournament->getTable()->getOwner()
         ) {
             throw $this->createAccessDeniedException('Unable to access this page!');
         }
@@ -290,8 +290,8 @@ class TournamentController extends Controller
 
 
         if (false === $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')
-            || $this->getUser() != $tournament->getOrganizer()
-            || $this->getUser() != $tournament->getTable()->getOwner()
+            && $this->getUser() != $tournament->getOrganizer()
+            && $this->getUser() != $tournament->getTable()->getOwner()
         ) {
             throw $this->createAccessDeniedException('Unable to access this page!');
         }
@@ -337,8 +337,8 @@ class TournamentController extends Controller
             }
 
             if (false === $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')
-                || $this->getUser() != $tournament->getOrganizer()
-                || $this->getUser() != $tournament->getTable()->getOwner()
+                && $this->getUser() != $tournament->getOrganizer()
+                && $this->getUser() != $tournament->getTable()->getOwner()
             ) {
                 throw $this->createAccessDeniedException('Unable to access this page!');
             }
