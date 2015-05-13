@@ -82,25 +82,33 @@
                     {% endif %}
                 </div>
             </div>
-            <div class="row">
+            <div class="row page-content">
                 <div class="col-md-12">
                     {% if (date(tournament.startTime) <= date() and tournament.endTime == 0)
                     or (is_granted('ROLE_ADMIN') or app.user == tournament.organizer)
                     or tournament.endTime != 0 %}
-                        {% if not game == NULL %}
-                            <div id="game" class="row page-content">
-                                <div class="col-xs-12 col-sm-4 text-left">
-                                    <h6>{{ game.competitor1.team.name }}</h6>
-                                </div>
-                                <div class="col-xs-12 col-sm-4 text-center">
-                                    <div class="row">
-                                        <div class="col-xs-4"><span class="score">{{ game.goals(0) }}</span></div>
-                                        <div class="col-xs-4"><h4>VS</h4></div>
-                                        <div class="col-xs-4"><span class="score">{{ game.goals(1) }}</span></div>
+                        {% if not match == NULL %}
+                            <div id="game">
+                                <div class="row">
+                                    <div class="col-xs-12 text-center">
+                                        {{ match.startTime|date('H:i') }}
+                                        - {{ match.endTime == 0 ? '?' : match.endTime|date('H:i') }}
                                     </div>
                                 </div>
-                                <div class="col-xs-12 col-sm-4 text-right">
-                                    <h6>{{ game.competitor2.team.name }}</h6>
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-4 text-left">
+                                        <h6>{{ match.competitor1.team.name }}</h6>
+                                    </div>
+                                    <div class="scores col-xs-12 col-sm-4 text-center">
+                                        <div class="row">
+                                            <div class="col-xs-4"><span class="score">{{ match.goals(0) }}</span></div>
+                                            <div class="col-xs-4"><h4>VS</h4></div>
+                                            <div class="col-xs-4"><span class="score">{{ match.goals(1) }}</span></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-4 text-right">
+                                        <h6>{{ match.competitor2.team.name }}</h6>
+                                    </div>
                                 </div>
                             </div>
                         {% endif %}

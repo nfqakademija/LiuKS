@@ -44,10 +44,9 @@ class TournamentController extends Controller
         $tournament = $em->getRepository('LiuksGameBundle:Tournament')->find($id);
         $tournament_utils = $this->get('tournament_utils.service');
         $data = $tournament_utils->getTournamentData($tournament);
+        $match = null;
         if ($tournament->getEndTime() == 0) {
-            $game = $this->get('game_utils.service')->getCurrentGame($tournament->getTable());
-        } else {
-            $game = null;
+            $match = $this->get('game_utils.service')->getCurrentGame($tournament->getTable());
         }
         if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             $competitors = $em->createQuery(
@@ -68,7 +67,7 @@ class TournamentController extends Controller
             'LiuksGameBundle:Tournament:show.html.twig',
             [
                 'tournament' => $tournament,
-                'game' => $game,
+                'match' => $match,
                 'data' => json_encode($data),
                 'competitors' => $competitors,
                 'isCompetitor' => $isCompetitor,
