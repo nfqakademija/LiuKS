@@ -10,6 +10,10 @@
     overflow-y: hidden;
 }
 
+.fancybox-inner h4 {
+    margin: 0;
+}
+
 .label-primary {
     background-color: #1ABC9C;
 }
@@ -24,6 +28,14 @@ h1 small, h2 small, h3 small,
 h4 small, h5 small, h6 small {
     color: #95A5A6;
     display: block;
+}
+
+div.jQBracket {
+    left: -10px;
+}
+
+div.jQBracket .tools {
+    left: 5px;
 }
 
 div.jQBracket .tools span {
@@ -50,4 +62,116 @@ div.jQBracket .team div.label {
     white-space: normal;
     height: 30px;
     width: 80px;
+}
+
+.current-game {
+    background-color: #2ECC71;
+    color: #ffffff;
+    border: #ECF0F1 1px solid;
+    padding: 1em;
+}
+
+.navbar {
+    border-radius: 0;
+    margin: 0;
+    border-bottom: #e5e9ea 2px solid;
+}
+
+.navbar .navbar-brand {
+    padding-left: 15px;
+}
+
+body {
+    min-height: 100vh;
+    display: -webkit-flex;
+    -webkit-flex-direction: column;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+    -webkit-flex: 1;
+}
+
+.panel-heading {
+    background-color: #ecf0f1;
+    border-bottom: #e5e9ea 2px solid;
+    border-radius: 0;
+    margin-bottom: 0;
+}
+
+footer {
+    height: auto;
+    text-align: center;
+    background-color: #ecf0f1;
+    border-top: #e5e9ea 2px solid;
+    padding-top: 10px;
+    width: 100%;
+}
+
+#actions > div {
+    padding: 0;
+}
+
+#actions a, #actions button {
+    border-radius: 0;
+}
+
+#tournament {
+    margin-bottom: 50px;
+}
+
+#join_tournament a {
+    padding: 15px;
+    text-align: center;
+    min-height: 160px;
+    display: -webkit-flex;
+    -webkit-align-items: center;
+    -webkit-justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#join_tournament a:not(.play) p {
+    font-size: 10pt;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+
+#join_tournament a:not(.play) {
+    font-size: 40pt;
+    line-height: 140px;
+}
+
+#match {
+    margin-bottom: 25px;
+}
+
+#match, #match .row {
+    background-color: #2ECC71;
+    padding: 20px 0;
+    display: block;
+}
+
+@media (min-width: 768px) {
+    #match, #match .row {
+        display: flex;
+        align-items: center;
+    }
+
+    .page-content.row, #actions.row {
+        margin-left: 0;
+        margin-right: 0;
+    }
+}
+
+#match .score {
+    font-size: 80px;
+    font-weight: 700;
+    line-height: 1.1;
 }
