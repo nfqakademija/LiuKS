@@ -74,13 +74,17 @@ div.jQBracket .team div.label {
     padding-left: 15px;
 }
 
+.navbar ul.nav li a {
+    padding: 15px 19px;
+}
+
 body {
     min-height: 100vh;
     display: -webkit-flex;
     -webkit-flex-direction: column;
     display: flex;
     flex-direction: column;
-    font-family: Helvetica,Arial,sans-serif;
+    font-family: Helvetica, Arial, sans-serif;
 }
 
 main {
@@ -147,13 +151,14 @@ footer {
     color: #ffffff;
     padding: 1em;
     margin-bottom: 25px;
+    margin-left: -15px;
+    margin-right: -15px;
 }
 
 #game .scores .row {
     display: flex;
     align-items: center;
 }
-
 @media (min-width: 768px) {
     #game .row {
         display: flex;
@@ -171,6 +176,7 @@ footer {
         padding-left: 0;
         padding-right: 0;
     }
+
 }
 
 #game .scores .score {
@@ -198,4 +204,26 @@ footer {
 
 .sortable-table .header.headerSortDown:after {
     content: "\f0de";
+}
+
+html {
+    -webkit-transition: background-color 0.5s;
+    transition: background-color 0.5s;
+}
+
+html.loader {
+    background: #333 url('img/fancybox_loading.gif') no-repeat 50% 50%;
+    -webkit-transition: background-color 0s;
+    transition: background-color 0s;
+}
+
+
+body {
+    -webkit-transition: opacity 1s ease-in;
+    transition: opacity 1s ease-in;
+}
+html.loader body {
+    opacity: 0.3;
+    -webkit-transition: opacity 0s;
+    transition: opacity 0s;
 }

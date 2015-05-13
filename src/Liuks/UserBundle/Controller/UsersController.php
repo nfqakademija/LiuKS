@@ -79,7 +79,7 @@ class UsersController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('users_delete', ['id' => $id]))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', ['label' => 'Delete', 'attr' => ['class' => 'btn btn-danger']])
+            ->add('submit', 'submit', ['label' => 'Delete', 'attr' => ['class' => 'btn btn-danger btn-block']])
             ->getForm();
     }
 
@@ -114,7 +114,7 @@ class UsersController extends Controller
             'LiuksUserBundle:Users:edit.html.twig',
             [
                 'user' => $user,
-                'edit_form' => $editForm->createView(),
+                'form' => $editForm->createView(),
                 'delete_form' => $deleteForm->createView(),
             ]
         );
@@ -137,7 +137,11 @@ class UsersController extends Controller
             ]
         );
 
-        $form->add('submit', 'submit', ['label' => 'Atnaujinti', 'attr' => ['class' => 'btn btn-success']]);
+        $form->add(
+            'submit',
+            'submit',
+            ['label' => 'Atnaujinti', 'attr' => ['class' => 'btn btn-success btn-lg btn-block']]
+        );
 
         return $form;
     }
@@ -174,14 +178,14 @@ class UsersController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('users_edit', ['id' => $id]));
+            return $this->redirect($this->generateUrl('users_show', ['id' => $id]));
         }
 
         return $this->render(
             'LiuksUserBundle:Users:edit.html.twig',
             [
                 'user' => $user,
-                'edit_form' => $editForm->createView(),
+                'form' => $editForm->createView(),
                 'delete_form' => $deleteForm->createView(),
             ]
         );
@@ -250,7 +254,11 @@ class UsersController extends Controller
         $form = $this->createFormBuilder()
             ->setAction($this->generateUrl('users_set_default_table', ['id' => $tables[0]->getId()]))
             ->setMethod('PUT')
-            ->add('submit', 'submit', ['label' => 'Pasirinkti'])
+            ->add(
+                'submit',
+                'submit',
+                ['label' => 'Pasirinkti', 'attr' => ['class' => 'btn btn-success btn-lg btn-block']]
+            )
             ->getForm()->createView();
 
         return $this->render(

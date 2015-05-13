@@ -1,13 +1,32 @@
-<div class="row">
-    <div class="col-md-12 default-table-form">
-        <h1>Artimiausi stalai</h1>
-
-        <div class="list-group">
-            <a href="#" class="list-group-item active" data-id="{{ tables[0].id }}">{{ tables[0].address }}</a>
-            {% for table in tables[1:] %}
-                <a href="#" class="list-group-item" data-id="{{ table.id }}">{{ table.address }}</a>
-            {% endfor %}
+<div class="jumbotron panel-heading">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 text-center">
+                <h3>Artimiausi stalai</h3>
+            </div>
         </div>
-        {{ form(setTableForm) }}
+    </div>
+</div>
+<div class="container">
+    <div id="actions" class="row text-center">
+        <div class="col-xs-6">
+            <a class="btn btn-primary btn-lg btn-block" href="{{ path('home_page') }}">
+                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="col-xs-6">
+            {{ form(setTableForm) }}
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 default-table-form">
+            <div class="list-group">
+                {% for table in tables %}
+                    <a href="#" class="list-group-item {{ loop.index == 1 ? 'active' : '' }}" data-id="{{ table.id }}">"{{ table.name }}" {{ table.address }}, {{ table.city }}</a>
+                {% endfor %}
+            </div>
+        </div>
     </div>
 </div>
