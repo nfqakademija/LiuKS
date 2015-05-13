@@ -3,38 +3,57 @@
 {% block title -%}Stalai |{% endblock %}
 
 {% block body -%}
-    <div class="row">
-        <div class="col-md-12">
+    <main>
+        <div class="jumbotron panel-heading">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <h3>Stalai</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                <div class="btn-group" role="group" aria-label="...">
-                    <a class="btn btn-success btn-lg btn-block" href="{{ path('table_new') }}">
-                        Turi Stalą? Registruok!
-                    </a>
+                <div id="actions" class="row text-center">
+                    <div class="col-xs-12 col-md-offset-3 col-md-6">
+                        <a class="btn btn-success btn-block btn-lg" href="{{ path('table_new') }}">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                            Turi Stalą? Registruok!
+                        </a>
+                    </div>
                 </div>
             {% endif %}
-            <h1>Stalai</h1>
+            <div class="list-group row page-content">
+                {% for table in tables %}
+                    <a href="{{ url('table_show', {id: table.id}) }}" class="list-group-item col-xs-12 col-sm-6">
+                        <div>
+                            <h6>"{{ table.name }}"</h6>
+                            <ul class="list-unstyled">
+                                <li>
+                                    <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+                                    {{ table.address }}, {{ table.city }}
+                                </li>
+                                <li>
+                                    <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+                                    {{ table.availableFrom|date('H:i') }} - {{ table.availableTo|date('H:i') }}
+                                </li>
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <li>
+                                        {{ table.private == 1 ? '<span class="glyphicon glyphicon-user"></span>' : '' }}
+                                        {{ table.disabled == 1 ? '<span class="glyphicon glyphicon-off"></span>' : '' }}
+                                        {{ table.free == 1 ? '<span class="glyphicon glyphicon-play text-success"></span>' : '<span class="glyphicon glyphicon-stop text-danger"></span>' }}
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </a>
+                {% else %}
+                    <div class="list-group-item col-xs-12 text-center">
+                        <h5>Stalų rasti nepavyko. Pabandykite prisijungti.</h5>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
-    </div>
-    <div class="list-group row">
-        {% for table in tables %}
-            <a href="{{ url('table_show', {id: table.id}) }}" class="list-group-item col-xs-12 col-sm-6">
-                <div>
-                    <h6>{{ table.name }}</h6>
-                    <ul class="list-unstyled">
-                        <li></li>
-                        <li>{{ table.address }}, {{ table.city }}</li>
-                        <li>{{ table.availableFrom|date('H:i') }} - {{ table.availableTo|date('H:i') }}</li>
-                        <li>{{ table.owner.email }}</li>
-                        {% if is_granted('ROLE_ADMIN') %}
-                            <li>
-                                {{ table.private == 1 ? '<span class="glyphicon glyphicon-user"></span>' : '' }}
-                                {{ table.disabled == 1 ? '<span class="glyphicon glyphicon-off"></span>' : '' }}
-                                {{ table.free == 1 ? '<span class="glyphicon glyphicon-play text-success"></span>' : '<span class="glyphicon glyphicon-stop text-danger"></span>' }}
-                            </li>
-                        {% endif %}
-                    </ul>
-                </div>
-            </a>
-        {% endfor %}
-    </div>
+    </main>
 {% endblock %}

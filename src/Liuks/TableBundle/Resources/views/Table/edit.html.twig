@@ -3,60 +3,65 @@
 {% block title -%}Stalo redagavimas |{% endblock %}
 
 {% block body -%}
-    <div class="row">
-        <div class="col-md-12">
-            <div class="btn-group" role="group">
-                <a class="btn btn-primary" href="{{ path('tables') }}">
-                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                </a>
-                <a class="btn btn-danger" href="#delete_popup" id="delete-btn">
-                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                </a>
-            </div>
-            <div id="delete_popup" style="display: none;">
-                <p>Ar tikrai norite ištrinti šį stalą?</p>
-
-                <div class="text-center">
-                    {{ form_start(delete_form) }}
-                    {{ form_row(delete_form.submit) }}
-                    {{ form_end(delete_form) }}
+    <main>
+        <div class="jumbotron panel-heading">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <h3>Stalo redagavimas</h3>
+                    </div>
                 </div>
             </div>
-            <h1 class="text-center">Stalo redagavimas</h1>
-
+        </div>
+        <div class="container">
             {{ form_start(form) }}
             {{ form_errors(form) }}
-
-            {{ form_row(form.address) }}
-            {{ form_row(form.city) }}
-            {{ form_row(form.lat) }}
-            {{ form_row(form.long) }}
-            {{ form_row(form.availableFrom) }}
-            {{ form_row(form.availableTo) }}
-            {{ form_row(form.api) }}
-            {% if is_granted('ROLE_ADMIN') %}
-                {{ form_row(form.disabled) }}
-            {% endif %}
-            {{ form_row(form.private) }}
-            {{ form_row(form.group.name) }}
+            <div id="actions" class="row text-center">
+                <div class="col-xs-4">
+                    <a class="btn btn-primary btn-block btn-lg" href="{{ path('table_show', { id: table.id }) }}">
+                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                    </a>
+                </div>
+                <div class="col-xs-4">
+                    <a class="btn btn-danger btn-block btn-lg" href="#delete_popup" id="delete-btn">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    </a>
+                </div>
+                <div class="col-xs-4">
+                    {{ form_widget(form.submit) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-md-8 col-md-offset-2">
+                    {{ form_row(form.address) }}
+                    {{ form_row(form.city) }}
+                    {{ form_row(form.lat) }}
+                    {{ form_row(form.long) }}
+                    {{ form_row(form.availableFrom) }}
+                    {{ form_row(form.availableTo) }}
+                    {{ form_row(form.api) }}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        {{ form_row(form.disabled) }}
+                    {% endif %}
+                    {{ form_row(form.private) }}
+                    {{ form_row(form.group.name) }}
+                </div>
+            </div>
             {{ form_end(form) }}
+            <div id="delete_popup" style="display: none;">
+                <div class="form-group text-center">
+                    <h5>Ar tikrai norite ištrinti šį stalą?</h5>
+                </div>
+                {{ form_start(delete_form) }}
+                {{ form_row(delete_form.submit) }}
+                {{ form_end(delete_form) }}
+            </div>
         </div>
-    </div>
+    </main>
 {% endblock %}
 
 {% block javascripts %}
-    <script>
-        var groupName = document.getElementById('liuks_tablebundle_table_group_name').parentElement;
-        groupName.classList.add('hidden');
-
-        function groupToggle()
-        {
-            if (document.getElementById('liuks_tablebundle_table_private').checked) {
-                groupName.classList.remove('hidden');
-            }
-            else {
-                groupName.classList.add('hidden');
-            }
-        }
-    </script>
+    {% javascripts '@LiuksTableBundle/Resources/public/table_create_form.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 {% endblock %}
