@@ -88,7 +88,7 @@
                     or (is_granted('ROLE_ADMIN') or app.user == tournament.organizer)
                     or tournament.endTime != 0 %}
                         {% if not game == NULL %}
-                            <div id="match" class="row page-content">
+                            <div id="game" class="row page-content">
                                 <div class="col-xs-12 col-sm-4 text-left">
                                     <h6>{{ game.competitor1.team.name }}</h6>
                                 </div>
@@ -179,7 +179,7 @@
                                 </div>
                             </div>
                         {% else %}
-                            <p class="text-center">Jeigu norite dalyvauti turnyre prašome prisijungti.</p>
+                            <h3 class="text-center">Jeigu norite dalyvauti turnyre prašome prisijungti.</h3>
                         {% endif %}
                     {% elseif is_granted('IS_AUTHENTICATED_FULLY') %}
                         <h3 class="text-center">Jūs jau dalyvaujate šiame turnyre.</h3>

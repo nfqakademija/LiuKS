@@ -1,11 +1,13 @@
 {% extends '::base.html.twig' %}
 
 {% block body %}
-    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-        {{ render(controller('LiuksTableBundle:Table:defaultTableShow', { 'id': app.user.defaultTable.id })) }}
-    {% else %}
-        {{ render(controller('LiuksTableBundle:Table:defaultTableShow', { 'id': 1 })) }}
-    {% endif %}
+    <main>
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            {{ render(controller('LiuksTableBundle:Table:defaultTableShow', { 'id': app.user.defaultTable.id })) }}
+        {% else %}
+            {{ render(controller('LiuksTableBundle:Table:defaultTableShow', { 'id': 1 })) }}
+        {% endif %}
+    </main>
 {% endblock %}
 
 {% block javascripts %}

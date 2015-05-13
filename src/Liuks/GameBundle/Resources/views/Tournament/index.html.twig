@@ -30,10 +30,14 @@
                        class="list-group-item col-xs-12 col-md-6">
                         <div>
                             <h6>
-                                {{ tournament.name }}
-                                <small>{{ tournament.table.address }}, {{ tournament.table.city }}</small>
+                                "{{ tournament.name }}"
+                                <small>{{ tournament.table.name }} stalas</small>
                             </h6>
                             <ul class="list-unstyled">
+                                <li>
+                                    <span class="glyphicon glyphicon-map-marker"></span>
+                                    {{ tournament.table.address }}, {{ tournament.table.city }}
+                                </li>
                                 <li>
                                     <span class="glyphicon glyphicon-time"></span>
                                     {% if tournament.endTime != 0 %}
@@ -50,10 +54,6 @@
                                         {{ diff.i }} min.
                                         ({{ tournament.startTime|date('Y-m-d H:i') }})
                                     {% endif %}
-                                </li>
-                                <li>
-                                    <span class="glyphicon glyphicon-envelope"></span>
-                                    {{ tournament.organizer.email }}
                                 </li>
                                 <li>
                                     <span class="glyphicon glyphicon-user"></span>
