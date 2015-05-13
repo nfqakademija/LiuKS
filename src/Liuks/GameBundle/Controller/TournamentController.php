@@ -44,13 +44,24 @@ class TournamentController extends Controller
         $tournament = $em->getRepository('LiuksGameBundle:Tournament')->find($id);
         $tournament_utils = $this->get('tournament_utils.service');
         $data = $tournament_utils->getTournamentData($tournament);
-        $game = $this->get('game_utils.service')->getCurrentGame($tournament->getTable());
+        if ($tournament->getEndTime() == 0) {
+            $game = $this->get('game_utils.service')->getCurrentGame($tournament->getTable());
+        } else {
+            $game = null;
+        }
         if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
-            $competitors = $em->getRepository('LiuksGameBundle:Competitor')->findBy(['tournament' => $tournament]);
+            $competitors = $em->createQuery(
+                'SELECT c FROM LiuksGameBundle:Competitor c
+                JOIN c.team team
+                WHERE team.player IS NULL AND c.tournament = :tournament'
+            )
+                ->setParameter('tournament', $tournament)
+                ->getResult();
             $form = $this->createDeleteForm($id)->createView();
             $isCompetitor = $tournament_utils->isCompetitor($tournament, $this->getUser());
+            $teams = $em->getRepository('LiuksUserBundle:Team')->findBy(['captain' => $this->getUser()]);
         } else {
-            $competitors = $form = $isCompetitor = null;
+            $competitors = $form = $isCompetitor = $teams = null;
         }
 
         return $this->render(
@@ -61,6 +72,7 @@ class TournamentController extends Controller
                 'data' => json_encode($data),
                 'competitors' => $competitors,
                 'isCompetitor' => $isCompetitor,
+                'teams' => $teams,
                 'delete_form' => $form
             ]
         );
@@ -344,12 +356,15 @@ class TournamentController extends Controller
     {
         $em = $this->get('doctrine.orm.default_entity_manager');
         $tournament = $em->getRepository('LiuksGameBundle:Tournament')->find($id);
-        $team_id = $_POST['team'];
-        if ($team_id == 'new') {
+        $team = $_POST['team'];
+        if ($team == 'new') {
             $team = $this->get('users_util.service')->createTeam($this->getUser(), $_POST['team_name']);
             $this->get('tournament_utils.service')->addCompetitor($tournament, $team);
+        } elseif ($team == 'existing') {
+            $team = $em->getRepository('LiuksUserBundle:Team')->find($_POST['team_id']);
+            $this->get('tournament_utils.service')->addCompetitor($tournament, $team);
         } else {
-            $this->get('users_util.service')->addTeamMember($team_id, $this->getUser());
+            $this->get('users_util.service')->addTeamMember($team, $this->getUser());
         }
 
         return new Response('success');
