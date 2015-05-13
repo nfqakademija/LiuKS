@@ -64,13 +64,6 @@ div.jQBracket .team div.label {
     width: 80px;
 }
 
-.current-game {
-    background-color: #2ECC71;
-    color: #ffffff;
-    border: #ECF0F1 1px solid;
-    padding: 1em;
-}
-
 .navbar {
     border-radius: 0;
     margin: 0;
@@ -148,18 +141,20 @@ footer {
     line-height: 140px;
 }
 
-#match {
+#game {
+    background-color: #2ECC71;
+    color: #ffffff;
+    padding: 1em;
     margin-bottom: 25px;
 }
 
-#match, #match .row {
-    background-color: #2ECC71;
-    padding: 20px 0;
-    display: block;
+#game .scores .row {
+    display: flex;
+    align-items: center;
 }
 
 @media (min-width: 768px) {
-    #match, #match .row {
+    #game .row {
         display: flex;
         align-items: center;
     }
@@ -170,7 +165,7 @@ footer {
     }
 }
 
-#match .score {
+#game .scores .score {
     font-size: 80px;
     font-weight: 700;
     line-height: 1.1;
