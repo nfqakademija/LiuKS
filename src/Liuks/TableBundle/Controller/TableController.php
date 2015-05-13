@@ -62,6 +62,7 @@ class TableController extends Controller
             $table->setFree(1);
             $table->setLastShake(0);
             $table->setLastEventId(0);
+            $table->setLastDataUpdate(0);
             $table->setOwner($this->getUser());
             if ($table->getGroup()) {
                 $em->persist($table->getGroup());
