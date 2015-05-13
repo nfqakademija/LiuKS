@@ -90,7 +90,7 @@ class TournamentController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('tournament_delete', ['id' => $id]))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', ['label' => 'Ištrinti', 'attr' => ['class' => 'btn btn-danger']])
+            ->add('submit', 'submit', ['label' => 'Ištrinti', 'attr' => ['class' => 'btn btn-danger btn-block']])
             ->getForm();
     }
 
@@ -182,7 +182,6 @@ class TournamentController extends Controller
             [
                 'action' => $this->generateUrl('tournament_create'),
                 'method' => 'POST',
-                'attr' => ['class' => 'form-horizontal']
             ]
         )
             ->add(
@@ -266,7 +265,11 @@ class TournamentController extends Controller
             ]
         );
 
-        $form->add('submit', 'submit', ['label' => 'Atnaujinti', 'attr' => ['class' => 'btn btn-success']]);
+        $form->add(
+            'submit',
+            'submit',
+            ['label' => 'Atnaujinti', 'attr' => ['class' => 'btn btn-success btn-block btn-lg']]
+        );
 
         return $form;
     }

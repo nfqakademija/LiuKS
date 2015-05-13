@@ -3,22 +3,37 @@
 {% block title -%}Turnyro kūrimas |{% endblock %}
 
 {% block body -%}
-    <div class="row">
-        <div class="col-md-12">
-            <div class="btn-group" role="group">
-                <a class="btn btn-primary" href="{{ path('tournaments') }}">
-                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                </a>
+    <main>
+        <div class="jumbotron panel-heading">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <h3>Turnyro kūrimas</h3>
+                    </div>
+                </div>
             </div>
-            <h1 class="text-center">Turnyro kūrimas</h1>
-
+        </div>
+        <div class="container">
             {{ form_start(form) }}
             {{ form_errors(form) }}
-
-            {{ form_row(form.name) }}
-            {{ form_row(form.startTime) }}
-            {{ form_row(form.table) }}
+            <div id="actions" class="row text-center">
+                <div class="col-xs-6 col-md-offset-2 col-md-4">
+                    <a class="btn btn-primary btn-block btn-lg" href="{{ path('tournaments') }}">
+                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                    </a>
+                </div>
+                <div class="col-xs-6 col-md-4">
+                    {{ form_widget(form.submit) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-md-8 col-md-offset-2">
+                    {{ form_row(form.name) }}
+                    {{ form_row(form.startTime) }}
+                    {{ form_row(form.table) }}
+                </div>
+            </div>
             {{ form_end(form) }}
         </div>
-    </div>
+    </main>
 {% endblock %}

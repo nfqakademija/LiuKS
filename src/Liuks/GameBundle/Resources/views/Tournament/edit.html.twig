@@ -3,33 +3,50 @@
 {% block title -%}Turnyro redagavimas |{% endblock %}
 
 {% block body -%}
-    <div class="row">
-        <div class="col-md-12">
-            <div class="btn-group" role="group">
-                <a class="btn btn-primary" href="{{ path('tournaments') }}">
-                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                </a>
-                <a class="btn btn-danger" href="#delete_popup" id="delete-btn">
-                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                </a>
-            </div>
-            <div id="delete_popup" style="display: none;">
-                <p>Ar tikrai norite ištrinti šį turnyrą?</p>
-
-                <div class="text-center">
-                    {{ form_start(delete_form) }}
-                    {{ form_row(delete_form.submit) }}
-                    {{ form_end(delete_form) }}
+    <main>
+        <div class="jumbotron panel-heading">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <h3>Turnyro redagavimas</h3>
+                    </div>
                 </div>
             </div>
-            <h1>Turnyro redagavimas</h1>
-
+        </div>
+        <div class="container">
             {{ form_start(form) }}
             {{ form_errors(form) }}
-            {{ form_row(form.name) }}
-            {{ form_row(form.startTime) }}
-            {{ form_row(form.table) }}
+            <div id="actions" class="row text-center">
+                <div class="col-xs-4">
+                    <a class="btn btn-primary btn-block btn-lg" href="{{ path('tournaments') }}">
+                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                    </a>
+                </div>
+                <div class="col-xs-4">
+                    <a class="btn btn-danger btn-block btn-lg" href="#delete_popup" id="delete-btn">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    </a>
+                </div>
+                <div class="col-xs-4">
+                    {{ form_widget(form.submit) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-md-8 col-md-offset-2">
+                    {{ form_row(form.name) }}
+                    {{ form_row(form.startTime) }}
+                    {{ form_row(form.table) }}
+                </div>
+            </div>
             {{ form_end(form) }}
+            <div id="delete_popup" style="display: none;">
+                <div class="form-group text-center">
+                    <h5>Ar tikrai norite ištrinti šį turnyrą?</h5>
+                </div>
+                {{ form_start(delete_form) }}
+                {{ form_row(delete_form.submit) }}
+                {{ form_end(delete_form) }}
+            </div>
         </div>
-    </div>
+    </main>
 {% endblock %}

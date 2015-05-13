@@ -14,7 +14,6 @@
                                 {{ tournament.table.address }}, {{ tournament.table.city }}
                             </a>
                         </strong>
-
                         <h3> "{{ tournament.name }}" </h3>
                     </div>
                 </div>
@@ -44,13 +43,12 @@
             </div>
             {% if canEdit %}
                 <div id="delete_popup" style="display: none;">
-                    <p>Ar tikrai norite ištrinti šį turnyrą?</p>
-
-                    <div class="text-center">
-                        {{ form_start(delete_form) }}
-                        {{ form_row(delete_form.submit) }}
-                        {{ form_end(delete_form) }}
+                    <div class="form-group text-center">
+                        <h5>Ar tikrai norite ištrinti šį turnyrą?</h5>
                     </div>
+                    {{ form_start(delete_form) }}
+                    {{ form_row(delete_form.submit) }}
+                    {{ form_end(delete_form) }}
                 </div>
             {% endif %}
         </div>
