@@ -18,8 +18,7 @@ class TeamController extends Controller
     {
         $em = $this->get('doctrine.orm.default_entity_manager');
 
-        $teams = $em->getRepository('LiuksUserBundle:Team')->
-        findBy([], ['gamesWon' => 'DESC', 'totalGoals' => 'DESC']);
+        $teams = $em->getRepository('LiuksUserBundle:Team')->findBy([], ['gamesWon' => 'DESC', 'totalGoals' => 'DESC']);
 
         return $this->render(
             'LiuksUserBundle:Team:index.html.twig',
@@ -86,7 +85,11 @@ class TeamController extends Controller
             ]
         );
 
-        $form->add('submit', 'submit', ['label' => 'Sukurti', 'attr' => ['class' => 'btn btn-success']]);
+        $form->add(
+            'submit',
+            'submit',
+            ['label' => 'Sukurti', 'attr' => ['class' => 'btn btn-success btn-lg btn-block']]
+        );
 
         return $form;
     }
@@ -153,7 +156,7 @@ class TeamController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('teams_delete', ['id' => $id]))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', ['label' => 'Ištrinti', 'attr' => ['class' => 'btn btn-danger']])
+            ->add('submit', 'submit', ['label' => 'Ištrinti', 'attr' => ['class' => 'btn btn-danger btn-block']])
             ->getForm();
     }
 
@@ -188,7 +191,7 @@ class TeamController extends Controller
             'LiuksUserBundle:Team:edit.html.twig',
             [
                 'team' => $team,
-                'edit_form' => $editForm->createView(),
+                'form' => $editForm->createView(),
                 'delete_form' => $deleteForm->createView(),
             ]
         );
@@ -212,7 +215,11 @@ class TeamController extends Controller
             ]
         );
 
-        $form->add('submit', 'submit', ['label' => 'Atnaujinti', 'attr' => ['class' => 'btn btn-success']]);
+        $form->add(
+            'submit',
+            'submit',
+            ['label' => 'Atnaujinti', 'attr' => ['class' => 'btn btn-success btn-lg btn-block']]
+        );
 
         return $form;
     }

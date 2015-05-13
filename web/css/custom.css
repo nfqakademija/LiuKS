@@ -80,6 +80,7 @@ body {
     -webkit-flex-direction: column;
     display: flex;
     flex-direction: column;
+    font-family: Helvetica,Arial,sans-serif;
 }
 
 main {
@@ -165,8 +166,36 @@ footer {
     }
 }
 
+@media (max-width: 768px) {
+    .page-content-table {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
 #game .scores .score {
     font-size: 80px;
     font-weight: 700;
     line-height: 1.1;
+}
+
+.sortable-table .header {
+    cursor: pointer;
+}
+
+.sortable-table .header:after {
+    font-family: "FontAwesome", serif;
+    font-size: 11pt;
+    content: "\f0dc";
+    line-height: 1;
+    margin-left: 5px;
+    display: inline-block;
+}
+
+.sortable-table .header.headerSortUp:after {
+    content: "\f0dd";
+}
+
+.sortable-table .header.headerSortDown:after {
+    content: "\f0de";
 }
