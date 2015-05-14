@@ -104,6 +104,19 @@ class GameService extends ContainerAware
                     ['matchup' => 'ASC'],
                     2
                 );
+                $ind = !array_key_exists(0, $competitors) ? 1 : !array_key_exists(1, $competitors) ? 0 : -1;
+                if ($ind != -1) {
+                    //this competitor gets autowin and we should find another pair of competitors
+                    $game = new Match();
+                    $game->setTournament($tournament);
+                    $game->setRound($round);
+                    $game->setMatchup($competitors[$ind]->getMatchup());
+                    $game->setCompetitor($competitors[$ind], $ind);
+                    $game->setCompetitor(null, !$ind);
+                    $game->setStartTime(-1);
+
+                    return $game;
+                }
                 if ($competitors[0]->getMatchup() == $competitors[1]->getMatchup()) {
                     $game = new Match();
                     $game->setTournament($tournament);
@@ -143,14 +156,22 @@ class GameService extends ContainerAware
     {
         $em = $this->container->get('doctrine.orm.default_entity_manager');
         $game = $this->getCurrentGame($table_id);
-        if (!$game) {
-            $game = $this->newGame($table_id);
-        }
-        $goals = $game->getGoals($team) + 1;
-        $game->setGoals($goals, $team);
-        $game = $this->checkGame($game, $team, $action_time);
+        do {
+            if ($game == null) {
+                $game = $this->newGame($table_id);
+            }
+            if ($game->getStartTime() != -1) {
+                $goals = $game->getGoals($team) + 1;
+                $game->setGoals($goals, $team);
+            } else {
+                $team = $game->getCompetitor1() == null ? 1 : $game->getCompetitor2() == null ? 0 : -1;
+            }
+            $game = $this->checkGame($game, $team, $action_time);
+        } while ($game == null || $game->getStartTime() == -1);
 
-        $em->flush($game);
+        if ($game->getStartTime() != -1) {
+            $em->flush($game);
+        }
 
         return $game;
     }
@@ -163,7 +184,9 @@ class GameService extends ContainerAware
      */
     private function checkGame($game, $winner_side, $action_time)
     {
-        if ($game->getGoals($winner_side) == 10) {
+        if ($game->getStartTime() == -1) {
+            $this->container->get('tournament_utils.service')->resolveTournament($game, $winner_side, $action_time);
+        } elseif ($game->getGoals($winner_side) == 10) {
             $game->setEndTime($action_time);
 
             if (is_a($game, 'Liuks\GameBundle\Entity\Match')) {
@@ -192,8 +215,6 @@ class GameService extends ContainerAware
         if ($game) {
             $gameLength = $time - $game->getStartTime();
             if ($gameLength > 1200) {
-                $em->remove($game);
-            } elseif ($gameLength > 600 && $game->getGoals1() < 5 && $game->getGoals2() < 5) {
                 $em->remove($game);
             }
             $em->flush($game);

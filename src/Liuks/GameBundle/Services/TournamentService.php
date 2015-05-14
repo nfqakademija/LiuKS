@@ -71,16 +71,23 @@ class TournamentService extends ContainerAware
         $winner = $match->getCompetitor($winner_side);
         $looser = $match->getCompetitor(!$winner_side);
         $tournament = $match->getTournament();
-
         $last_round = (int)(($tournament->getCompetitors() - 1) / 2);
-        if ($last_round == $tournament->getCurrentRound() + 1) {
-            //next round is the last, loosers should fight for 3rd place
-            $looser->setRound($looser->getRound() + 1);
-            $looser->setMatchup(1);
-        } else {
-            $looser->setRound($looser->getRound() - 1);
+        if ($last_round == $tournament->getCurrentRound() && $tournament->getCompetitors() == 2) {
+            $tournament->setCurrentRound(-1);
+        } elseif ($looser != null) {
+            if ($last_round == $tournament->getCurrentRound() + 1) {
+                //next round is the last, loosers should fight for 3rd place
+                $looser->setRound($looser->getRound() + 1);
+                $looser->setMatchup(1);
+            } else {
+                $looser->setRound($looser->getRound() - 1);
+            }
         }
 
+        $last_matchup = (int)(ceil($tournament->getCompetitors() / 2) - 1);
+        if ($winner->getRound() != 0) {
+            $last_matchup = floor($last_matchup / ($winner->getRound() + 1));
+        }
         if ($tournament->getCurrentRound() == -1) {
             $tournament->setEndTime($action_time);
 
@@ -91,17 +98,20 @@ class TournamentService extends ContainerAware
             if ($winner->getMatchup() == 0 && $winner->getRound() == $last_round) {
                 $winner->setRound($winner->getRound() + 1);
                 $tournament->setCurrentRound(-1);   //next round will be for third place and the last in tournament
-            } else {
+            } elseif ($winner->getMatchup() == $last_matchup) {
                 $tournament->setCurrentRound($tournament->getCurrentRound() + 1);
             }
         }
         $winner->setRound($winner->getRound() + 1);
         $winner->setMatchup(floor($winner->getMatchup() / 2));
-        $em->flush([$tournament, $winner, $looser]);
+        $em->flush([$tournament, $winner]);
 
-        $users_util = $this->container->get('users_util.service');
-        $users_util->addToTeamRanking($winner->getTeam(), true, $match->getGoals($winner_side));
-        $users_util->addToTeamRanking($looser->getTeam(), false, $match->getGoals(!$winner_side));
+        if ($looser != null) {
+            $em->flush($looser);
+            $users_util = $this->container->get('users_util.service');
+            $users_util->addToTeamRanking($winner->getTeam(), true, $match->getGoals($winner_side));
+            $users_util->addToTeamRanking($looser->getTeam(), false, $match->getGoals(!$winner_side));
+        }
     }
 
     /**
@@ -211,18 +221,18 @@ class TournamentService extends ContainerAware
     {
         $em = $this->container->get('doctrine.orm.default_entity_manager');
         $competitors = $em->getRepository('LiuksGameBundle:Competitor')->findBy(['tournament' => $tournament]);
-        $teams = [['', '']];
+        $teams = [['--', '--']];
         if ($competitors) {
             foreach ($competitors as $competitor) {
                 if (!isset($teams[$competitor->getStartPos()])) {
                     $count = count($teams);
                     $teams = array_merge(
                         $teams,
-                        array_fill((int)$competitor->getStartPos(), $count == 0 ? 1 : $count, ['', ''])
+                        array_fill((int)$competitor->getStartPos(), $count == 0 ? 1 : $count, ['--', '--'])
                     );
                 }
 
-                if ($teams[$competitor->getStartPos()][0] == '') {
+                if ($teams[$competitor->getStartPos()][0] == '--') {
                     $teams[$competitor->getStartPos()][0] = $competitor->getTeam()->getName();
                 } else {
                     $teams[$competitor->getStartPos()][1] = $competitor->getTeam()->getName();
