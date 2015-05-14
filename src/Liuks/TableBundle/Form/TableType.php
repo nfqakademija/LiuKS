@@ -16,6 +16,7 @@ class TableType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('name', 'text', ['label' => 'Pavadinimas'])
             ->add('address', 'text', ['label' => 'Adresas'])
             ->add('city', 'text', ['label' => 'Miestas'])
             ->add('lat', 'number', ['label' => 'Platuma'])
