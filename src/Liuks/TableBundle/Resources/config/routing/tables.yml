@@ -2,6 +2,10 @@ tables:
     path:     /
     defaults: { _controller: "LiuksTableBundle:Table:index" }
 
+my_tables:
+    path:     /my
+    defaults: { _controller: "LiuksTableBundle:Table:myIndex" }
+
 table_status:
     path:     /{id}/data
     defaults: { _controller: "LiuksTableBundle:Table:data" }

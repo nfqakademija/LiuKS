@@ -50,7 +50,11 @@
                     </a>
                 {% else %}
                     <div class="list-group-item col-xs-12 text-center">
-                        <h5>Stalų rasti nepavyko. Pabandykite prisijungti.</h5>
+                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                            <h5>Jūs neturite užregistruotų stalų.</h5>
+                        {% else %}
+                            <h5>Stalų rasti nepavyko. Pabandykite prisijungti.</h5>
+                        {% endif %}
                     </div>
                 {% endfor %}
             </div>

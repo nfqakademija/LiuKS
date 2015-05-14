@@ -47,6 +47,31 @@ class TableController extends Controller
     }
 
     /**
+     * Lists all current user Tables.
+     *
+     * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
+     *
+     */
+    public function myIndexAction()
+    {
+        $em = $this->get('doctrine.orm.default_entity_manager');
+
+        $tables = $em->createQuery(
+            'SELECT t FROM LiuksTableBundle:Table t
+            WHERE t.owner = :owner'
+        )
+            ->setParameter('owner', $this->getUser())
+            ->getResult();
+
+        return $this->render(
+            'LiuksTableBundle:Table:index.html.twig',
+            [
+                'tables' => $tables,
+            ]
+        );
+    }
+
+    /**
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
