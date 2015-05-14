@@ -2,6 +2,10 @@ teams:
     path:     /
     defaults: { _controller: "LiuksUserBundle:Team:index" }
 
+my_teams:
+    path:     /my
+    defaults: { _controller: "LiuksUserBundle:Team:myIndex" }
+
 teams_show:
     path:     /{id}/show
     defaults: { _controller: "LiuksUserBundle:Team:show" }

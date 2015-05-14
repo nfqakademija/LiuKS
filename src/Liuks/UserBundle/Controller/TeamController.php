@@ -29,6 +29,32 @@ class TeamController extends Controller
     }
 
     /**
+     * Lists all current user Teams.
+     *
+     * @Security("has_role('ROLE_USER')")
+     *
+     */
+    public function myIndexAction()
+    {
+        $em = $this->get('doctrine.orm.default_entity_manager');
+
+        $teams = $em->createQuery(
+            'SELECT t FROM LiuksUserBundle:Team t
+            WHERE t.captain = :user OR t.player = :user
+            ORDER BY t.gamesWon DESC, t.totalGoals DESC'
+        )
+            ->setParameter('user', $this->getUser())
+            ->getResult();
+
+        return $this->render(
+            'LiuksUserBundle:Team:index.html.twig',
+            [
+                'teams' => $teams,
+            ]
+        );
+    }
+
+    /**
      * Creates a new Team entity.
      *
      * @Security("has_role('ROLE_USER')")
