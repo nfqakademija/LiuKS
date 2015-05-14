@@ -13,8 +13,8 @@
                             <li class="list-group-item col-xs-12 col-sm-4 {{ loop.index % 2 == 0 ? 'bg-success' : '' }}">
                                 <div class="row">
                                     <div class="col-xs-12 col-md-12 text-center">
-                                        {{ game.startTime|date('H:i') }}
-                                        - {{ game.endTime == 0 ? 'TBD' : game.endTime|date('H:i') }}
+                                        {{ game.startTime|date('H:i', 'Europe/Vilnius') }}
+                                        - {{ game.endTime == 0 ? 'TBD' : game.endTime|date('H:i', 'Europe/Vilnius') }}
                                     </div>
                                 </div>
                                 <div class="row">

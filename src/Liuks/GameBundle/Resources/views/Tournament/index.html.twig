@@ -41,8 +41,8 @@
                                 <li>
                                     <span class="glyphicon glyphicon-time"></span>
                                     {% if tournament.endTime != 0 %}
-                                        {{ tournament.startTime|date('Y-m-d H:i') }}
-                                        - {{ tournament.endTime|date('Y-m-d H:i') }}
+                                        {{ tournament.startTime|date('Y-m-d H:i', 'Europe/Vilnius') }}
+                                        - {{ tournament.endTime|date('Y-m-d H:i', 'Europe/Vilnius') }}
                                     {% else %}
                                         {% set diff = date().diff(date(tournament.startTime)) %}
                                         {% if diff.d > 0 %}
@@ -52,7 +52,7 @@
                                             {{ diff.h }} val.
                                         {% endif %}
                                         {{ diff.i }} min.
-                                        ({{ tournament.startTime|date('Y-m-d H:i') }})
+                                        ({{ tournament.startTime|date('Y-m-d H:i', 'Europe/Vilnius') }})
                                     {% endif %}
                                 </li>
                                 <li>
