@@ -24,34 +24,42 @@
                     </div>
                 </div>
             {% endif %}
-            <div class="row">
-                <div class="col-md-12 page-content-table">
-                    <div class="table-responsive">
-                        <table class="sortable-table table table-striped table-condensed">
-                            <thead>
-                            <tr>
-                                <th>Pavadinimas</th>
-                                <th>Žaista</th>
-                                <th>Laimėta</th>
-                                <th>Pralaimėta</th>
-                                <th>Įvarčiai</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for team in teams %}
+            {% if teams %}
+                <div class="row">
+                    <div class="col-md-12 page-content-table">
+                        <div class="table-responsive">
+                            <table class="sortable-table table table-striped table-condensed">
+                                <thead>
                                 <tr>
-                                    <td><a href="{{ path('teams_show', {'id': team.id}) }}">{{ team.name }}</a></td>
-                                    <td>{{ team.gamesPlayed }}</td>
-                                    <td>{{ team.gamesWon }}</td>
-                                    <td>{{ team.gamesPlayed - team.gamesWon }}</td>
-                                    <td>{{ team.totalGoals }}</td>
+                                    <th>Pavadinimas</th>
+                                    <th>Žaista</th>
+                                    <th>Laimėta</th>
+                                    <th>Pralaimėta</th>
+                                    <th>Įvarčiai</th>
                                 </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                {% for team in teams %}
+                                    <tr>
+                                        <td><a href="{{ path('teams_show', {'id': team.id}) }}">{{ team.name }}</a></td>
+                                        <td>{{ team.gamesPlayed }}</td>
+                                        <td>{{ team.gamesWon }}</td>
+                                        <td>{{ team.gamesPlayed - team.gamesWon }}</td>
+                                        <td>{{ team.totalGoals }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
-            </div>
+            {% else %}
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h5>Nepavyko rasti nei vienos komandos.</h5>
+                    </div>
+                </div>
+            {% endif %}
         </div>
     </main>
 {% endblock %}
