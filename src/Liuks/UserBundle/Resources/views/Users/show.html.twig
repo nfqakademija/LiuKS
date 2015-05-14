@@ -37,7 +37,7 @@
         <div class="container">
             <div id="actions" class="row text-center">
                 {% set canEdit = is_granted('IS_AUTHENTICATED_FULLY') and (is_granted('ROLE_ADMIN') or app.user == user) %}
-                <div class="{{ canEdit ? 'col-xs-4' : 'col-xs-12 col-md-offset-4 col-md-4' }} ">
+                <div class="{{ canEdit ? 'col-xs-4' : 'col-xs-12' }} ">
                     <a class="btn btn-primary btn-block" href="{{ path('users') }}">
                         <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
                     </a>
