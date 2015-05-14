@@ -29,9 +29,8 @@ class TableController extends Controller
             $tables = $em->getRepository('LiuksTableBundle:Table')->findAll();
         } elseif ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             $tables = $em->createQuery(
-                '
-              SELECT t FROM LiuksTableBundle:Table t
-              WHERE t.owner = :owner OR t.private = 0'
+                'SELECT t FROM LiuksTableBundle:Table t
+                WHERE t.owner = :owner OR t.private = 0'
             )
                 ->setParameter('owner', $this->getUser())
                 ->getResult();
@@ -150,9 +149,15 @@ class TableController extends Controller
         if (!$table) {
             throw $this->createNotFoundException('Ooops, it looks like this table is in another dimension...');
         }
-
-        $games = $em->getRepository('LiuksGameBundle:Game')->findBy(['table' => $table], ['startTime' => 'DESC'], 20);
-
+        $games = $em->createQuery(
+            'SELECT g FROM LiuksGameBundle:Game g
+            WHERE g.table = :table AND g.startTime > :today
+            ORDER BY g.startTime DESC'
+        )
+            ->setMaxResults(20)
+            ->setParameter('table', $table)
+            ->setParameter('today', mktime(0, 0, 0))
+            ->getResult();
         $game = null;
         if (array_key_exists(0, $games) && $games[0]->getEndTime() == 0) {
             $game = $games[0];
