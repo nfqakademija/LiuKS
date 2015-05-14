@@ -60,6 +60,7 @@ class TableController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $table->setFree(1);
+            $table->setDisabled(0);
             $table->setLastShake(0);
             $table->setLastEventId(0);
             $table->setLastDataUpdate(0);

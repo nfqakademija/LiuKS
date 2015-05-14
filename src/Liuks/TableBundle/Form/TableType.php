@@ -24,15 +24,6 @@ class TableType extends AbstractType
             ->add('availableTo', 'time', ['label' => 'Dirba iki'])
             ->add('api', 'url', ['label' => 'API'])
             ->add(
-                'disabled',
-                'checkbox',
-                [
-                    'label' => 'Išjungtas',
-                    'required' => false,
-                    'attr' => ['class' => 'custom-checkbox', 'checked' => 'checked']
-                ]
-            )
-            ->add(
                 'private',
                 'checkbox',
                 [
