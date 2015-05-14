@@ -191,10 +191,10 @@ class GameService extends ContainerAware
         $game = $em->getRepository('LiuksGameBundle:Game')->findOneBy(['table' => $table, 'endTime' => 0]);
         if ($game) {
             $gameLength = $time - $game->getStartTime();
-//            if ($gameLength > 1200) {
-//                $em->remove($game);
-//            }
-//            $em->flush($game);
+            if ($gameLength > 1200) {
+                $em->remove($game);
+            }
+            $em->flush($game);
         }
     }
 }
