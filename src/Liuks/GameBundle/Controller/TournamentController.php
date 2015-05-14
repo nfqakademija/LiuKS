@@ -136,6 +136,30 @@ class TournamentController extends Controller
     }
 
     /**
+     * Lists all current user Tournaments.
+     *
+     */
+    public function myIndexAction()
+    {
+        $em = $this->get('doctrine.orm.default_entity_manager');
+
+        $tournaments = $em->createQuery(
+            'SELECT t FROM LiuksGameBundle:Tournament t
+        WHERE t.organizer = :user
+        ORDER BY t.startTime DESC'
+        )
+            ->setParameter('user', $this->getUser())
+            ->getResult();
+
+        return $this->render(
+            'LiuksGameBundle:Tournament:index.html.twig',
+            [
+                'tournaments' => $tournaments,
+            ]
+        );
+    }
+
+    /**
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */

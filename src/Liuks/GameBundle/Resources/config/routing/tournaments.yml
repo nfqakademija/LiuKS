@@ -2,6 +2,10 @@ tournaments:
     path:     /
     defaults: { _controller: "LiuksGameBundle:Tournament:index" }
 
+my_tournaments:
+    path:     /my
+    defaults: { _controller: "LiuksGameBundle:Tournament:myIndex" }
+
 tournament_show:
     path:     /{id}/show
     defaults: { _controller: "LiuksGameBundle:Tournament:show" }
