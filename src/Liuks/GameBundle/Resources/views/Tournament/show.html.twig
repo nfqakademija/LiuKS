@@ -189,6 +189,9 @@
                         {% endif %}
                     {% elseif is_granted('IS_AUTHENTICATED_FULLY') %}
                         <h3 class="text-center">Jūs jau dalyvaujate šiame turnyre.</h3>
+                        <a class="btn btn-danger btn-block col-xs-12" href="{{ path('tournament_leave', {id: tournament.id}) }}">
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Palikti turnyrą
+                        </a>
                     {% endif %}
                 </div>
             </div>

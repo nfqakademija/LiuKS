@@ -13,6 +13,24 @@ use Symfony\Component\HttpFoundation\Response;
 class TournamentController extends Controller
 {
     /**
+     * Removes current user from tournament.
+     *
+     * @param integer $id
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     */
+    public function leaveAction($id)
+    {
+        $em = $this->get('doctrine.orm.default_entity_manager');
+        $tournament = $em->getRepository('LiuksTableBundle:Table')->find($id);
+        if (!$tournament) {
+            throw $this->createNotFoundException('Unable to find Tournament entity.');
+        }
+
+        return $this->redirectToRoute('tournament_show', ['id' => $id]);
+    }
+
+    /**
      * Finds and displays an ongoing tournament data for specific table.
      *
      * @param integer $table_id
@@ -138,6 +156,7 @@ class TournamentController extends Controller
     /**
      * Lists all current user Tournaments.
      *
+     * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
      */
     public function myIndexAction()
     {

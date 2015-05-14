@@ -10,6 +10,10 @@ tournament_show:
     path:     /{id}/show
     defaults: { _controller: "LiuksGameBundle:Tournament:show" }
 
+tournament_leave:
+    path:     /{id}/leave
+    defaults: { _controller: "LiuksGameBundle:Tournament:leave" }
+
 tournament_new:
     path:     /new
     defaults: { _controller: "LiuksGameBundle:Tournament:new" }
